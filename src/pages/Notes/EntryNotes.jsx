@@ -6,7 +6,7 @@ import MainLayout from "../../MainLayout";
 export default function EntryNotes({ mode, toggleTheme }) {
   const theme = useTheme();
 
-  const cardColors = ["#FFFFFF", "#F5F5F5"]; 
+  const cardColors = ["#FFFFFF", "#F5F5F5"]; // تبديل الألوان بين الأبيض والرمادي الفاتح
 
   return (
     <MainLayout

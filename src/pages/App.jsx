@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from "react";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -126,8 +125,4 @@ export default function App() {
       </Router>
     </ThemeProvider>
   );
-
-export default function Home() {
-  return <h1 className="text-3xl font-bold underline">Hello world!</h1>;
-
 }
