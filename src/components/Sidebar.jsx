@@ -1,78 +1,39 @@
 import React, { useState, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 import { useLocation, useNavigate } from "react-router-dom";
-
-const menuItems = [
-  {
-    icon: <img src="/assets/icons-dashboard/Home.svg" className="w-4 h-4" />,
-    label: "الصفحة الرئيسية",
-    path: "/",
-  },
-  {
-    icon: <img src="/assets/icons-dashboard/calendar.svg" className="w-4 h-4" />,
-    label: "التقويم",
-    path: "/calendar",
-  },
-  {
-    icon: <img src="/assets/icons-dashboard/EntryNotes.svg" className="w-4 h-4" />,
-    label: "اضافة منتج",
-    path: "/AddProduct1",
-  },
-  {
-    icon: <img src="/assets/icons-dashboard/EntryNotes.svg" className="w-4 h-4" />,
-    label: "مذكرات إدخال",
-    path: "/AllEntry",
-  },
-  {
-    icon: <img src="/assets/icons-dashboard/ExNotes.svg" className="w-4 h-4" />,
-    label: "مذكرات إخراج",
-    path: "/AllExit",
-  },
-  {
-    icon: <img src="/assets/icons-dashboard/ReceivNotes.svg" className="w-4 h-4" />,
-    label: "مذكرات الاستلام",
-    path: "/AllReceiving",
-  },
-  {
-    icon: <img src="/assets/icons-dashboard/ScrapNote.svg" className="w-4 h-4" />,
-    label: "مذكرات إتلاف",
-    path: "/AllScrap",
-  },
-  {
-    icon: <img src="/assets/icons-dashboard/PurRequest.svg" className="w-4 h-4" />,
-    label: "طلبات الشراء",
-    path: "/AllPurchase",
-  },
-  {
-    icon: <img src="/assets/icons-dashboard/CuManagment.svg" className="w-4 h-4" />,
-    label: "العهدة الشخصية",
-    path: "/AllCustody",
-  },
-  {
-    icon: <img src="/assets/icons-dashboard/notification.svg" className="w-4 h-4" />,
-    label: "الإشعارات",
-    path: "/Notification",
-  },
-  {
-    icon: <img src="/assets/icons-dashboard/User.svg" className="w-4 h-4" />,
-    label: "المستخدمين",
-    path: "/users",
-  },
-  {
-    icon: <img src="/assets/icons-dashboard/Settings.svg" className="w-4 h-4" />,
-    label: "الإعدادات",
-    path: "/",
-  },
-];
+import axios from "axios";
 
 export default function Sidebar() {
   const theme = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
+
+  const [showWarehouses, setShowWarehouses] = useState(false);
+  const [warehouses, setWarehouses] = useState([]);
   const [showInstallReports, setShowInstallReports] = useState(false);
 
   const isActive = (path) => location.pathname === path;
 
+  // جلب المستودعات
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    axios
+      .get("http://localhost:8000/api/warehouses/index", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setWarehouses(
+          res.data.data.sort((a, b) => a.name.localeCompare(b.name))
+        );
+      })
+      .catch((err) => {
+        console.error("خطأ في جلب المستودعات:", err);
+      });
+  }, []);
+
+  // فتح قسم ضبط التركيب إذا كان على صفحة فرعية
   useEffect(() => {
     if (
       location.pathname === "/InstallReportsUser" ||
@@ -82,8 +43,106 @@ export default function Sidebar() {
     }
   }, [location.pathname]);
 
+  const menuItemsBeforeInstall = [
+    {
+      icon: <img src="/assets/icons-dashboard/Home.svg" className="w-4 h-4" />,
+      label: "الصفحة الرئيسية",
+      path: "/dashboard",
+    },
+    {
+      icon: (
+        <img src="/assets/icons-dashboard/calendar.svg" className="w-4 h-4" />
+      ),
+      label: "التقويم",
+      path: "/calendar",
+    },
+    {
+      icon: (
+        <img src="/assets/icons-dashboard/EntryNotes.svg" className="w-4 h-4" />
+      ),
+      label: "اضافة منتج",
+      path: "/AddProduct1",
+    },
+    {
+      icon: (
+        <img src="/assets/icons-dashboard/EntryNotes.svg" className="w-4 h-4" />
+      ),
+      label: "مذكرات إدخال",
+      path: "/AllEntry",
+    },
+    {
+      icon: (
+        <img src="/assets/icons-dashboard/ExNotes.svg" className="w-4 h-4" />
+      ),
+      label: "مذكرات إخراج",
+      path: "/AllExit",
+    },
+    {
+      icon: (
+        <img
+          src="/assets/icons-dashboard/ReceivNotes.svg"
+          className="w-4 h-4"
+        />
+      ),
+      label: "مذكرات الاستلام",
+      path: "/AllReceiving",
+    },
+    {
+      icon: (
+        <img src="/assets/icons-dashboard/ScrapNote.svg" className="w-4 h-4" />
+      ),
+      label: "مذكرات إتلاف",
+      path: "/AllScrap",
+    },
+  ];
+
+  const menuItemsAfterInstall = [
+    {
+      icon: (
+        <img src="/assets/icons-dashboard/PurRequest.svg" className="w-4 h-4" />
+      ),
+      label: "طلبات الشراء",
+      path: "/AllPurchase",
+    },
+    {
+      icon: (
+        <img
+          src="/assets/icons-dashboard/CuManagment.svg"
+          className="w-4 h-4"
+        />
+      ),
+      label: "العهدة الشخصية",
+      path: "/AllCustody",
+    },
+    {
+      icon: (
+        <img
+          src="/assets/icons-dashboard/notification.svg"
+          className="w-4 h-4"
+        />
+      ),
+      label: "الإشعارات",
+      path: "/Notification",
+    },
+    {
+      icon: <img src="/assets/icons-dashboard/User.svg" className="w-4 h-4" />,
+      label: "المستخدمين",
+      path: "/users",
+    },
+    {
+      icon: (
+        <img src="/assets/icons-dashboard/Settings.svg" className="w-4 h-4" />
+      ),
+      label: "الإعدادات",
+      path: "/settings",
+    },
+  ];
+
   return (
-    <div className="w-[218px] pt-[37px] pb-[37px] pl-[30px] pr-[30px]" dir="rtl">
+    <div
+      className="w-[218px] pt-[37px] pb-[37px] pl-[30px] pr-[30px]"
+      dir="rtl"
+    >
       <div
         className="w-[200px] h-full flex flex-col justify-between py-5 px-5 rounded-[30px] font-sans shadow-lg"
         style={{
@@ -91,53 +150,135 @@ export default function Sidebar() {
           color: theme.palette.text.primary,
         }}
       >
+        {/* الشعار */}
         <div className="flex items-center justify-center mb-6">
           <img src="/assets/logo.png" alt="شعار" className="w-6 h-6" />
           <span className="text-sm font-semibold ml-2">RockStock</span>
         </div>
 
+        {/* القائمة */}
         <ul className="flex-1 space-y-3 text-xs font-medium">
-          {menuItems
-            .filter((item) =>
-              [
-                "الصفحة الرئيسية",
-                "التقويم",
-                "اضافة منتج",
-                "مذكرات إدخال",
-                "مذكرات إخراج",
-                "مذكرات الاستلام",
-                "مذكرات إتلاف",
-              ].includes(item.label)
-            )
-            .map((item, index) => (
-              <li
-                key={index}
-                onClick={() => navigate(item.path)}
-                className={`flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-all duration-200 ${
-                  isActive(item.path) ? "bg-[#FF8E29]" : "hover:bg-[#FF8E29]"
-                }`}
-                style={{
-                  color: isActive(item.path)
-                    ? "#FFFFFF"
-                    : theme.palette.mode === "dark"
-                    ? "#CCCDCD"
-                    : "#6F757E",
-                }}
-                onMouseEnter={(e) => {
-                  if (!isActive(item.path)) e.currentTarget.style.color = "#FFFFFF";
-                }}
-                onMouseLeave={(e) => {
-                  if (!isActive(item.path))
-                    e.currentTarget.style.color =
-                      theme.palette.mode === "dark" ? "#CCCDCD" : "#6F757E";
-                }}
-              >
-                {item.icon}
-                <span className="truncate">{item.label}</span>
-              </li>
-            ))}
+          {/* القائمة قبل ضبط التركيب */}
+          {menuItemsBeforeInstall.map((item, index) => (
+            <li
+              key={index}
+              onClick={() => navigate(item.path)}
+              className={`flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-all duration-200 ${
+                isActive(item.path) ? "bg-[#FF8E29]" : "hover:bg-[#FF8E29]"
+              }`}
+              style={{
+                color: isActive(item.path)
+                  ? "#FFFFFF"
+                  : theme.palette.mode === "dark"
+                  ? "#CCCDCD"
+                  : "#6F757E",
+              }}
+              onMouseEnter={(e) => {
+                if (!isActive(item.path))
+                  e.currentTarget.style.color = "#FFFFFF";
+              }}
+              onMouseLeave={(e) => {
+                if (!isActive(item.path))
+                  e.currentTarget.style.color =
+                    theme.palette.mode === "dark" ? "#CCCDCD" : "#6F757E";
+              }}
+            >
+              {item.icon}
+              <span className="truncate">{item.label}</span>
+            </li>
+          ))}
 
-          {/* 🔧 ضبط التركيب */}  
+          {/* المنتجات (منسدلة) */}
+          <li>
+            <div
+              onClick={() => setShowWarehouses((prev) => !prev)}
+              className={`flex items-center justify-between px-3 py-2 rounded-md cursor-pointer transition-all duration-200 ${
+                location.pathname.startsWith("/products")
+                  ? "bg-[#FF8E29]"
+                  : "hover:bg-[#FF8E29]"
+              }`}
+              style={{
+                color: location.pathname.startsWith("/products")
+                  ? "#FFFFFF"
+                  : theme.palette.mode === "dark"
+                  ? "#CCCDCD"
+                  : "#6F757E",
+              }}
+              onMouseEnter={(e) => {
+                if (!location.pathname.startsWith("/products"))
+                  e.currentTarget.style.color = "#FFFFFF";
+              }}
+              onMouseLeave={(e) => {
+                if (!location.pathname.startsWith("/products"))
+                  e.currentTarget.style.color =
+                    theme.palette.mode === "dark" ? "#CCCDCD" : "#6F757E";
+              }}
+            >
+              <div className="flex items-center gap-2">
+                <img
+                  src="/assets/icons-dashboard/Products.svg"
+                  className="w-4 h-4"
+                />
+                <span className="truncate">المنتجات</span>
+              </div>
+              <img
+                src="/assets/icons-dashboard/arrow.png"
+                alt="سهم"
+                className={`w-[14px] h-[8.75px] transition-transform duration-300 ${
+                  showWarehouses ? "" : "rotate-180"
+                }`}
+              />
+            </div>
+
+            {showWarehouses && (
+              <ul className="mt-2 pr-6 space-y-1 text-sm text-right">
+                <li
+                  className="cursor-pointer rounded-md px-2 py-1 transition hover:bg-[#FF8E29]"
+                  style={{
+                    color:
+                      location.pathname === "/products"
+                        ? theme.palette.mode === "dark"
+                          ? "#FFFFFF"
+                          : "#3C3C3C"
+                        : theme.palette.mode === "dark"
+                        ? "#CCCDCD"
+                        : "#6F757E",
+                  }}
+                  onClick={() => {
+                    navigate("/products");
+                    setShowWarehouses(false);
+                  }}
+                >
+                  جميع المنتجات
+                </li>
+
+                {warehouses.map((wh) => (
+                  <li
+                    key={wh.id}
+                    className="cursor-pointer rounded-md px-2 py-1 transition hover:bg-[#FF8E29]"
+                    style={{
+                      color:
+                        location.pathname === `/products/warehouse/${wh.id}`
+                          ? theme.palette.mode === "dark"
+                            ? "#FFFFFF"
+                            : "#3C3C3C"
+                          : theme.palette.mode === "dark"
+                          ? "#CCCDCD"
+                          : "#6F757E",
+                    }}
+                    onClick={() => {
+                      navigate(`/products/warehouse/${wh.id}`);
+                      setShowWarehouses(false);
+                    }}
+                  >
+                    {wh.name}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+
+          {/* ضبط التركيب (من الكود الثاني) */}
           <li>
             <div
               onClick={() => {
@@ -220,7 +361,11 @@ export default function Sidebar() {
                       : "#6F757E",
                 }}
               >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 9l6 6 6-6" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 9l6 6 6-6"
+                />
               </svg>
             </div>
 
@@ -255,47 +400,38 @@ export default function Sidebar() {
             )}
           </li>
 
-          {/* العناصر بعد ضبط التركيب */}
-          {menuItems
-            .filter((item) =>
-              [
-                "طلبات الشراء",
-                "العهدة الشخصية",
-                "الإشعارات",
-                "المستخدمين",
-                "الإعدادات",
-              ].includes(item.label)
-            )
-            .map((item, index) => (
-              <li
-                key={index}
-                onClick={() => navigate(item.path)}
-                className={`flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-all duration-200 ${
-                  isActive(item.path) ? "bg-[#FF8E29]" : "hover:bg-[#FF8E29]"
-                }`}
-                style={{
-                  color: isActive(item.path)
-                    ? "#FFFFFF"
-                    : theme.palette.mode === "dark"
-                    ? "#CCCDCD"
-                    : "#6F757E",
-                }}
-                onMouseEnter={(e) => {
-                  if (!isActive(item.path)) e.currentTarget.style.color = "#FFFFFF";
-                }}
-                onMouseLeave={(e) => {
-                  if (!isActive(item.path))
-                    e.currentTarget.style.color =
-                      theme.palette.mode === "dark" ? "#CCCDCD" : "#6F757E";
-                }}
-              >
-                {item.icon}
-                <span className="truncate">{item.label}</span>
-              </li>
-            ))}
+          {/* القائمة بعد ضبط التركيب */}
+          {menuItemsAfterInstall.map((item, index) => (
+            <li
+              key={index}
+              onClick={() => navigate(item.path)}
+              className={`flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-all duration-200 ${
+                isActive(item.path) ? "bg-[#FF8E29]" : "hover:bg-[#FF8E29]"
+              }`}
+              style={{
+                color: isActive(item.path)
+                  ? "#FFFFFF"
+                  : theme.palette.mode === "dark"
+                  ? "#CCCDCD"
+                  : "#6F757E",
+              }}
+              onMouseEnter={(e) => {
+                if (!isActive(item.path))
+                  e.currentTarget.style.color = "#FFFFFF";
+              }}
+              onMouseLeave={(e) => {
+                if (!isActive(item.path))
+                  e.currentTarget.style.color =
+                    theme.palette.mode === "dark" ? "#CCCDCD" : "#6F757E";
+              }}
+            >
+              {item.icon}
+              <span className="truncate">{item.label}</span>
+            </li>
+          ))}
         </ul>
 
-        {/* زر تسجيل الخروج */}
+        {/* تسجيل الخروج */}
         <div
           className="flex items-center gap-2 cursor-pointer px-3 py-2 rounded-md transition text-xs"
           style={{ color: theme.palette.error.main }}
@@ -306,22 +442,11 @@ export default function Sidebar() {
             e.currentTarget.style.backgroundColor = "transparent";
           }}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
+          <img
+            src="/assets/icons-dashboard/logout.svg"
+            alt="أيقونة"
             className="w-4 h-4"
-            style={{ color: theme.palette.error.main }}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1m0-9V6m-6 6h6"
-            />
-          </svg>
-
+          />
           <span>تسجيل الخروج</span>
         </div>
       </div>

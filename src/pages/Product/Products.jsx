@@ -43,7 +43,7 @@ export default function Products({ mode, toggleTheme }) {
       config.params = { ...config.params, ...transformedFilters };
 
       console.log("Request URL:", url, config.params);
-      
+
       const res = await axios.get(url, config);
       setProducts(res.data?.data?.products || []);
     } catch (err) {

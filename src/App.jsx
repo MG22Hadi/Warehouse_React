@@ -1,14 +1,15 @@
 import { useState, useMemo } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 import getTheme from "./Theme.jsx";
 import SignUp from "./pages/login/SignUp.jsx";
 import Login from "./pages/login/Login.jsx";
 import ResetPassword from "./pages/login/ResetPassword.jsx";
 import ResetSuccess from "./pages/login/ResetSuccess.jsx";
-import AddProduct2 from "./pages/AddProduct2.jsx"; 
+import AddProduct2 from "./pages/AddProduct2.jsx";
 import Dashboard from "./pages/Dashborad-Content/Dashboard.jsx";
 import Products from "./pages/Products.jsx";
 import ProductDetailsCard from "./pages/ProductDetailsCard.jsx";
@@ -32,9 +33,8 @@ import AllPurchase from "./pages/AllPurchase.jsx";
 import AllCustody from "./pages/AllCustody.jsx";
 import AllInstall from "./pages/AllInstall.jsx";
 import AllUserRequests from "./pages/AllUserRequests.jsx";
-
-
-
+import Warehouses from "./pages/Warehouses.jsx";
+import Settings from "./pages/Settings.jsx";
 
 export default function App() {
   const [mode, setMode] = useState("light");
@@ -45,7 +45,6 @@ export default function App() {
   };
 
   return (
-    
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
@@ -71,111 +70,248 @@ export default function App() {
           {/* صفحات داخل layout */}
           <Route
             path="/dashboard"
-            element={<Dashboard mode={mode} toggleTheme={toggleTheme} />}
+            // element={<Dashboard mode={mode} toggleTheme={toggleTheme} />}
+            element={
+              <ProtectedRoute>
+                <Dashboard mode={mode} toggleTheme={toggleTheme} />
+              </ProtectedRoute>
+            }
           />
           <Route
             path="/products"
-            element={<Products mode={mode} toggleTheme={toggleTheme} />}
+            // element={<Products mode={mode} toggleTheme={toggleTheme} />}
+            element={
+              <ProtectedRoute>
+                <Products mode={mode} toggleTheme={toggleTheme} />
+              </ProtectedRoute>
+            }
           />
           <Route
             path="/products/warehouse/:warehouseId"
-            element={<Products mode={mode} toggleTheme={toggleTheme} />}
+            element={
+              <ProtectedRoute>
+                <Products mode={mode} toggleTheme={toggleTheme} />
+              </ProtectedRoute>
+            }
           />
           <Route
             path="/products/details/:id"
-            element={<ProductDetailsCard />}
+            element={
+              <ProtectedRoute>
+                <ProductDetailsCard mode={mode} toggleTheme={toggleTheme} />
+              </ProtectedRoute>
+            }
           />
           <Route
             path="/products/:id"
             element={
-              <ProductDetailsCard mode={mode} toggleTheme={toggleTheme} />
+              <ProtectedRoute>
+                <ProductDetailsCard mode={mode} toggleTheme={toggleTheme} />
+              </ProtectedRoute>
             }
           />
           <Route
             path="/calendar"
-            element={<CalendarPage mode={mode} toggleTheme={toggleTheme} />}
+            element={
+              <ProtectedRoute>
+                <CalendarPage mode={mode} toggleTheme={toggleTheme} />
+              </ProtectedRoute>
+            }
           />
-          <Route 
-          path="/AddProduct2" 
-          element={<AddProduct2 mode={mode} toggleTheme={toggleTheme}/>} 
+          <Route
+            path="/warehouses"
+            element={
+              <ProtectedRoute>
+                <Warehouses mode={mode} toggleTheme={toggleTheme} />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute>
+                <Settings mode={mode} toggleTheme={toggleTheme} />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/AddProduct1"
+            element={
+              <ProtectedRoute>
+                <AddProduct1 mode={mode} toggleTheme={toggleTheme} />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/AddProduct2"
+            element={
+              <ProtectedRoute>
+                <AddProduct2 mode={mode} toggleTheme={toggleTheme} />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/AddProduct3"
+            element={
+              <ProtectedRoute>
+                <AddProduct3 mode={mode} toggleTheme={toggleTheme} />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/EntryNotes"
+            element={
+              <ProtectedRoute>
+                <EntryNotes mode={mode} toggleTheme={toggleTheme} />
+              </ProtectedRoute>
+            }
           />
 
-          <Route 
-          path="/AddProduct1" 
-          element={<AddProduct1 mode={mode} toggleTheme={toggleTheme}/>} 
+          <Route
+            path="/ExitNotes"
+            element={
+              <ProtectedRoute>
+                <ExitNotes mode={mode} toggleTheme={toggleTheme} />
+              </ProtectedRoute>
+            }
           />
 
-           <Route path="/AddProduct3" 
-          element={<AddProduct3 mode={mode} toggleTheme={toggleTheme}/>} 
+          <Route
+            path="/ReceivingNotes"
+            element={
+              <ProtectedRoute>
+                <ReceivingNotes mode={mode} toggleTheme={toggleTheme} />
+              </ProtectedRoute>
+            }
           />
 
-           <Route path="/EntryNotes" 
-            element={<EntryNotes mode={mode} toggleTheme={toggleTheme}/>} 
-            />
+          <Route
+            path="/ScrapNotes"
+            element={
+              <ProtectedRoute>
+                <ScrapNotes mode={mode} toggleTheme={toggleTheme} />
+              </ProtectedRoute>
+            }
+          />
 
-            <Route path="/ExitNotes" 
-             element={<ExitNotes mode={mode} toggleTheme={toggleTheme}/>} 
-             />
+          <Route
+            path="/InstallReportsUser"
+            element={
+              <ProtectedRoute>
+                <InstallReportsUser mode={mode} toggleTheme={toggleTheme} />
+              </ProtectedRoute>
+            }
+          />
 
-             <Route path="/ReceivingNotes" 
-             element={<ReceivingNotes mode={mode} toggleTheme={toggleTheme}/>} 
-             />
+          <Route
+            path="/InstallReportsStore"
+            element={
+              <ProtectedRoute>
+                <InstallReportsStore mode={mode} toggleTheme={toggleTheme} />
+              </ProtectedRoute>
+            }
+          />
 
-           <Route path="/ScrapNotes" 
-            element={<ScrapNotes mode={mode} toggleTheme={toggleTheme}/>} 
-            />
+          <Route
+            path="/PurchaseRequests"
+            element={
+              <ProtectedRoute>
+                <PurchaseRequests mode={mode} toggleTheme={toggleTheme} />
+              </ProtectedRoute>
+            }
+          />
 
-            <Route path="/InstallReportsUser" 
-            element={<InstallReportsUser mode={mode} toggleTheme={toggleTheme}/>} />
+          <Route
+            path="/CustodyManagement"
+            element={
+              <ProtectedRoute>
+                <CustodyManagement mode={mode} toggleTheme={toggleTheme} />
+              </ProtectedRoute>
+            }
+          />
 
-            <Route path="/InstallReportsStore" 
-            element={<InstallReportsStore mode={mode} toggleTheme={toggleTheme}/>} />
+          <Route
+            path="/Notification"
+            element={
+              <ProtectedRoute>
+                <Notification mode={mode} toggleTheme={toggleTheme} />
+              </ProtectedRoute>
+            }
+          />
 
-             <Route path="/PurchaseRequests" 
-             element={<PurchaseRequests mode={mode} toggleTheme={toggleTheme}/>} />
+          <Route
+            path="/AllEntry"
+            element={
+              <ProtectedRoute>
+                <AllEntry mode={mode} toggleTheme={toggleTheme} />
+              </ProtectedRoute>
+            }
+          />
 
+          <Route
+            path="/AllExit"
+            element={
+              <ProtectedRoute>
+                <AllExit mode={mode} toggleTheme={toggleTheme} />
+              </ProtectedRoute>
+            }
+          />
 
-            <Route path="/CustodyManagement"  
-            element={<CustodyManagement mode={mode} toggleTheme={toggleTheme}/>} />
-            
+          <Route
+            path="/AllReceiving"
+            element={
+              <ProtectedRoute>
+                <AllReceiving mode={mode} toggleTheme={toggleTheme} />
+              </ProtectedRoute>
+            }
+          />
 
-            <Route path="/Notification"  
-            element={<Notification mode={mode} toggleTheme={toggleTheme}/>} />
+          <Route
+            path="/AllScrap"
+            element={
+              <ProtectedRoute>
+                <AllScrap mode={mode} toggleTheme={toggleTheme} />
+              </ProtectedRoute>
+            }
+          />
 
-            <Route path="/AllEntry"  
-            element={<AllEntry mode={mode} toggleTheme={toggleTheme}/>} />
+          <Route
+            path="/AllPurchase"
+            element={
+              <ProtectedRoute>
+                <AllPurchase mode={mode} toggleTheme={toggleTheme} />
+              </ProtectedRoute>
+            }
+          />
 
-            <Route path="/AllExit"  
-            element={<AllExit mode={mode} toggleTheme={toggleTheme}/>} />
-            
-            <Route path="/AllReceiving"  
-            element={<AllReceiving mode={mode} toggleTheme={toggleTheme}/>} />
-            
-            <Route path="/AllScrap"  
-            element={<AllScrap mode={mode} toggleTheme={toggleTheme}/>} />
+          <Route
+            path="/AllCustody"
+            element={
+              <ProtectedRoute>
+                <AllCustody mode={mode} toggleTheme={toggleTheme} />
+              </ProtectedRoute>
+            }
+          />
 
-             <Route path="/AllPurchase"  
-             element={<AllPurchase mode={mode} toggleTheme={toggleTheme}/>} />
+          <Route
+            path="/AllInstall"
+            element={
+              <ProtectedRoute>
+                <AllInstall mode={mode} toggleTheme={toggleTheme} />
+              </ProtectedRoute>
+            }
+          />
 
-             <Route path="/AllCustody"  
-             element={<AllCustody mode={mode} toggleTheme={toggleTheme}/>} />
-
-             <Route path="/AllInstall"  
-             element={<AllInstall mode={mode} toggleTheme={toggleTheme}/>} />
-
-             <Route path="/AllUserRequests"  
-             element={<AllUserRequests mode={mode} toggleTheme={toggleTheme}/>} />
-
-            
-          
-            
-
-                    </Routes>
-
-                    
-        
+          <Route
+            path="/AllUserRequests"
+            element={
+              <ProtectedRoute>
+                <AllUserRequests mode={mode} toggleTheme={toggleTheme} />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
       </Router>
     </ThemeProvider>
-    
   );
 }

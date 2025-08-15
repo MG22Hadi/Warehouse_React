@@ -6,7 +6,7 @@ import arLocale from "@fullcalendar/core/locales/ar";
 import MainLayout from "../MainLayout";
 import { useTheme } from "@mui/material/styles";
 import { Listbox } from "@headlessui/react";
-// import "../index.css";
+import "../index.css";
 
 export default function CalendarPage({ mode, toggleTheme }) {
   const calendarRef = useRef(null);
