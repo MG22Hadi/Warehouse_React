@@ -1,0 +1,134 @@
+/* Container */
+.media-container {
+  max-width: 700px;
+  margin: 40px auto;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  font-family: sans-serif;
+}
+
+/* Progress Header */
+.progress-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+  background-color: #ff8c42;
+  padding: 24px;
+  border-radius: 12px;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.step-label1 {
+  font-size: 2px;
+  color: #ffffff;
+  font-weight: 400;
+}
+
+.step .circle {
+  width: 10px;
+  height: 10px;
+  background: white;
+  border-radius: 50%;
+}
+
+.step.inactive .circle {
+  background: #ffbb66;
+}
+
+.line {
+  flex-grow: 1;
+  height: 2px;
+  background: #ffffff;
+  margin: 0 8px;
+}
+
+.step span {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Main Content */
+.media-content {
+  padding: 30px;
+  text-align: center;
+}
+
+.media-content h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.upload-box {
+  border: 2px dashed orange;
+  padding: 40px 20px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+}
+
+.upload-icon {
+  font-size: 40px;
+  color: orange;
+  margin-bottom: 10px;
+}
+
+.browse-text {
+  color: orange;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.support-text {
+  font-size: 13px;
+  color: #888;
+  margin-top: 4px;
+}
+
+/* Buttons */
+.nav-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.back-button,
+.next-button {
+  padding: 10px 24px;
+  font-size: 14px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.back-button {
+  background: transparent;
+  border: 1.5px solid orange;
+  color: orange;
+}
+
+.back-button:hover {
+  background-color: #fff5e6;
+}
+
+.next-button {
+  background-color: orange;
+  color: white;
+}
+
+.next-button:hover {
+  background-color: darkorange;
+}
+
+
+
+
+
+

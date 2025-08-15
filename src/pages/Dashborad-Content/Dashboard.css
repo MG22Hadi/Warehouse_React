@@ -1,0 +1,6 @@
+.dashboard-wrapper {
+  background-color: #fff3e0; /* لون برتقالي فاتح جداً */
+  min-height: 100vh;
+  display: flex;
+}
+

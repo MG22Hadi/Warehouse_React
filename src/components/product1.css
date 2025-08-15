@@ -1,0 +1,276 @@
+/* Container */
+.media-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* الشكل الدائري الأساسي */
+.step-number {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #FFC794; /* الافتراضي للخطوات غير المفعلة */
+}
+
+/* ترتيب الخطوات */
+.progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 10px;
+}
+
+/* الخطوة النشطة فقط (معلومات المنتج) */
+.progress-step.active .step-number {
+  background-color: #ffffff;
+}
+
+.progress-step.active .step-label {
+  color: #ffffff;
+  font-weight: bold;
+}
+
+/* النص لكل الخطوات غير النشطة */
+.step-label,
+.step-label1 {
+  margin-top: 6px;
+  font-size: 16px;
+  color: #FFC794;
+  font-weight: 600;
+}
+.progress-step .step-number1{
+    background-color: #FFC794;
+}
+
+.progress-line {
+  width: 120px;
+  height: 2px;
+  background-color: #FFC794;
+  margin-top:-40px;
+}
+
+.step span {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+
+.media-content {
+  padding: 30px;
+  text-align: center;
+}
+
+.upload-box {
+  border: 2px dashed orange;
+  padding: 40px 20px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+}
+
+.upload-icon {
+  font-size: 40px;
+  color: orange;
+  margin-bottom: 10px;
+}
+
+.browse-text {
+  color: orange;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.support-text {
+  font-size: 13px;
+  color: #888;
+  margin-top: 4px;
+}
+
+.nav-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 60px;
+}
+
+.back-button,
+.nextbutton {
+  width: 170px;
+  height: 46px;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.back-button {
+  background: transparent;
+  color: #FF8E29;
+  border: 1.5px solid #FF8E29;
+}
+
+.back-button:hover {
+  background-color: #fff5e6;
+}
+
+.nextbutton {
+  background-color: #FF8E29;
+  color: white;
+}
+
+.nextbutton:hover {
+  background-color: darkorange;
+}
+
+.info_product {
+  text-align: right;
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.media-container .new_product {
+  font-size: 30px;
+  text-align: center;
+  display: block;
+  margin-top: -30px;
+  font-weight: bold;
+}
+
+.media-container .under_new_product {
+  margin-top: -10px;
+  margin-bottom: 80px;
+  font-size: 20px;
+  text-align: center;
+  display: block;
+  color: #6f757e;
+}
+
+.form-box {
+  background-color: white;
+  border-radius: 12px;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 30px 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.new_product {
+  font-size: 32px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.under_new_product {
+  font-size: 16px;
+  text-align: center;
+  color: #888;
+  margin-bottom: 30px;
+}
+
+.progress-bar {
+  width: 95%;
+  max-width: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #FF8E29;
+  border-radius: 12px;
+  color: white;
+  box-shadow: 0 2px 8px rgba(255, 140, 66, 0.3);
+  margin-top: -60px;
+  margin-right: 30px;
+}
+
+.input-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.input-fields input {
+  padding: 15px 10px;
+  font-size: 16px;
+  border: 2px solid #E1E1E1;
+  border-radius: 12px;
+  background-color: #f5f5f5;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+  text-align: right;
+}
+
+.input-fields input:focus {
+  outline: none;
+  border-color: orange;
+}
+
+.input-fields .centered-input {
+  width: 100%;
+  padding: 15px 10px;
+  font-size: 16px;
+  border: 2px solid #E1E1E1;
+  border-radius: 12px;
+  background-color: #f5f5f5;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+
+}
+.input-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+  margin-right: 5px;
+  text-align: right;
+}
+.text{
+  padding-top: 20px;
+  padding-right: 100px;
+}
+.input-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input-row {
+  display: flex;
+  gap: 20px;
+}
+
+.input-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-wrapper input {
+  padding: 12px;
+  font-size: 16px;
+  border: 2px solid #E1E1E1;
+  border-radius: 12px;
+  background-color: #f5f5f5;
+  text-align: right;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+  min-height: 16px;
+}
+
