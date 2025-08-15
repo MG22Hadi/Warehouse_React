@@ -1,4 +1,5 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
+import { useNavigate } from 'react-router-dom';
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -7,14 +8,33 @@ import SignUp from "./pages/login/SignUp.jsx";
 import Login from "./pages/login/Login.jsx";
 import ResetPassword from "./pages/login/ResetPassword.jsx";
 import ResetSuccess from "./pages/login/ResetSuccess.jsx";
-
+import AddProduct2 from "./pages/AddProduct2.jsx"; 
 import Dashboard from "./pages/Dashborad-Content/Dashboard.jsx";
-import Products from "./pages/Product/Products.jsx";
-import ProductDetailsCard from "./pages/Product/ProductDetailsCard.jsx";
+import Products from "./pages/Products.jsx";
+import ProductDetailsCard from "./pages/ProductDetailsCard.jsx";
 import CalendarPage from "./pages/Calendar.jsx";
-import EntryNotes from "./pages/Notes/EntryNotes.jsx";
-import Warehouses from "./pages/Warehouses.jsx";
-import Settings from "./pages/Settings.jsx";
+import AddProduct3 from "./pages/AddProduct3.jsx";
+import EntryNotes from "./pages/EntryNotes.jsx";
+import ExitNotes from "./pages/ExitNotes.jsx";
+import ReceivingNotes from "./pages/ReceivingNotes.jsx";
+import ScrapNotes from "./pages/ScrapNotes.jsx";
+import InstallReportsUser from "./pages/InstallReportsUser.jsx";
+import AddProduct1 from "./pages/AddProduct1.jsx";
+import InstallReportsStore from "./pages/InstallReportsStore";
+import PurchaseRequests from "./pages/PurchaseRequests";
+import CustodyManagement from "./pages/CustodyManagement";
+import Notification from "./pages/Notification.jsx";
+import AllEntry from "./pages/AllEntry.jsx";
+import AllExit from "./pages/AllExit.jsx";
+import AllReceiving from "./pages/AllReceiving.jsx";
+import AllScrap from "./pages/AllScrap.jsx";
+import AllPurchase from "./pages/AllPurchase.jsx";
+import AllCustody from "./pages/AllCustody.jsx";
+import AllInstall from "./pages/AllInstall.jsx";
+import AllUserRequests from "./pages/AllUserRequests.jsx";
+
+
+
 
 export default function App() {
   const [mode, setMode] = useState("light");
@@ -24,11 +44,8 @@ export default function App() {
     setMode((prev) => (prev === "light" ? "dark" : "light"));
   };
 
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", mode);
-  }, [mode]);
-
   return (
+    
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
@@ -78,20 +95,87 @@ export default function App() {
             path="/calendar"
             element={<CalendarPage mode={mode} toggleTheme={toggleTheme} />}
           />
-          <Route
-            path="/entry-notes"
-            element={<EntryNotes mode={mode} toggleTheme={toggleTheme} />}
+          <Route 
+          path="/AddProduct2" 
+          element={<AddProduct2 mode={mode} toggleTheme={toggleTheme}/>} 
           />
-          <Route
-            path="/warehouses"
-            element={<Warehouses mode={mode} toggleTheme={toggleTheme} />}
+
+          <Route 
+          path="/AddProduct1" 
+          element={<AddProduct1 mode={mode} toggleTheme={toggleTheme}/>} 
           />
-          <Route
-            path="/settings"
-            element={<Settings mode={mode} toggleTheme={toggleTheme} />}
+
+           <Route path="/AddProduct3" 
+          element={<AddProduct3 mode={mode} toggleTheme={toggleTheme}/>} 
           />
-        </Routes>
+
+           <Route path="/EntryNotes" 
+            element={<EntryNotes mode={mode} toggleTheme={toggleTheme}/>} 
+            />
+
+            <Route path="/ExitNotes" 
+             element={<ExitNotes mode={mode} toggleTheme={toggleTheme}/>} 
+             />
+
+             <Route path="/ReceivingNotes" 
+             element={<ReceivingNotes mode={mode} toggleTheme={toggleTheme}/>} 
+             />
+
+           <Route path="/ScrapNotes" 
+            element={<ScrapNotes mode={mode} toggleTheme={toggleTheme}/>} 
+            />
+
+            <Route path="/InstallReportsUser" 
+            element={<InstallReportsUser mode={mode} toggleTheme={toggleTheme}/>} />
+
+            <Route path="/InstallReportsStore" 
+            element={<InstallReportsStore mode={mode} toggleTheme={toggleTheme}/>} />
+
+             <Route path="/PurchaseRequests" 
+             element={<PurchaseRequests mode={mode} toggleTheme={toggleTheme}/>} />
+
+
+            <Route path="/CustodyManagement"  
+            element={<CustodyManagement mode={mode} toggleTheme={toggleTheme}/>} />
+            
+
+            <Route path="/Notification"  
+            element={<Notification mode={mode} toggleTheme={toggleTheme}/>} />
+
+            <Route path="/AllEntry"  
+            element={<AllEntry mode={mode} toggleTheme={toggleTheme}/>} />
+
+            <Route path="/AllExit"  
+            element={<AllExit mode={mode} toggleTheme={toggleTheme}/>} />
+            
+            <Route path="/AllReceiving"  
+            element={<AllReceiving mode={mode} toggleTheme={toggleTheme}/>} />
+            
+            <Route path="/AllScrap"  
+            element={<AllScrap mode={mode} toggleTheme={toggleTheme}/>} />
+
+             <Route path="/AllPurchase"  
+             element={<AllPurchase mode={mode} toggleTheme={toggleTheme}/>} />
+
+             <Route path="/AllCustody"  
+             element={<AllCustody mode={mode} toggleTheme={toggleTheme}/>} />
+
+             <Route path="/AllInstall"  
+             element={<AllInstall mode={mode} toggleTheme={toggleTheme}/>} />
+
+             <Route path="/AllUserRequests"  
+             element={<AllUserRequests mode={mode} toggleTheme={toggleTheme}/>} />
+
+            
+          
+            
+
+                    </Routes>
+
+                    
+        
       </Router>
     </ThemeProvider>
+    
   );
 }

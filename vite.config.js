@@ -1,13 +1,24 @@
+import path from "path";
+import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import tailwindcss from "@tailwindcss/vite";
+import { fileURLToPath } from "url";
+import svgr from "vite-plugin-svgr";
 
-// https://vite.dev/config/
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 export default defineConfig({
-  plugins: [tailwindcss(), react()],
+  // plugins: [tailwindcss(), react()],
+  plugins: [react(), tailwindcss(), svgr()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
   server: {
     proxy: {
-      "/api": "http://localhost:8000", // أو رابط السيرفر تبع Laravel
+      "/api": "http://localhost:8000",
     },
   },
 });

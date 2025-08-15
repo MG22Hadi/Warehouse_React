@@ -12,7 +12,7 @@ export default function Login({ mode, toggleTheme }) {
   const navigate = useNavigate();
 
   const [login, setLogin] = useState("");
-  const [isManager, setIsManager] = useState(false); 
+  const [isManager, setIsManager] = useState(false);
 
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");

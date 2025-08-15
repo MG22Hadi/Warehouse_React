@@ -18,29 +18,7 @@
 /* يمكن تخصيص التنسيق أكثر عند الحاجة */
 /* .calendar-wrapper {
   direction: rtl;
-} */
+} */ 
 
-/*مشان حقول واللون الاصفر*/
-:root {
-  --autofill-bg: #fff;
-  --autofill-text: #000;
-}
 
-[data-theme="dark"] {
-  --autofill-bg: #1e293b;
-  --autofill-text: #fff;
-}
 
-input:-webkit-autofill {
-  box-shadow: 0 0 0px 1000px var(--autofill-bg) inset !important;
-  -webkit-text-fill-color: var(--autofill-text) !important;
-  transition: background-color 9999s ease-out, color 9999s ease-out;
-}
-
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-.scrollbar-hide {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
