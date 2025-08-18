@@ -100,7 +100,7 @@ export default function SignUp({ mode, toggleTheme }) {
             navigate("/dashboard");
             break;
           case "warehouseKeeper":
-            navigate("/warehouse");
+            navigate("/warehouses");
             break;
           case "user":
             navigate("/data-entry");

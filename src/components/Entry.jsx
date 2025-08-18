@@ -1,25 +1,23 @@
-// EntryNote.jsx
 import React from "react";
 import "./Entry.css";
 
-const EntryNote = () => {
+const EntryNote = ({ note }) => {
   return (
     <div className="container" dir="rtl">
       <div className="header">
         <div className="top-right">
           <p>
             <span className="black"> رقم التسلسل:</span>
-            <span className="storage"> 12345678</span>
+            <span className="storage"> {note.serial_number}</span>
           </p>
-          <p className="gray">مستودع الرياض</p>
+          <p className="gray">{note.warehouse?.name || "—"}</p>
         </div>
         <div className="title">
           <p className="text-lg font-semibold">مذكرة إدخال</p>
           <p className="Date">
             <span className="black"> التاريخ :</span>
-            <span className="storage"> 2024-05-20</span>
+            <span className="storage"> {note.date?.slice(0, 10)}</span>
           </p>
-        
         </div>
         <div className="top-left">
           <p className="black">الجمهورية العربية السورية</p>
@@ -30,7 +28,7 @@ const EntryNote = () => {
       <div className="table-wrapper">
         <table>
           <thead>
-            <tr> 
+            <tr>
               <th rowSpan="2">الرقم التسلسلي</th>
               <th colSpan="3">المواد</th>
               <th rowSpan="2">الكمية المستلمة</th>
@@ -43,33 +41,39 @@ const EntryNote = () => {
             </tr>
           </thead>
           <tbody>
-            {Array(10).fill().map((_, index) => (
-              <tr key={index}>
-                <td>1</td>
-                <td>ITM-1001</td>
-                <td>Printer Canon</td>
-                <td>PCS</td>
-                <td>300</td>
-                <td>تسليم عاجل</td>
+            {note.items && note.items.length > 0 ? (
+              note.items.map((item, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{item.product?.code}</td>
+                  <td>{item.product?.name}</td>
+                  <td>{item.product?.unit || "—"}</td>
+                  <td>{item.quantity}</td>
+                  <td>{item.notes || "—"}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6">لا توجد مواد</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
 
       <div className="total">
         <span className="grand_total">الإجمالي:</span>
-         <span className="price"> $1,200.00</span>
+        <span className="price">{note.total || "—"}</span>
       </div>
 
       <div className="footer">
         <p>
           <span className="grand_total">أمين المستودع:</span>
-          <span className="price"> ملك مبارك</span>
+          <span className="price">{note.user?.name || "—"}</span>
         </p>
         <p>
           <span className="grand_total"> المستلم:</span>
-          <span className="price"> ملك مبارك</span>
+          <span className="price">{note.recipient || "—"}</span>
         </p>
       </div>
     </div>
