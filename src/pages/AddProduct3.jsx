@@ -7,7 +7,7 @@ import ProductDetailsCard from "./ProductDetailsCard";
 import Product3 from "../components/Product3";
 
 
-export default function AProduct3({ mode, toggleTheme }) {
+export default function AddProduct3({ mode, toggleTheme }) {
   const theme = useTheme();
   const { warehouseId } = useParams();
   const [products, setProducts] = useState([]);

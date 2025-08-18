@@ -6,51 +6,31 @@ import arLocale from "@fullcalendar/core/locales/ar";
 import MainLayout from "../MainLayout";
 import { useTheme } from "@mui/material/styles";
 import { Listbox } from "@headlessui/react";
+import api from "../api/axiosInstance";
 import "../index.css";
 
 export default function CalendarPage({ mode, toggleTheme }) {
   const calendarRef = useRef(null);
   const [currentDate, setCurrentDate] = useState(new Date());
   const theme = useTheme();
-  // const dayCellBg = mode === "dark" ? "bg-neutral-900" : "bg-white";
 
-  useEffect(() => {
-    const api = calendarRef.current?.getApi();
-    if (api) setCurrentDate(api.getDate());
-  }, []);
+  // ====== API & STATE ======
+  const BASE_URL = "http://localhost:8000/api/calendar";
 
-  const handleNextMonth = () => {
-    const api = calendarRef.current.getApi();
-    api.next();
-    setCurrentDate(api.getDate());
-  };
+  const [events, setEvents] = useState([]); // ملاحظات الشهر الحالي (معالجة لـ FullCalendar)
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handlePrevMonth = () => {
-    const api = calendarRef.current.getApi();
-    api.prev();
-    setCurrentDate(api.getDate());
-  };
+  // نافذة الإضافة/التعديل/الحذف
+  const [showModal, setShowModal] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null); // YYYY-MM-DD
+  const [noteContent, setNoteContent] = useState("");
+  const [hasExistingNote, setHasExistingNote] = useState(false); // لتمييز بين إضافة/تعديل
 
-  const handleNextDay = () => {
-    const api = calendarRef.current.getApi();
-    api.incrementDate({ days: 1 });
-    setCurrentDate(api.getDate());
-  };
-
-  const handlePrevDay = () => {
-    const api = calendarRef.current.getApi();
-    api.incrementDate({ days: -1 });
-    setCurrentDate(api.getDate());
-  };
-
-  const handleMonthChange = (event) => {
-    const selectedMonth = parseInt(event.target.value);
-    const api = calendarRef.current.getApi();
-    const newDate = new Date(currentDate);
-    newDate.setMonth(selectedMonth);
-    api.gotoDate(newDate);
-    setCurrentDate(newDate);
-  };
+  // ====== Helpers ======
+  const two = (n) => String(n).padStart(2, "0");
+  const ymd = (d) =>
+    `${d.getFullYear()}-${two(d.getMonth() + 1)}-${two(d.getDate())}`;
 
   const monthYearFormatter = new Intl.DateTimeFormat("ar", {
     month: "long",
@@ -64,6 +44,159 @@ export default function CalendarPage({ mode, toggleTheme }) {
       new Date(2025, i)
     ),
   }));
+
+  // ====== Fetch notes for visible month ======
+  const fetchNotesByMonthYear = async (dateObj) => {
+    setLoading(true);
+    setError("");
+
+    const month = two(dateObj.getMonth() + 1);
+    const year = String(dateObj.getFullYear());
+
+    try {
+      const token = localStorage.getItem("token"); // لازم يكون موجود بعد تسجيل الدخول
+      const res = await api.get(`${BASE_URL}?month=${month}&year=${year}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const notes = res?.data?.data?.notes ?? [];
+      const mapped = notes.map((n) => ({
+        title: n.noteContent,
+        date: n.note_date,
+        backgroundColor: "#FFEDD5",
+        textColor: theme.palette?.text?.primary || "#111827",
+        borderColor: "transparent",
+      }));
+
+      setEvents(mapped);
+    } catch (err) {
+      console.error("فشل جلب ملاحظات التقويم", err);
+      setError("فشل جلب ملاحظات التقويم");
+      setEvents([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // جلب عند التحميل وأي تغيير للشهر/السنة
+  useEffect(() => {
+    fetchNotesByMonthYear(currentDate);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentDate.getFullYear(), currentDate.getMonth()]);
+
+  // ====== Calendar navigation handlers (كما هي) ======
+  useEffect(() => {
+    const apiFC = calendarRef.current?.getApi();
+    if (apiFC) setCurrentDate(apiFC.getDate());
+  }, []);
+
+  const handleNextMonth = () => {
+    const apiFC = calendarRef.current.getApi();
+    apiFC.next();
+    setCurrentDate(apiFC.getDate());
+  };
+
+  const handlePrevMonth = () => {
+    const apiFC = calendarRef.current.getApi();
+    apiFC.prev();
+    setCurrentDate(apiFC.getDate());
+  };
+
+  const handleNextDay = () => {
+    const apiFC = calendarRef.current.getApi();
+    apiFC.incrementDate({ days: 1 });
+    setCurrentDate(apiFC.getDate());
+  };
+
+  const handlePrevDay = () => {
+    const apiFC = calendarRef.current.getApi();
+    apiFC.incrementDate({ days: -1 });
+    setCurrentDate(apiFC.getDate());
+  };
+
+  const handleMonthChange = (event) => {
+    const selectedMonth = parseInt(event.target.value);
+    const apiFC = calendarRef.current.getApi();
+    const newDate = new Date(currentDate);
+    newDate.setMonth(selectedMonth);
+    apiFC.gotoDate(newDate);
+    setCurrentDate(newDate);
+  };
+
+  // ====== Modal open logic on date click ======
+  const openModalForDate = (dateStr) => {
+    setSelectedDate(dateStr);
+    const existing = events.find((e) => e.date === dateStr);
+    if (existing) {
+      setHasExistingNote(true);
+      setNoteContent(existing.title || "");
+    } else {
+      setHasExistingNote(false);
+      setNoteContent("");
+    }
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedDate(null);
+    setNoteContent("");
+    setHasExistingNote(false);
+  };
+
+  // ====== CRUD Handlers ======
+  const handleSave = async () => {
+    try {
+      // البيانات اللي راح نرسلها
+      const payload = {
+        noteContent: noteContent,
+        note_date: selectedDate,
+        // أضف أي حقول أخرى مطلوبة حسب الـ API
+      };
+
+      console.log("📤 البيانات المرسلة:", payload);
+
+      const res = await api.post(`${BASE_URL}/store`, payload, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      console.log("✅ تم الحفظ بنجاح:", res.data);
+      alert("تم الحفظ بنجاح");
+    } catch (err) {
+      console.error("❌ خطأ أثناء الحفظ:", err);
+
+      if (err.response) {
+        console.error("📩 رد السيرفر:", err.response.data);
+        alert(
+          `خطأ من السيرفر: ${err.response.status} - ${JSON.stringify(
+            err.response.data
+          )}`
+        );
+      } else if (err.request) {
+        console.error("📡 لم يتم الرد من السيرفر");
+        alert("لم يتم الرد من السيرفر");
+      } else {
+        console.error("⚠️ خطأ غير متوقع:", err.message);
+        alert(`خطأ غير متوقع: ${err.message}`);
+      }
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!selectedDate) return;
+    if (!window.confirm("هل أنت متأكد من حذف الملاحظة؟")) return;
+
+    try {
+      await api.delete(`${BASE_URL}/destroy/${selectedDate}`);
+      await fetchNotesByMonthYear(new Date(selectedDate));
+      closeModal();
+    } catch (err) {
+      console.error("خطأ أثناء حذف الملاحظة", err);
+      alert("حدث خطأ أثناء الحذف");
+    }
+  };
 
   return (
     <MainLayout mode={mode} toggleTheme={toggleTheme} pageTitle="التقويم">
@@ -86,6 +219,7 @@ export default function CalendarPage({ mode, toggleTheme }) {
               <img
                 src="/assets/icons-dashboard/right-arrow-month.png"
                 className="w-full h-full object-cover object-bottom"
+                alt=""
               />
             </button>
             <button
@@ -95,6 +229,7 @@ export default function CalendarPage({ mode, toggleTheme }) {
               <img
                 src="/assets/icons-dashboard/right-arrow-month.png"
                 className="w-full h-full object-cover object-bottom rotate-180"
+                alt=""
               />
             </button>
           </div>
@@ -108,6 +243,7 @@ export default function CalendarPage({ mode, toggleTheme }) {
               <img
                 src="/assets/icons-dashboard/right-arrow.png"
                 className="w-full h-full object-cover object-bottom"
+                alt=""
               />
             </button>
             <div>{weekdayFormatter.format(currentDate)}</div>
@@ -115,6 +251,7 @@ export default function CalendarPage({ mode, toggleTheme }) {
               <img
                 src="/assets/icons-dashboard/left-arrow.png"
                 className="w-full h-full object-cover object-bottom"
+                alt=""
               />
             </button>
           </div>
@@ -124,10 +261,10 @@ export default function CalendarPage({ mode, toggleTheme }) {
             <Listbox
               value={currentDate.getMonth()}
               onChange={(selectedMonth) => {
-                const api = calendarRef.current.getApi();
+                const apiFC = calendarRef.current.getApi();
                 const newDate = new Date(currentDate);
                 newDate.setMonth(selectedMonth);
-                api.gotoDate(newDate);
+                apiFC.gotoDate(newDate);
                 setCurrentDate(newDate);
               }}
             >
@@ -172,6 +309,7 @@ export default function CalendarPage({ mode, toggleTheme }) {
             </Listbox>
           </div>
         </div>
+
         <div
           className="rounded-[20px] shadow p-4"
           style={{ backgroundColor: theme.palette.background.calender }}
@@ -188,6 +326,11 @@ export default function CalendarPage({ mode, toggleTheme }) {
               dayGridMonth: { titleFormat: { year: "numeric", month: "long" } },
             }}
             dayHeaderFormat={{ weekday: "short" }}
+            //  فتح المودال عند الضغط على اليوم
+            dateClick={(arg) => {
+              // arg.dateStr بصيغة YYYY-MM-DD
+              openModalForDate(arg.dateStr);
+            }}
             dayCellContent={(arg) => {
               const date = arg.date;
               const isToday = new Date().toDateString() === date.toDateString();
@@ -227,23 +370,82 @@ export default function CalendarPage({ mode, toggleTheme }) {
                 .filter(Boolean)
                 .join(" ");
             }}
-            events={[
-              {
-                title: "مهمة مستودع",
-                date: "2025-05-15",
-                backgroundColor: "#FDBA74",
-                textColor: "#7C2D12",
-              },
-              {
-                title: "تسليم مهم",
-                date: "2025-05-20",
-                backgroundColor: "#93C5FD",
-                textColor: "#1E3A8A",
-              },
-            ]}
+            //  استخدام الملاحظات القادمة من الـ API
+            events={events}
           />
+          {loading && (
+            <div
+              className="mt-3 text-sm"
+              style={{ color: theme.palette.text.secondary }}
+            >
+              جاري تحميل ملاحظات الشهر...
+            </div>
+          )}
+          {!!error && <div className="mt-3 text-sm text-red-600">{error}</div>}
         </div>
       </div>
+
+      {/* ===== Modal (إضافة/تعديل/حذف) بنفس روح صفحة المستودعات ===== */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div
+            className="w-[90%] max-w-md rounded-xl p-6 text-right"
+            style={{
+              backgroundColor:
+                theme.palette.mode === "dark" ? "#1f2937" : "#ffffff",
+            }}
+          >
+            <h2
+              className="text-xl font-bold mb-2"
+              style={{ color: theme.palette.text.primary }}
+            >
+              {hasExistingNote ? "تعديل ملاحظة" : "إضافة ملاحظة"}
+            </h2>
+            <p
+              className="text-sm mb-4"
+              style={{ color: theme.palette.text.secondary }}
+            >
+              التاريخ: {selectedDate}
+            </p>
+
+            <div className="mb-4">
+              <label className="block mb-1 text-sm font-medium">
+                نص الملاحظة
+              </label>
+              <textarea
+                className="w-full border rounded px-3 py-2 min-h-[110px]"
+                value={noteContent}
+                onChange={(e) => setNoteContent(e.target.value)}
+              />
+            </div>
+
+            <div className="flex flex-wrap gap-2 justify-between mt-4">
+              <div className="flex gap-2">
+                <button
+                  onClick={handleSave}
+                  className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                >
+                  حفظ
+                </button>
+                {hasExistingNote && (
+                  <button
+                    onClick={handleDelete}
+                    className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                  >
+                    حذف
+                  </button>
+                )}
+              </div>
+              <button
+                onClick={closeModal}
+                className="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500"
+              >
+                إلغاء
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </MainLayout>
   );
 }

@@ -18,20 +18,20 @@ export const getTheme = (mode) =>
               secondary: "#6F757E", // رمادي معتدل للنصوص الثانوية
             },
             primary: {
-              main: "#FF8E29",
+              main: "#FF8E29", 
             },
             action: {
               selected: "#FFE9D6",
-              hover: "#FFF4EA",
+              hover :"#FFF4EA",
             },
             error: {
-              main: "#DC2626",
+              main: "#DC2626", 
               light: "#FEE2E2",
             },
           }
         : {
             background: {
-              default: "#151D32",
+              default: "#151D32", 
               paper: "#292F45", // سطح العناصر
               calender: "#151D32",
               card1: "#353C56",
@@ -45,8 +45,8 @@ export const getTheme = (mode) =>
               main: "#FF8E29", // يبقى ثابت لتمييز الزر الأساسي
             },
             action: {
-              selected: "#3D2B1F",
-              hover: "#151D32",
+              selected: "#3D2B1F", 
+              hover :"#151D32",
             },
             error: {
               main: "#F87171",

@@ -21,7 +21,7 @@ export default function ReceivingNotes({ mode, toggleTheme }) {
         dir="rtl"
       >
         <div className="space-y-4 pl-[31.33px] pr-[31.33px]">
-          {eitNotes.map((note, index) => (
+          {exitNotes.map((note, index) => (
             <div
               key={note.id}
               className="w-full rounded-[20px] p-6 shadow-sm flex justify-between items-center px-8 py-8"

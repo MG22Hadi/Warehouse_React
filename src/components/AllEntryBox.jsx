@@ -1,28 +1,41 @@
-import React from "react";
-import { useNavigate } from "react-router-dom"; 
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./AllNotesBox.css";
-const data = [];
-
-for (let i = 1; i <= 4; i++) {
-  data.push({
-    serial: `OUT-2024-00${i}`,
-    date: "2024-05-20",
-    count: 5,
-    recipient: "نور",
-    action: "مذكرات ادخال",
-    link: `/EntryNotes`,
-  });
-}
 
 const AllEntryBox = () => {
   const navigate = useNavigate();
+  const [data, setData] = useState([]);
+  const token = localStorage.getItem("token");
 
-  const handleClick = (link) => {
-    navigate(link);
+  useEffect(() => {
+    const fetchNotes = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/api/allEntryNote",
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("📥 المذكرات:", response.data);
+        setData(response.data.data);
+      } catch (error) {
+        console.error("فشل في جلب المذكرات", error);
+      }
+    };
+
+    fetchNotes();
+  }, []);
+
+  const handleClick = (id) => {
+    navigate(`/EntryNotes/${id}`);
   };
 
   const handleCreateNote = () => {
-    navigate("/CreateExitNote");
+    navigate("/CreateEntryNote");
   };
 
   return (
@@ -36,33 +49,37 @@ const AllEntryBox = () => {
       <div className="cards-row">
         {data.map((item, index) => (
           <div
-            key={index}
-            className={`card ${index % 2 === 0 ? "bg-white" : "bg-gray"} clickable`}
-            onClick={() => handleClick(item.link)}
+            key={item.id}
+            className={`card ${
+              index % 2 === 0 ? "bg-white" : "bg-gray"
+            } clickable`}
+            onClick={() => handleClick(item.id)}
             role="button"
             tabIndex={0}
-            onKeyDown={(e) => { if (e.key === 'Enter') handleClick(item.link); }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleClick(item.id);
+            }}
           >
             <div className="card-content">
               <div className="info-item">
                 <span className="label">الرقم</span>
-                <span className="value">{item.serial}</span>
+                <span className="value">{item.serial_number}</span>
               </div>
               <div className="info-item">
                 <span className="label">التاريخ</span>
-                <span className="value">{item.date}</span>
+                <span className="value">{item.date?.slice(0, 10)}</span>
               </div>
               <div className="info-item">
                 <span className="label">العدد</span>
-                <span className="value">{item.count}</span>
+                <span className="value">{item.items_count}</span>
               </div>
               <div className="info-item">
                 <span className="label">المستلم</span>
-                <span className="value">{item.recipient}</span>
+                <span className="value">{item.user?.name || "—"}</span>
               </div>
               <div className="info-item">
                 <span className="label">الحالة</span>
-                <span className="value">{item.action}</span>
+                <span className="value">مذكرة ادخال</span>
               </div>
             </div>
           </div>

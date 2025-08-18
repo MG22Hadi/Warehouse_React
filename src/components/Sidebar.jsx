@@ -7,16 +7,14 @@ export default function Sidebar() {
   const theme = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
-
   const [showWarehouses, setShowWarehouses] = useState(false);
   const [warehouses, setWarehouses] = useState([]);
-  const [showInstallReports, setShowInstallReports] = useState(false);
 
   const isActive = (path) => location.pathname === path;
 
-  // جلب المستودعات
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token"); // أو اسم التوكن عندك
+
     axios
       .get("http://localhost:8000/api/warehouses/index", {
         headers: {
@@ -24,6 +22,7 @@ export default function Sidebar() {
         },
       })
       .then((res) => {
+        console.log("المستودعات:", res.data);
         setWarehouses(
           res.data.data.sort((a, b) => a.name.localeCompare(b.name))
         );
@@ -33,21 +32,25 @@ export default function Sidebar() {
       });
   }, []);
 
-  // فتح قسم ضبط التركيب إذا كان على صفحة فرعية
-  useEffect(() => {
-    if (
-      location.pathname === "/InstallReportsUser" ||
-      location.pathname === "/InstallReportsStore"
-    ) {
-      setShowInstallReports(true);
-    }
-  }, [location.pathname]);
-
-  const menuItemsBeforeInstall = [
+  const menuItems = [
+    // {
+    //   icon: <img src="/assets/icons-dashboard/Home.svg" className="w-4 h-4" />,
+    //   label: "الصفحة الرئيسية",
+    //   path: "/dashboard",
+    // },
+    // {
+    //   icon: (
+    //     <img src="/assets/icons-dashboard/Products.svg" className="w-4 h-4" />
+    //   ),
+    //   label: "المنتجات",
+    //   path: "/products",
+    // },
     {
-      icon: <img src="/assets/icons-dashboard/Home.svg" className="w-4 h-4" />,
-      label: "الصفحة الرئيسية",
-      path: "/dashboard",
+      icon: (
+        <img src="/assets/icons-dashboard/Settings.svg" className="w-4 h-4" />
+      ),
+      label: "المستودعات",
+      path: "/warehouses",
     },
     {
       icon: (
@@ -60,22 +63,15 @@ export default function Sidebar() {
       icon: (
         <img src="/assets/icons-dashboard/EntryNotes.svg" className="w-4 h-4" />
       ),
-      label: "اضافة منتج",
-      path: "/AddProduct1",
-    },
-    {
-      icon: (
-        <img src="/assets/icons-dashboard/EntryNotes.svg" className="w-4 h-4" />
-      ),
       label: "مذكرات إدخال",
-      path: "/AllEntry",
+      path: "/entry-notes",
     },
     {
       icon: (
         <img src="/assets/icons-dashboard/ExNotes.svg" className="w-4 h-4" />
       ),
       label: "مذكرات إخراج",
-      path: "/AllExit",
+      path: "/exit-notes",
     },
     {
       icon: (
@@ -84,25 +80,32 @@ export default function Sidebar() {
           className="w-4 h-4"
         />
       ),
-      label: "مذكرات الاستلام",
-      path: "/AllReceiving",
+      label: "المذكرات المستلمة",
+      path: "/received-notes",
     },
     {
       icon: (
         <img src="/assets/icons-dashboard/ScrapNote.svg" className="w-4 h-4" />
       ),
       label: "مذكرات إتلاف",
-      path: "/AllScrap",
+      path: "/scrap-notes",
     },
-  ];
-
-  const menuItemsAfterInstall = [
+    {
+      icon: (
+        <img
+          src="/assets/icons-dashboard/InstallReports.svg"
+          className="w-4 h-4"
+        />
+      ),
+      label: "تقارير التثبيت",
+      path: "/install-reports-user",
+    },
     {
       icon: (
         <img src="/assets/icons-dashboard/PurRequest.svg" className="w-4 h-4" />
       ),
       label: "طلبات الشراء",
-      path: "/AllPurchase",
+      path: "/purchase-requests",
     },
     {
       icon: (
@@ -111,8 +114,8 @@ export default function Sidebar() {
           className="w-4 h-4"
         />
       ),
-      label: "العهدة الشخصية",
-      path: "/AllCustody",
+      label: "أمين المستودع",
+      path: "/custody-management",
     },
     {
       icon: (
@@ -122,7 +125,7 @@ export default function Sidebar() {
         />
       ),
       label: "الإشعارات",
-      path: "/Notification",
+      path: "/notifications",
     },
     {
       icon: <img src="/assets/icons-dashboard/User.svg" className="w-4 h-4" />,
@@ -158,35 +161,32 @@ export default function Sidebar() {
 
         {/* القائمة */}
         <ul className="flex-1 space-y-3 text-xs font-medium">
-          {/* القائمة قبل ضبط التركيب */}
-          {menuItemsBeforeInstall.map((item, index) => (
-            <li
-              key={index}
-              onClick={() => navigate(item.path)}
-              className={`flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-all duration-200 ${
-                isActive(item.path) ? "bg-[#FF8E29]" : "hover:bg-[#FF8E29]"
-              }`}
-              style={{
-                color: isActive(item.path)
-                  ? "#FFFFFF"
-                  : theme.palette.mode === "dark"
-                  ? "#CCCDCD"
-                  : "#6F757E",
-              }}
-              onMouseEnter={(e) => {
-                if (!isActive(item.path))
-                  e.currentTarget.style.color = "#FFFFFF";
-              }}
-              onMouseLeave={(e) => {
-                if (!isActive(item.path))
-                  e.currentTarget.style.color =
-                    theme.palette.mode === "dark" ? "#CCCDCD" : "#6F757E";
-              }}
-            >
-              {item.icon}
-              <span className="truncate">{item.label}</span>
-            </li>
-          ))}
+          {/* الصفحة الرئيسية */}
+          <li
+            onClick={() => navigate("/dashboard")}
+            className={`flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-all duration-200 ${
+              isActive("/dashboard") ? "bg-[#FF8E29]" : "hover:bg-[#FF8E29]"
+            }`}
+            style={{
+              color: isActive("/dashboard")
+                ? "#FFFFFF"
+                : theme.palette.mode === "dark"
+                ? "#CCCDCD"
+                : "#6F757E",
+            }}
+            onMouseEnter={(e) => {
+              if (!isActive("/dashboard"))
+                e.currentTarget.style.color = "#FFFFFF";
+            }}
+            onMouseLeave={(e) => {
+              if (!isActive("/dashboard"))
+                e.currentTarget.style.color =
+                  theme.palette.mode === "dark" ? "#CCCDCD" : "#6F757E";
+            }}
+          >
+            <img src="/assets/icons-dashboard/Home.svg" className="w-4 h-4" />
+            <span className="truncate">الصفحة الرئيسية</span>
+          </li>
 
           {/* المنتجات (منسدلة) */}
           <li>
@@ -230,6 +230,7 @@ export default function Sidebar() {
               />
             </div>
 
+            {/* المستودعات */}
             {showWarehouses && (
               <ul className="mt-2 pr-6 space-y-1 text-sm text-right">
                 <li
@@ -278,130 +279,8 @@ export default function Sidebar() {
             )}
           </li>
 
-          {/* ضبط التركيب (من الكود الثاني) */}
-          <li>
-            <div
-              onClick={() => {
-                if (showInstallReports) {
-                  setShowInstallReports(false);
-                } else {
-                  setShowInstallReports(true);
-                  if (location.pathname !== "/AllInstall") {
-                    navigate("/AllInstall");
-                  }
-                }
-              }}
-              className={`flex items-center justify-between px-3 py-2 cursor-pointer transition-all duration-200
-                ${
-                  showInstallReports ||
-                  location.pathname === "/AllInstall" ||
-                  location.pathname === "/InstallReportsUser" ||
-                  location.pathname === "/InstallReportsStore"
-                    ? "bg-[#FF8E29]"
-                    : "hover:bg-[#FF8E29]"
-                }
-                ${showInstallReports ? "rounded-t-[8px]" : "rounded-[8px]"}
-              `}
-              style={{
-                color:
-                  showInstallReports ||
-                  location.pathname === "/AllInstall" ||
-                  location.pathname === "/InstallReportsUser" ||
-                  location.pathname === "/InstallReportsStore"
-                    ? "#FFFFFF"
-                    : theme.palette.mode === "dark"
-                    ? "#CCCDCD"
-                    : "#6F757E",
-              }}
-              onMouseEnter={(e) => {
-                if (
-                  !showInstallReports &&
-                  location.pathname !== "/AllInstall" &&
-                  location.pathname !== "/InstallReportsUser" &&
-                  location.pathname !== "/InstallReportsStore"
-                ) {
-                  e.currentTarget.style.color = "#FFFFFF";
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (
-                  !showInstallReports &&
-                  location.pathname !== "/AllInstall" &&
-                  location.pathname !== "/InstallReportsUser" &&
-                  location.pathname !== "/InstallReportsStore"
-                ) {
-                  e.currentTarget.style.color =
-                    theme.palette.mode === "dark" ? "#CCCDCD" : "#6F757E";
-                }
-              }}
-            >
-              <div className="flex items-center gap-2">
-                <img
-                  src="/assets/icons-dashboard/InstallReportsUser.svg"
-                  className="w-4 h-4"
-                />
-                <span className="truncate">ضبط التركيب</span>
-              </div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className={`w-[20px] h-[20px] transition-transform duration-300 ${
-                  showInstallReports ? "rotate-180" : ""
-                }`}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-                style={{
-                  color:
-                    showInstallReports ||
-                    location.pathname === "/AllInstall" ||
-                    location.pathname === "/InstallReportsUser" ||
-                    location.pathname === "/InstallReportsStore"
-                      ? "#FFFFFF"
-                      : "#6F757E",
-                }}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 9l6 6 6-6"
-                />
-              </svg>
-            </div>
-
-            {showInstallReports && (
-              <ul
-                className="mt-0 pr-1 pb-1 space-y-1 text-right rounded-b-[8px] overflow-hidden"
-                style={{
-                  backgroundColor: "#FF8E29",
-                }}
-              >
-                <li
-                  className={`cursor-pointer px-4 py-2 transition text-[16px] font-medium ${
-                    location.pathname === "/InstallReportsUser"
-                      ? "text-white"
-                      : "text-[#FFC794] hover:text-white"
-                  }`}
-                  onClick={() => navigate("/InstallReportsUser")}
-                >
-                  شراء
-                </li>
-                <li
-                  className={`cursor-pointer px-4 py-2 transition text-[16px] font-medium ${
-                    location.pathname === "/InstallReportsStore"
-                      ? "text-white"
-                      : "text-[#FFC794] hover:text-white"
-                  }`}
-                  onClick={() => navigate("/InstallReportsStore")}
-                >
-                  استخدام من المستودع
-                </li>
-              </ul>
-            )}
-          </li>
-
-          {/* القائمة بعد ضبط التركيب */}
-          {menuItemsAfterInstall.map((item, index) => (
+          {/* بقية العناصر */}
+          {menuItems.map((item, index) => (
             <li
               key={index}
               onClick={() => navigate(item.path)}
