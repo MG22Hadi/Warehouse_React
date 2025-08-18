@@ -22,7 +22,7 @@ const AllCustodyBox = () => {
   };
 
   const handleCreateNote = () => {
-    navigate("/CreateExitNote");
+    navigate("/CreateCustodyNote");
   };
 
   return (

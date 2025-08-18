@@ -22,7 +22,7 @@ const AllScrapBox = () => {
   };
 
   const handleCreateNote = () => {
-    navigate("/CreateExitNote");
+    navigate("/CreateScrapNote");
   };
 
   return (

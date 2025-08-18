@@ -32,8 +32,13 @@ import AllPurchase from "./pages/AllPurchase.jsx";
 import AllCustody from "./pages/AllCustody.jsx";
 import AllInstall from "./pages/AllInstall.jsx";
 import AllUserRequests from "./pages/AllUserRequests.jsx";
-
-
+import CreateEntryNote from "./pages/CreateEntryNote.jsx";
+import CreateExitNote from "./pages/CreateExitNote.jsx";
+import CreateReceivingNote from "./pages/CreateReceivingNote.jsx";
+import CreateScrapNote from "./pages/CreateScrapNote.jsx";
+import CreatePurchaseNote from "./pages/CreatePurchaseNote.jsx";
+import CreateCustodyNote from "./pages/CreateCustodyNote.jsx";
+import Settings from "./pages/Settings.jsx";
 
 
 export default function App() {
@@ -166,8 +171,42 @@ export default function App() {
              <Route path="/AllUserRequests"  
              element={<AllUserRequests mode={mode} toggleTheme={toggleTheme}/>} />
 
+             <Route
+            path="/CreateEntryNote"
+            element={<CreateEntryNote mode={mode} toggleTheme={toggleTheme} />}
+          />
+
+          <Route
+            path="/CreateExitNote"
+            element={<CreateExitNote mode={mode} toggleTheme={toggleTheme} />}
+          />
+
+          <Route
+            path="/CreateReceivingNote"
+            element={<CreateReceivingNote mode={mode} toggleTheme={toggleTheme} />}
+          />
+
+          <Route
+            path="/CreateScrapNote"
+            element={<CreateScrapNote mode={mode} toggleTheme={toggleTheme} />}
+          />
+
+<Route
+  path="/CreatePurchaseNote"
+  element={<CreatePurchaseNote mode={mode} toggleTheme={toggleTheme} />}
+/>
+
+<Route
+  path="/CreateCustodyNote"
+  element={<CreateCustodyNote mode={mode} toggleTheme={toggleTheme} />}
+/>
+
             
-          
+<Route
+  path="/Settings"
+  element={<Settings mode={mode} toggleTheme={toggleTheme} />}
+/>
+        
             
 
                     </Routes>

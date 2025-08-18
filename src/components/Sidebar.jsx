@@ -1,71 +1,37 @@
 import React, { useState, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 import { useLocation, useNavigate } from "react-router-dom";
+import HomeIcon from "@mui/icons-material/Home";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import AddBoxIcon from "@mui/icons-material/AddBox";
+import DescriptionIcon from "@mui/icons-material/Description";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import InventoryIcon from "@mui/icons-material/Inventory";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import PeopleIcon from "@mui/icons-material/People";
+import SettingsIcon from "@mui/icons-material/Settings";
+import BuildIcon from "@mui/icons-material/Build";
 
 const menuItems = [
-  {
-    icon: <img src="/assets/icons-dashboard/Home.svg" className="w-4 h-4" />,
-    label: "الصفحة الرئيسية",
-    path: "/",
-  },
-  {
-    icon: <img src="/assets/icons-dashboard/calendar.svg" className="w-4 h-4" />,
-    label: "التقويم",
-    path: "/calendar",
-  },
-  {
-    icon: <img src="/assets/icons-dashboard/EntryNotes.svg" className="w-4 h-4" />,
-    label: "اضافة منتج",
-    path: "/AddProduct1",
-  },
-  {
-    icon: <img src="/assets/icons-dashboard/EntryNotes.svg" className="w-4 h-4" />,
-    label: "مذكرات إدخال",
-    path: "/AllEntry",
-  },
-  {
-    icon: <img src="/assets/icons-dashboard/ExNotes.svg" className="w-4 h-4" />,
-    label: "مذكرات إخراج",
-    path: "/AllExit",
-  },
-  {
-    icon: <img src="/assets/icons-dashboard/ReceivNotes.svg" className="w-4 h-4" />,
-    label: "مذكرات الاستلام",
-    path: "/AllReceiving",
-  },
-  {
-    icon: <img src="/assets/icons-dashboard/ScrapNote.svg" className="w-4 h-4" />,
-    label: "مذكرات إتلاف",
-    path: "/AllScrap",
-  },
-  {
-    icon: <img src="/assets/icons-dashboard/PurRequest.svg" className="w-4 h-4" />,
-    label: "طلبات الشراء",
-    path: "/AllPurchase",
-  },
-  {
-    icon: <img src="/assets/icons-dashboard/CuManagment.svg" className="w-4 h-4" />,
-    label: "العهدة الشخصية",
-    path: "/AllCustody",
-  },
-  {
-    icon: <img src="/assets/icons-dashboard/notification.svg" className="w-4 h-4" />,
-    label: "الإشعارات",
-    path: "/Notification",
-  },
-  {
-    icon: <img src="/assets/icons-dashboard/User.svg" className="w-4 h-4" />,
-    label: "المستخدمين",
-    path: "/users",
-  },
-  {
-    icon: <img src="/assets/icons-dashboard/Settings.svg" className="w-4 h-4" />,
-    label: "الإعدادات",
-    path: "/",
-  },
+  { icon: <HomeIcon />, label: "الصفحة الرئيسية", path: "/Dashboard" },
+  { icon: <CalendarMonthIcon />, label: "التقويم", path: "/calendar" },
+  { icon: <AddBoxIcon />, label: "اضافة منتج", path: "/AddProduct1" },
+  { icon: <DescriptionIcon />, label: "مذكرات إدخال", path: "/AllEntry" },
+  { icon: <AssignmentIcon />, label: "مذكرات إخراج", path: "/AllExit" },
+  { icon: <InventoryIcon />, label: "مذكرات الاستلام", path: "/AllReceiving" },
+  { icon: <DeleteIcon />, label: "مذكرات إتلاف", path: "/AllScrap" },
+  { icon: <ShoppingCartIcon />, label: "طلبات الشراء", path: "/AllPurchase" },
+  { icon: <AccountBoxIcon />, label: "العهدة الشخصية", path: "/AllCustody" },
+  { icon: <NotificationsIcon />, label: "الإشعارات", path: "/Notification" },
+  { icon: <PeopleIcon />, label: "المستخدمين", path: "/users" },
+  { icon: <SettingsIcon />, label: "الإعدادات", path: "/Settings" },
 ];
 
 export default function Sidebar() {
+  const [hoverInstall, setHoverInstall] = useState(false);
   const theme = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
@@ -117,125 +83,89 @@ export default function Sidebar() {
                   isActive(item.path) ? "bg-[#FF8E29]" : "hover:bg-[#FF8E29]"
                 }`}
                 style={{
-                  color: isActive(item.path)
-                    ? "#FFFFFF"
-                    : theme.palette.mode === "dark"
-                    ? "#CCCDCD"
-                    : "#6F757E",
+                  color: isActive(item.path) ? "#FFFFFF" : theme.palette.mode === "dark" ? "#CCCDCD" : "#6F757E",
                 }}
                 onMouseEnter={(e) => {
                   if (!isActive(item.path)) e.currentTarget.style.color = "#FFFFFF";
                 }}
                 onMouseLeave={(e) => {
                   if (!isActive(item.path))
-                    e.currentTarget.style.color =
-                      theme.palette.mode === "dark" ? "#CCCDCD" : "#6F757E";
+                    e.currentTarget.style.color = theme.palette.mode === "dark" ? "#CCCDCD" : "#6F757E";
                 }}
               >
-                {item.icon}
+                {React.cloneElement(item.icon, {
+                  style: { color: isActive(item.path) ? "#FFFFFF" : undefined },
+                  className: "w-4 h-4",
+                })}
                 <span className="truncate">{item.label}</span>
               </li>
             ))}
 
-          {/* 🔧 ضبط التركيب */}  
           <li>
-            <div
-              onClick={() => {
-                if (showInstallReports) {
-                  setShowInstallReports(false);
-                } else {
-                  setShowInstallReports(true);
-                  if (location.pathname !== "/AllInstall") {
-                    navigate("/AllInstall");
-                  }
-                }
-              }}
-              className={`flex items-center justify-between px-3 py-2 cursor-pointer transition-all duration-200
-                ${
-                  showInstallReports ||
-                  location.pathname === "/AllInstall" ||
-                  location.pathname === "/InstallReportsUser" ||
-                  location.pathname === "/InstallReportsStore"
-                    ? "bg-[#FF8E29]"
-                    : "hover:bg-[#FF8E29]"
-                }
-                ${showInstallReports ? "rounded-t-[8px]" : "rounded-[8px]"}
-              `}
-              style={{
-                color:
-                  showInstallReports ||
-                  location.pathname === "/AllInstall" ||
-                  location.pathname === "/InstallReportsUser" ||
-                  location.pathname === "/InstallReportsStore"
-                    ? "#FFFFFF"
-                    : theme.palette.mode === "dark"
-                    ? "#CCCDCD"
-                    : "#6F757E",
-              }}
-              onMouseEnter={(e) => {
-                if (
-                  !showInstallReports &&
-                  location.pathname !== "/AllInstall" &&
-                  location.pathname !== "/InstallReportsUser" &&
-                  location.pathname !== "/InstallReportsStore"
-                ) {
-                  e.currentTarget.style.color = "#FFFFFF";
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (
-                  !showInstallReports &&
-                  location.pathname !== "/AllInstall" &&
-                  location.pathname !== "/InstallReportsUser" &&
-                  location.pathname !== "/InstallReportsStore"
-                ) {
-                  e.currentTarget.style.color =
-                    theme.palette.mode === "dark" ? "#CCCDCD" : "#6F757E";
-                }
-              }}
-            >
-              <div className="flex items-center gap-2">
-                <img
-                  src="/assets/icons-dashboard/InstallReportsUser.svg"
-                  className="w-4 h-4"
-                />
-                <span className="truncate">ضبط التركيب</span>
-              </div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className={`w-[20px] h-[20px] transition-transform duration-300 ${
-                  showInstallReports ? "rotate-180" : ""
-                }`}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-                style={{
-                  color:
-                    showInstallReports ||
-                    location.pathname === "/AllInstall" ||
-                    location.pathname === "/InstallReportsUser" ||
-                    location.pathname === "/InstallReportsStore"
-                      ? "#FFFFFF"
-                      : "#6F757E",
-                }}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 9l6 6 6-6" />
-              </svg>
-            </div>
+          <div
+  onClick={() => setShowInstallReports(!showInstallReports)}
+  onMouseEnter={() => setHoverInstall(true)}
+  onMouseLeave={() => setHoverInstall(false)}
+  className={`flex items-center justify-between px-3 py-2 cursor-pointer transition-all duration-200 ${
+    showInstallReports ||
+    location.pathname === "/AllInstall" ||
+    location.pathname === "/InstallReportsUser" ||
+    location.pathname === "/InstallReportsStore"
+      ? "bg-[#FF8E29]"
+      : "hover:bg-[#FF8E29]"
+  } ${showInstallReports ? "rounded-t-[8px]" : "rounded-[8px]"}`}
+  style={{
+    color:
+      hoverInstall ||
+      showInstallReports ||
+      location.pathname === "/AllInstall" ||
+      location.pathname === "/InstallReportsUser" ||
+      location.pathname === "/InstallReportsStore"
+        ? "#FFFFFF"
+        : theme.palette.mode === "dark"
+        ? "#CCCDCD"
+        : "#6F757E",
+  }}
+>
+  <div className="flex items-center gap-2">
+    <BuildIcon
+      className="w-4 h-4"
+      style={{
+        color:
+          hoverInstall ||
+          showInstallReports ||
+          location.pathname === "/AllInstall" ||
+          location.pathname === "/InstallReportsUser" ||
+          location.pathname === "/InstallReportsStore"
+            ? "#FFFFFF"
+            : theme.palette.mode === "dark"
+            ? "#CCCDCD"
+            : "#6F757E",
+      }}
+    />
+    <span className="truncate">
+      ضبط التركيب
+    </span>
+  </div>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className={`w-[20px] h-[20px] transition-transform duration-300 ${
+      showInstallReports ? "rotate-180" : ""
+    }`}
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={2}
+  >
+    <path strokeLinecap="round" strokeLinejoin="round" d="M6 9l6 6 6-6" />
+  </svg>
+</div>
 
             {showInstallReports && (
-              <ul
-                className="mt-0 pr-1 pb-1 space-y-1 text-right rounded-b-[8px] overflow-hidden"
-                style={{
-                  backgroundColor: "#FF8E29",
-                }}
-              >
+              <ul className="mt-0 pr-1 pb-1 space-y-1 text-right rounded-b-[8px] overflow-hidden" style={{ backgroundColor: "#FF8E29" }}>
                 <li
                   className={`cursor-pointer px-4 py-2 transition text-[16px] font-medium ${
-                    location.pathname === "/InstallReportsUser"
-                      ? "text-white"
-                      : "text-[#FFC794] hover:text-white"
+                    location.pathname === "/InstallReportsUser" ? "text-white" : "text-[#FFC794] hover:text-white"
                   }`}
                   onClick={() => navigate("/InstallReportsUser")}
                 >
@@ -243,9 +173,7 @@ export default function Sidebar() {
                 </li>
                 <li
                   className={`cursor-pointer px-4 py-2 transition text-[16px] font-medium ${
-                    location.pathname === "/InstallReportsStore"
-                      ? "text-white"
-                      : "text-[#FFC794] hover:text-white"
+                    location.pathname === "/InstallReportsStore" ? "text-white" : "text-[#FFC794] hover:text-white"
                   }`}
                   onClick={() => navigate("/InstallReportsStore")}
                 >
@@ -255,16 +183,9 @@ export default function Sidebar() {
             )}
           </li>
 
-          {/* العناصر بعد ضبط التركيب */}
           {menuItems
             .filter((item) =>
-              [
-                "طلبات الشراء",
-                "العهدة الشخصية",
-                "الإشعارات",
-                "المستخدمين",
-                "الإعدادات",
-              ].includes(item.label)
+              ["طلبات الشراء", "العهدة الشخصية", "الإشعارات", "المستخدمين", "الإعدادات"].includes(item.label)
             )
             .map((item, index) => (
               <li
@@ -274,56 +195,24 @@ export default function Sidebar() {
                   isActive(item.path) ? "bg-[#FF8E29]" : "hover:bg-[#FF8E29]"
                 }`}
                 style={{
-                  color: isActive(item.path)
-                    ? "#FFFFFF"
-                    : theme.palette.mode === "dark"
-                    ? "#CCCDCD"
-                    : "#6F757E",
+                  color: isActive(item.path) ? "#FFFFFF" : theme.palette.mode === "dark" ? "#CCCDCD" : "#6F757E",
                 }}
                 onMouseEnter={(e) => {
                   if (!isActive(item.path)) e.currentTarget.style.color = "#FFFFFF";
                 }}
                 onMouseLeave={(e) => {
                   if (!isActive(item.path))
-                    e.currentTarget.style.color =
-                      theme.palette.mode === "dark" ? "#CCCDCD" : "#6F757E";
+                    e.currentTarget.style.color = theme.palette.mode === "dark" ? "#CCCDCD" : "#6F757E";
                 }}
               >
-                {item.icon}
+                {React.cloneElement(item.icon, {
+                  style: { color: isActive(item.path) ? "#FFFFFF" : undefined },
+                  className: "w-4 h-4",
+                })}
                 <span className="truncate">{item.label}</span>
               </li>
             ))}
         </ul>
-
-        {/* زر تسجيل الخروج */}
-        <div
-          className="flex items-center gap-2 cursor-pointer px-3 py-2 rounded-md transition text-xs"
-          style={{ color: theme.palette.error.main }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = theme.palette.error.light;
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = "transparent";
-          }}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-            className="w-4 h-4"
-            style={{ color: theme.palette.error.main }}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1m0-9V6m-6 6h6"
-            />
-          </svg>
-
-          <span>تسجيل الخروج</span>
-        </div>
       </div>
     </div>
   );

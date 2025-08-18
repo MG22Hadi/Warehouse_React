@@ -22,7 +22,7 @@ const AllEntryBox = () => {
   };
 
   const handleCreateNote = () => {
-    navigate("/CreateExitNote");
+    navigate("/CreateEntryNote");
   };
 
   return (

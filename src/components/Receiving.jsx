@@ -83,10 +83,6 @@ const ReceivingNote = () => {
         </p>
       </div>
 
-      <button className="creat" onClick={() => setShowConfirm(true)}>
-        إنشاء مذكرة استلام
-      </button>
-
       {showConfirm && (
         <div className="overlay">
           <div className="custom-modal" dir="rtl">

@@ -10,7 +10,7 @@ for (let i = 1; i <= 4; i++) {
     count: 5,
     recipient: "نور",
     action: "مذكرات استلام",
-    link: `/EntryNotes`,
+    link: `/ReceivingNotes`,
   });
 }
 
@@ -22,7 +22,7 @@ const AllReceivingBox = () => {
   };
 
   const handleCreateNote = () => {
-    navigate("/CreateExitNote");
+    navigate("/CreateReceivingNote");
   };
 
   return (

@@ -22,7 +22,7 @@ const AllPurchaseBox = () => {
   };
 
   const handleCreateNote = () => {
-    navigate("/CreateExitNote");
+    navigate("/CreatePurchaseNote");
   };
 
   return (

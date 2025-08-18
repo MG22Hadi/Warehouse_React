@@ -1,19 +1,31 @@
 body {
   font-family: sans-serif;
   background-color: #fff;
-  
 }
+
+.table-input {
+  width: 90%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 16px;
+  text-align: center;
+}
+.table-input:focus {
+  background: #f0f0f0;
+  border-radius: 4px;
+}
+
 
 .container {
   max-width: 1200px;
   /* margin: 0 auto; */
 }
-.header{
-margin-top: -50px;
+.header {
+  margin-top: 32px;
 }
 .header,
 .footer {
-
   display: flex;
   justify-content: space-between;
   /* margin-bottom: 20px; */
@@ -21,7 +33,7 @@ margin-top: -50px;
 }
 
 .title {
-  margin-top : 30px;
+  margin-top: 30px;
   text-align: center;
 }
 
@@ -36,26 +48,26 @@ table {
 th,
 td {
   border: 1px solid #ccc;
-  padding: 8px;
+  padding: 18px;
   text-align: center;
 }
 
 thead tr:first-child {
-  background-color: #FF8E29;
+  background-color: #ff8e29;
   color: white;
 }
 /* thead th { */
-  /* color: #FFDAB9 ; */
+/* color: #FFDAB9 ; */
 /* } */
 /*  */
 thead tr:nth-child(2) {
-  background-color: #FF8E29;
+  background-color: #ff8e29;
   color: white;
 }
 
 tbody tr {
-  background-color: #FFF4EA;
-  color: #6F757E ;
+  background-color: #fff4ea;
+  color: #6f757e;
 }
 
 .total {
@@ -63,29 +75,29 @@ tbody tr {
   text-align: center;
 }
 
-.Serial_Number{
-    padding-top: 1px;
+.Serial_Number {
+  padding-top: 1px;
 }
-.grand_total{
+.grand_total {
   font-weight: bold;
-  color:#FF8E29;
-  font-size: 20px; 
+  color: #ff8e29;
+  font-size: 20px;
 }
-.price{
-  color : #6F757E;
-  font-size: 20px; 
+.price {
+  color: #6f757e;
+  font-size: 20px;
 }
-.storage{
- color : #6F757E;
+.storage {
+  color: #6f757e;
 }
-.black{
-  color:black;
+.black {
+  color: black;
   font-weight: bold;
 }
-.gray{
-  color : black;
+.gray {
+  color: black;
 }
-.Date{
+.Date {
   margin-top: 15px;
 }
 .center-text {
