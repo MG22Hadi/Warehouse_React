@@ -1,32 +1,51 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Product1.css";
-import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-export default function AProduct1() {
-  const navigate = useNavigate();
-
+export default function Product1({ onNext, initialData }) {
   const [formData, setFormData] = useState({
-    name: "",
-    type: "",
-    price: "",
-    quantity: "",
-    warehouse: "",
+    name: initialData.name || "",
+    unit: initialData.unit || "",
+    code: initialData.code || "",
+    consumable: initialData.consumable || "",
+    warehouse_id: initialData.warehouse_id || "",
   });
 
   const [errors, setErrors] = useState({});
+  const [warehouses, setWarehouses] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/api/warehouses/index", {
+        headers: {
+          Accept: "application/json",
+          Authorization:
+            "Bearer 10|OLrvKOGVvlVK9gtwenFZi4HtU28tGXmBA8DA4uY31de52ba1",
+        },
+      })
+      .then((res) => {
+        setWarehouses(res.data.data || []);
+      })
+      .catch((err) => {
+        console.error("Error fetching warehouses:", err);
+        setWarehouses([]);
+      });
+  }, []);
 
   const handleNext = () => {
     const newErrors = {};
     if (!formData.name.trim()) newErrors.name = "يرجى تعبئة هذا الحقل";
-    if (!formData.type.trim()) newErrors.type = "يرجى تعبئة هذا الحقل";
-    if (!formData.price.trim()) newErrors.price = "يرجى تعبئة هذا الحقل";
-    if (!formData.quantity.trim()) newErrors.quantity = "يرجى تعبئة هذا الحقل";
-    if (!formData.warehouse.trim()) newErrors.warehouse = "يرجى تعبئة هذا الحقل";
+    if (!formData.consumable.toString().trim())
+      newErrors.consumable = "يرجى تعبئة هذا الحقل";
+    if (!formData.code.trim()) newErrors.code = "يرجى تعبئة هذا الحقل";
+    if (!formData.unit.trim()) newErrors.unit = "يرجى تعبئة هذا الحقل";
+    if (!formData.warehouse_id.toString().trim())
+      newErrors.warehouse_id = "يرجى تعبئة هذا الحقل";
 
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      navigate("/Addproduct2");
+      onNext({ ...initialData, ...formData });
     }
   };
 
@@ -75,56 +94,78 @@ export default function AProduct1() {
                   value={formData.name}
                   onChange={handleChange}
                 />
-                {errors.name && <span className="error-message">{errors.name}</span>}
+                {errors.name && (
+                  <span className="error-message">{errors.name}</span>
+                )}
               </div>
               <div className="input-wrapper">
-                <input
-                  type="text"
-                  name="type"
-                  placeholder="النوع"
-                  value={formData.type}
+                <select
+                  name="consumable"
+                  value={formData.consumable}
                   onChange={handleChange}
-                />
-                {errors.type && <span className="error-message">{errors.type}</span>}
+                  className="centered-input"
+                  style={{
+                    color: formData.consumable === "" ? "#6f757e" : "#000000",
+                  }}
+                >
+                  <option value="">النوع</option>
+                  <option value="مستهلك">مستهلك</option>
+                  <option value="غير مستهلك">غير مستهلك</option>
+                </select>
+                {errors.consumable && (
+                  <span className="error-message">{errors.consumable}</span>
+                )}
               </div>
             </div>
 
-            {/* السعر والكمية */}
+            {/* الكود والوحدة */}
             <div className="input-row">
               <div className="input-wrapper">
                 <input
                   type="text"
-                  name="price"
-                  placeholder="السعر"
-                  value={formData.price}
+                  name="code"
+                  placeholder="الكود"
+                  value={formData.code}
                   onChange={handleChange}
                 />
-                {errors.price && <span className="error-message">{errors.price}</span>}
+                {errors.code && (
+                  <span className="error-message">{errors.code}</span>
+                )}
               </div>
               <div className="input-wrapper">
                 <input
                   type="text"
-                  name="quantity"
-                  placeholder="الكمية"
-                  value={formData.quantity}
+                  name="unit"
+                  placeholder="الوحدة"
+                  value={formData.unit}
                   onChange={handleChange}
                 />
-                {errors.quantity && <span className="error-message">{errors.quantity}</span>}
+                {errors.unit && (
+                  <span className="error-message">{errors.unit}</span>
+                )}
               </div>
             </div>
 
             {/* المستودع */}
             <div className="input-wrapper full-width">
-              <input
-                type="text"
-                name="warehouse"
-                placeholder="المستودع"
-                className="centered-input"
-                value={formData.warehouse}
+              <select
+                name="warehouse_id"
+                value={formData.warehouse_id}
                 onChange={handleChange}
-              />
-              {errors.warehouse && (
-                <span className="error-message">{errors.warehouse}</span>
+                className="centered-input"
+                style={{
+                  color: formData.warehouse_id === "" ? "#6f757e" : "#000000",
+                }}
+              >
+                <option value="">المستودع</option>
+                {warehouses.map((w) => (
+                  <option key={w.id} value={w.id}>
+                    {w.name}
+                  </option>
+                ))}
+              </select>
+              {errors.warehouse_id && (
+                <span className="error-message">{errors.warehouse_id}</span>
               )}
             </div>
           </div>

@@ -1,22 +1,39 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import "./Product2.css";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 
-export default function AProduct2() {
-  const navigate = useNavigate(); 
+export default function Product2({ onNext, initialData }) {
+  const navigate = useNavigate();
+
+  // استقبال البيانات من الصفحة الأولى
+  const productData = initialData?.formData || {};
+
+  // حالة حفظ الصورة
+  const [image, setImage] = useState(null);
+  const fileInputRef = useRef(null);
 
   const handleBack = () => {
-    navigate("/Addproduct1"); 
+    navigate("/Addproduct1", { state: { formData: productData } });
   };
 
   const handleNext = () => {
-    navigate("/Addproduct3"); 
+    onNext({ ...productData, image });
+  };
+
+  const handleFileChange = (e) => {
+    setImage(e.target.files[0]);
+  };
+
+  const handleUploadClick = () => {
+    fileInputRef.current.click();
   };
 
   return (
     <div className="media-container">
       <div className="new_product">اضافة منتج جديد</div>
-      <div className="under_new_product">يرجى تعبئة بيانات المنتج بشكل مفصل</div>
+      <div className="under_new_product">
+        يرجى تعبئة بيانات المنتج بشكل مفصل
+      </div>
 
       <div className="form-box">
         <div className="progress-bar">
@@ -38,13 +55,23 @@ export default function AProduct2() {
 
         <div className="media-content">
           <p className="info_product">صورة المنتج</p>
-          <div className="upload-box">
+
+          <div className="upload-box" onClick={handleUploadClick}>
             <div className="upload-icon">&#8682;</div>
             <p>
               أدخل صورة أو <span className="browse-text">Browse</span>
             </p>
             <p className="support-text">يدعم: JPG, JPEG, PNG</p>
+            {image && <p>الملف المختار: {image.name}</p>}
+            <input
+              type="file"
+              accept="image/jpeg,image/png"
+              onChange={handleFileChange}
+              ref={fileInputRef}
+              style={{ display: "none" }}
+            />
           </div>
+
           <div className="nav-buttons">
             <button className="back-button" onClick={handleBack}>
               السابق
