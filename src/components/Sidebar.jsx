@@ -84,14 +84,14 @@ export default function Sidebar() {
         <img src="/assets/icons-dashboard/EntryNotes.svg" className="w-4 h-4" />
       ),
       label: "مذكرات إدخال",
-      path: "/entry-notes",
+      path: "/EntryNotes",
     },
     {
       icon: (
         <img src="/assets/icons-dashboard/ExNotes.svg" className="w-4 h-4" />
       ),
       label: "مذكرات إخراج",
-      path: "/exit-notes",
+      path: "/ExitNotes",
     },
     {
       icon: (
@@ -101,14 +101,14 @@ export default function Sidebar() {
         />
       ),
       label: "المذكرات المستلمة",
-      path: "/received-notes",
+      path: "/ReceivingNotes",
     },
     {
       icon: (
         <img src="/assets/icons-dashboard/ScrapNote.svg" className="w-4 h-4" />
       ),
       label: "مذكرات إتلاف",
-      path: "/scrap-notes",
+      path: "/ScrapNotes",
     },
     {
       icon: (
@@ -201,14 +201,20 @@ export default function Sidebar() {
                   isActive(item.path) ? "bg-[#FF8E29]" : "hover:bg-[#FF8E29]"
                 }`}
                 style={{
-                  color: isActive(item.path) ? "#FFFFFF" : theme.palette.mode === "dark" ? "#CCCDCD" : "#6F757E",
+                  color: isActive(item.path)
+                    ? "#FFFFFF"
+                    : theme.palette.mode === "dark"
+                    ? "#CCCDCD"
+                    : "#6F757E",
                 }}
                 onMouseEnter={(e) => {
-                  if (!isActive(item.path)) e.currentTarget.style.color = "#FFFFFF";
+                  if (!isActive(item.path))
+                    e.currentTarget.style.color = "#FFFFFF";
                 }}
                 onMouseLeave={(e) => {
                   if (!isActive(item.path))
-                    e.currentTarget.style.color = theme.palette.mode === "dark" ? "#CCCDCD" : "#6F757E";
+                    e.currentTarget.style.color =
+                      theme.palette.mode === "dark" ? "#CCCDCD" : "#6F757E";
                 }}
               >
                 {React.cloneElement(item.icon, {
@@ -272,15 +278,24 @@ export default function Sidebar() {
               stroke="currentColor"
               strokeWidth={2}
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 9l6 6 6-6" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 9l6 6 6-6"
+              />
             </svg>
           </div>
 
           {showInstallReports && (
-            <ul className="mt-0 pr-1 pb-1 space-y-1 text-right rounded-b-[8px] overflow-hidden" style={{ backgroundColor: "#FF8E29" }}>
+            <ul
+              className="mt-0 pr-1 pb-1 space-y-1 text-right rounded-b-[8px] overflow-hidden"
+              style={{ backgroundColor: "#FF8E29" }}
+            >
               <li
                 className={`cursor-pointer px-4 py-2 transition text-[16px] font-medium ${
-                  location.pathname === "/InstallReportsUser" ? "text-white" : "text-[#FFC794] hover:text-white"
+                  location.pathname === "/InstallReportsUser"
+                    ? "text-white"
+                    : "text-[#FFC794] hover:text-white"
                 }`}
                 onClick={() => navigate("/InstallReportsUser")}
               >
@@ -288,7 +303,9 @@ export default function Sidebar() {
               </li>
               <li
                 className={`cursor-pointer px-4 py-2 transition text-[16px] font-medium ${
-                  location.pathname === "/InstallReportsStore" ? "text-white" : "text-[#FFC794] hover:text-white"
+                  location.pathname === "/InstallReportsStore"
+                    ? "text-white"
+                    : "text-[#FFC794] hover:text-white"
                 }`}
                 onClick={() => navigate("/InstallReportsStore")}
               >
@@ -417,7 +434,13 @@ export default function Sidebar() {
 
           {menuItems
             .filter((item) =>
-              ["طلبات الشراء", "العهدة الشخصية", "الإشعارات", "المستخدمين", "الإعدادات"].includes(item.label)
+              [
+                "طلبات الشراء",
+                "العهدة الشخصية",
+                "الإشعارات",
+                "المستخدمين",
+                "الإعدادات",
+              ].includes(item.label)
             )
             .map((item, index) => (
               <li
@@ -427,14 +450,20 @@ export default function Sidebar() {
                   isActive(item.path) ? "bg-[#FF8E29]" : "hover:bg-[#FF8E29]"
                 }`}
                 style={{
-                  color: isActive(item.path) ? "#FFFFFF" : theme.palette.mode === "dark" ? "#CCCDCD" : "#6F757E",
+                  color: isActive(item.path)
+                    ? "#FFFFFF"
+                    : theme.palette.mode === "dark"
+                    ? "#CCCDCD"
+                    : "#6F757E",
                 }}
                 onMouseEnter={(e) => {
-                  if (!isActive(item.path)) e.currentTarget.style.color = "#FFFFFF";
+                  if (!isActive(item.path))
+                    e.currentTarget.style.color = "#FFFFFF";
                 }}
                 onMouseLeave={(e) => {
                   if (!isActive(item.path))
-                    e.currentTarget.style.color = theme.palette.mode === "dark" ? "#CCCDCD" : "#6F757E";
+                    e.currentTarget.style.color =
+                      theme.palette.mode === "dark" ? "#CCCDCD" : "#6F757E";
                 }}
               >
                 {React.cloneElement(item.icon, {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./AllNotesBox.css";
-import CreateEntryNote from "./CreateEntryNote";
+// import CreateEntryNote from "./CreateEntryNote";
 
 const AllScrapBox = () => {
   const [open, setOpen] = useState(false);
@@ -46,7 +46,7 @@ const AllScrapBox = () => {
         <button className="create-note-button" onClick={() => setOpen(true)}>
           إنشاء مذكرة إتلاف
         </button>
-        <CreateEntryNote open={open} onClose={() => setOpen(false)} />
+        {/* <CreateEntryNote open={open} onClose={() => setOpen(false)} /> */}
       </div>
 
       <div className="cards-row">
