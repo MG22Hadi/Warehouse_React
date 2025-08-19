@@ -20,13 +20,12 @@ import AddProduct3 from "./pages/AddProduct3.jsx";
 import EntryNotes from "./pages/EntryNotes.jsx";
 import ExitNotes from "./pages/ExitNotes.jsx";
 
-// import ReceivingNotes from "./pages/ReceivingNotes.jsx";
-// import ScrapNotes from "./pages/ScrapNotes.jsx";
-// import InstallReportsUser from "./pages/InstallReportsUser.jsx";
-// import InstallReportsStore from "./pages/InstallReportsStore";
-// import PurchaseRequests from "./pages/PurchaseRequests";
-// import CustodyManagement from "./pages/CustodyManagement";
-
+ import ReceivingNotes from "./pages/ReceivingNotes.jsx";
+ import ScrapNotes from "./pages/ScrapNotes.jsx";
+ import InstallReportsUser from "./pages/InstallReportsUser.jsx";
+ import InstallReportsStore from "./pages/InstallReportsStore";
+ import PurchaseRequests from "./pages/PurchaseRequests";
+ import CustodyManagement from "./pages/CustodyManagement";
 import Notification from "./pages/Notification.jsx";
 import AllEntry from "./pages/AllEntry.jsx";
 import AllExit from "./pages/AllExit.jsx";
