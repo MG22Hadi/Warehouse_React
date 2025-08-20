@@ -4,7 +4,7 @@ import "./Entry.css";
 const EntryNote = ({ note }) => {
   return (
     <div className="container" dir="rtl">
-      <div className="header">
+      <div className="entry-header">
         <div className="top-right">
           <p>
             <span className="black"> رقم التسلسل:</span>
@@ -41,39 +41,31 @@ const EntryNote = ({ note }) => {
             </tr>
           </thead>
           <tbody>
-            {note.items && note.items.length > 0 ? (
-              note.items.map((item, index) => (
+            {Array.from({ length: 11 }).map((_, index) => {
+              const item = note.items?.[index]; 
+              return (  
                 <tr key={index}>
                   <td>{index + 1}</td>
-                  <td>{item.product?.code}</td>
-                  <td>{item.product?.name}</td>
-                  <td>{item.product?.unit || "—"}</td>
-                  <td>{item.quantity}</td>
-                  <td>{item.notes || "—"}</td>
+                  <td>{item ? item.product?.code : ""}</td>
+                  <td>{item ? item.product?.name : ""}</td>
+                  <td>{item ? item.product?.unit : ""}</td>
+                  <td>{item ? item.quantity : ""}</td>
+                  <td>{item ? item.notes : ""}</td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="6">لا توجد مواد</td>
-              </tr>
-            )}
+              );
+            })}
           </tbody>
         </table>
-      </div>
-
-      <div className="total">
-        <span className="grand_total">الإجمالي:</span>
-        <span className="price">{note.total || "—"}</span>
       </div>
 
       <div className="footer">
         <p>
           <span className="grand_total">أمين المستودع:</span>
-          <span className="price">{note.user?.name || "—"}</span>
+          <span className="price">{note.created_by?.name || "—"}</span>
         </p>
         <p>
           <span className="grand_total"> المستلم:</span>
-          <span className="price">{note.recipient || "—"}</span>
+          <span className="price">{note.user?.name || "—"}</span>
         </p>
       </div>
     </div>

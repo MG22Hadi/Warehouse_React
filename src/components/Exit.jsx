@@ -1,29 +1,24 @@
-import React, { useState } from "react";
+import React from "react";
 import "./Exit.css";
 
-const ExitNote = () => {
-  const [showConfirm, setShowConfirm] = useState(false);
-
-  const handleConfirm = () => {
-
-    setShowConfirm(false);
-  };
-
+const ExitNote = ({ note }) => {
   return (
     <div className="container" dir="rtl">
       <div className="header">
         <div className="top-right">
           <p>
             <span className="black"> رقم التسلسل:</span>
-            <span className="storage"> 12345678</span>
+            <span className="storage"> {note.serial_number}</span>
           </p>
-          <p className="gray">مستودع الرياض</p>
+          <p className="gray">{note.warehouse?.name ?? "—"}</p>
         </div>
         <div className="title">
           <p className="text-lg font-semibold">مذكرة إخراج</p>
           <p className="Date">
             <span className="black"> التاريخ :</span>
-            <span className="storage"> 2024-05-20</span>
+            <span className="storage">
+              {new Date(note.date).toLocaleDateString("ar-EG")}
+            </span>
           </p>
         </div>
         <div className="top-left">
@@ -36,30 +31,42 @@ const ExitNote = () => {
         <table>
           <thead>
             <tr>
-              <th rowSpan="2" className="center-text">الرقم التسلسلي</th>
+              <th rowSpan="2" className="center-text">
+                #
+              </th>
               <th colSpan="3">المواد</th>
-              <th rowSpan="2" className="center-text">الكمية المستلمة</th>
-              <th rowSpan="2" className="center-text">ملاحظات</th>
+              <th rowSpan="2" className="center-text">
+                الكمية المستلمة
+              </th>
+              <th rowSpan="2" className="center-text">
+                ملاحظات
+              </th>
             </tr>
-            
             <tr>
               <th>كود المادة</th>
-              <th  >اسم المادة و الوصف</th>
-              <th>الوحدة</th>
+              <th>اسم المادة</th>
+              <th>الوصف</th>
             </tr>
           </thead>
           <tbody>
-            {Array(8).fill().map((_, index) => (
-              <tr key={index}>
-                <td className="center-text">1</td>
-                <td>ITM-1001</td>
-                <td>Printer Canon</td>
-                <td>لاسلكي، بحجم A4</td>
-               
-                <td className="center-text">300</td>
-                <td className="center-text">تسليم عاجل</td>
+            {note.items && note.items.length > 0 ? (
+              note.items.map((item, index) => (
+                <tr key={index}>
+                  <td className="center-text">{index + 1}</td>
+                  <td>{item.code}</td>
+                  <td>{item.name}</td>
+                  <td>{item.description}</td>
+                  <td className="center-text">{item.quantity}</td>
+                  <td className="center-text">{item.notes ?? "—"}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6" className="text-center">
+                  لا توجد مواد
+                </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
@@ -67,11 +74,11 @@ const ExitNote = () => {
       <div className="footer">
         <p>
           <span className="grand_total">أمين المستودع:</span>
-          <span className="price"> ملك مبارك</span>
+          <span className="price">{note.created_by?.name ?? "—"}</span>
         </p>
         <p>
-          <span className="grand_total"> المستلم:</span>
-          <span className="price"> ملك مبارك</span>
+          <span className="grand_total">المستلم:</span>
+          <span className="price">{note.user?.name ?? "—"}</span>
         </p>
       </div>
     </div>

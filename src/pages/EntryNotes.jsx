@@ -7,7 +7,7 @@ import EntryNote from "../components/Entry";
 
 export default function EntryNotes({ mode, toggleTheme }) {
   const theme = useTheme();
-  const { id } = useParams(); // ← ناخد id من الرابط
+  const { id } = useParams(); 
   const [note, setNote] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -25,6 +25,7 @@ export default function EntryNotes({ mode, toggleTheme }) {
             },
           }
         );
+        console.log("📌 تفاصيل المذكرة:", response.data);
         setNote(response.data.data);
       } catch (error) {
         console.error("فشل في جلب تفاصيل المذكرة", error);
