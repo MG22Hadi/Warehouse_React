@@ -1,0 +1,247 @@
+import React, { useRef, useState } from "react";
+import {
+  Box,
+  Paper,
+  Tabs,
+  Typography,
+  TextField,
+  MenuItem,
+  Button,
+} from "@mui/material";
+import { useNavigate } from "react-router-dom"; 
+import MainLayout from "../MainLayout";
+
+export default function AddUsers2({ mode, toggleTheme }) {
+  const navigate = useNavigate();
+
+  const sectionsRef = {
+    info: useRef(null),
+    password: useRef(null),
+    twofa: useRef(null),
+    delete: useRef(null),
+  };
+
+  const handleScroll = (section) => {
+    sectionsRef[section].current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const [activeStep, setActiveStep] = useState(1);
+  const [role, setRole] = useState("");
+
+  const steps = [
+    { label: "معلومات المستخدم", key: "info" },
+    { label: "العنوان الحالي", key: "password" },
+    { label: "مواقع التواصل", key: "twofa" },
+    { label: "مراجعة", key: "delete" },
+  ];
+
+  return (
+    <MainLayout mode={mode} toggleTheme={toggleTheme} pageTitle="اضافة مستخدم">
+      <Box
+        dir="rtl"
+        sx={{
+          minHeight: "100vh",
+          bgcolor: "white",
+          color: "text.primary",
+          borderRadius: 6,
+          px: 4,
+          py: 6,
+        }}
+      >
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: { lg: "240px 1fr", xs: "1fr" },
+            gap: 4,
+          }}
+        >
+          {/* العمود الجانبي للخطوات */}
+          <Paper
+            sx={{
+              position: "relative",
+              bgcolor: "#fff",
+              borderRadius: 2,
+              boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+              px: 2,
+              py: 4,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+                position: "relative",
+              }}
+            >
+              {steps.map((step, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    mb: 6,
+                    position: "relative",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      position: "relative",
+                      width: 24,
+                      height: 24,
+                      borderRadius: "50%",
+                      bgcolor:
+                        index === 0 || index === activeStep
+                          ? "#FF8E29"
+                          : "#FFC794",
+                      cursor: "pointer",
+                      zIndex: 2,
+                    }}
+                    onClick={() => {
+                      setActiveStep(index);
+                      handleScroll(step.key);
+                    }}
+                  >
+                    {index < steps.length - 1 && (
+                      <Box
+                        sx={{
+                          position: "absolute",
+                          top: 24,
+                          left: "50%",
+                          transform: "translateX(-50%)",
+                          width: 2,
+                          height: 72,
+                          bgcolor: index < activeStep ? "#FF8E29" : "#FFC794",
+                          zIndex: 1,
+                        }}
+                      />
+                    )}
+                  </Box>
+
+                  <Box
+                    sx={{
+                      color:
+                        index === 0 || index === activeStep
+                          ? "#FF8E29"
+                          : "#A0A0A0",
+                      fontWeight:
+                        index === 0 || index === activeStep
+                          ? "bold"
+                          : "normal",
+                      cursor: "pointer",
+                      mr: 2,
+                    }}
+                    onClick={() => {
+                      setActiveStep(index);
+                      handleScroll(step.key);
+                    }}
+                  >
+                    {step.label}
+                  </Box>
+                </Box>
+              ))}
+            </Box>
+          </Paper>
+
+          {/* العمود الرئيسي للمحتوى */}
+          <Paper
+            sx={{
+              bgcolor: "#fff",
+              borderRadius: 2,
+              boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+              p: 4,
+            }}
+          >
+            <Typography variant="h6" gutterBottom sx={{ color: "#000" }}>
+              العنوان
+            </Typography>
+            <Typography variant="body2" gutterBottom sx={{ color: "#6F757E", mb: 3 }}>
+              ضع عنوانك الشخصي
+            </Typography>
+
+            {/* الحقول */}
+            <Box display="grid" gridTemplateColumns="1fr" gap={3}>
+              <TextField
+                label="عنوان المنزل"
+                fullWidth
+                sx={{
+                  borderRadius: "30px",
+                  backgroundColor: "#F5F5F5",
+                  "& .MuiOutlinedInput-root": { borderRadius: "30px", backgroundColor: "#F5F5F5", "& fieldset": { border: "none" } },
+                }}
+              />
+              <TextField
+                label="العنوان التفصيلي"
+                fullWidth
+                sx={{
+                  borderRadius: "30px",
+                  backgroundColor: "#F5F5F5",
+                  "& .MuiOutlinedInput-root": { borderRadius: "30px", backgroundColor: "#F5F5F5", "& fieldset": { border: "none" } },
+                }}
+              />
+            </Box>
+
+            {/* City و Syria جنب بعض */}
+            <Box display="grid" gridTemplateColumns="1fr 1fr" gap={3} mt={3}>
+              <TextField
+                label="المدينة"
+                fullWidth
+                sx={{
+                  borderRadius: "30px",
+                  backgroundColor: "#F5F5F5",
+                  "& .MuiOutlinedInput-root": { borderRadius: "30px", backgroundColor: "#F5F5F5", "& fieldset": { border: "none" } },
+                }}
+              />
+              <TextField
+                label="البلد"
+                fullWidth
+                sx={{
+                  borderRadius: "30px",
+                  backgroundColor: "#F5F5F5",
+                  "& .MuiOutlinedInput-root": { borderRadius: "30px", backgroundColor: "#F5F5F5", "& fieldset": { border: "none" } },
+                }}
+              />
+            </Box>
+
+            {/* أزرار التالي والسابق */}
+            <Box display="flex" justifyContent="space-between" mt={8}>
+              <Button
+                variant="contained"
+                sx={{
+                  bgcolor: "#FF8E29",
+                  color: "#fff",
+                  borderRadius: "30px",
+                  px: 6,
+                  py: 1.5,
+                  fontSize: "16px",
+                  "&:hover": { bgcolor: "#ff7f00" },
+                }}
+                onClick={() => navigate("/AddUsers3")}
+              >
+                التالي
+              </Button>
+              <Button
+                variant="outlined"
+                sx={{
+                  borderRadius: "30px",
+                  px: 6,
+                  py: 1.5,
+                  fontSize: "16px",
+                  color: "#FF8E29",
+                  borderColor: "#FF8E29",
+                  "&:hover": { borderColor: "#ff7f00", color: "#ff7f00" },
+                }}
+                onClick={() => navigate("/AddUsers")}
+              >
+                السابق
+              </Button>
+            </Box>
+          </Paper>
+        </Box>
+      </Box>
+    </MainLayout>
+  );
+}

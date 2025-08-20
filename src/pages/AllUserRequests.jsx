@@ -34,9 +34,9 @@ const AllUserRequests = ({ mode, toggleTheme }) => {
                   <div className="order-actions">
                     <button className="view-btn">▼ عرض التفاصيل</button>
                     {i % 2 === 1 ? (
-                      <button className="approve-btn">موافقة ✅</button>
+                      <button className="approve-btn">موافقة </button>
                     ) : (
-                      <button className="deny-btn">رفض ❌</button>
+                      <button className="deny-btn">رفض </button>
                     )}
                   </div>
                 </div>

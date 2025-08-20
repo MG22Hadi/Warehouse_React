@@ -11,12 +11,12 @@ for (let i = 1; i <= 4; i++) {
     date: "2024-05-20",
     count: 5,
     recipient: "نور",
-    action: isEven ? "شراء" : "استخدام من المستودع",
-    link: isEven ? "/InstallReportsUser" : "/InstallReportsStore",
+    action: isEven ? "شراء" : " شراء",
+    link: isEven ? "/InstallReportsUser" : "/InstallReportsUser",
   });
 }
 
-const AllInstallBox = () => {
+const AllInstallStoreBox = () => {
   const navigate = useNavigate();
 
   const handleClick = (link) => {
@@ -26,18 +26,12 @@ const AllInstallBox = () => {
   const handleCreateNote1 = () => {
     navigate("/CreateInstallBuyNote");
   };
-  const handleCreateNote2 = () => {
-    navigate("/CreateInstallmosNote");
-  };
   return (
     <div className="all-exit-box-container">
       <div className="create-note-button-wrapper">
         <button className="create-note-button ml-5" onClick={handleCreateNote1}>
          ضبط تركيب شراء
         </button>
-        <button className="create-note-button" onClick={handleCreateNote2}>
- ضبط تركيب من المستودع
-</button>
       </div>
 
       <div className="cards-row">
@@ -81,4 +75,4 @@ const AllInstallBox = () => {
   );
 };
 
-export default AllInstallBox;
+export default AllInstallStoreBox;

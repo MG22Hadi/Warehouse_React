@@ -12,20 +12,21 @@ import Products from "./pages/Product/Products.jsx";
 import ProductDetailsCard from "./pages/Product/ProductDetailsCard.jsx";
 import CalendarPage from "./pages/Calendar.jsx";
 import Warehouses from "./pages/Warehouses.jsx";
-
+import AddUsers3 from "./pages/AddUsers3";
+import AddUsers2 from "./pages/AddUsers2";
 import AddProduct1 from "./pages/AddProduct1.jsx";
 import AddProduct2 from "./pages/AddProduct2.jsx";
 import AddProduct3 from "./pages/AddProduct3.jsx";
-
+import AddUsers4 from "./pages/AddUsers4.jsx";
 import EntryNotes from "./pages/EntryNotes.jsx";
 import ExitNotes from "./pages/ExitNotes.jsx";
 
-import ReceivingNotes from "./pages/ReceivingNotes.jsx";
-import ScrapNotes from "./pages/ScrapNotes.jsx";
-import InstallReportsUser from "./pages/InstallReportsUser.jsx";
-import InstallReportsStore from "./pages/InstallReportsStore";
-import PurchaseRequests from "./pages/PurchaseRequests";
-import CustodyManagement from "./pages/CustodyManagement";
+ import ReceivingNotes from "./pages/ReceivingNotes.jsx";
+ import ScrapNotes from "./pages/ScrapNotes.jsx";
+ import InstallReportsUser from "./pages/InstallReportsUser.jsx";
+ import InstallReportsStore from "./pages/InstallReportsStore";
+ import PurchaseRequests from "./pages/PurchaseRequests";
+ import CustodyManagement from "./pages/CustodyManagement";
 import Notification from "./pages/Notification.jsx";
 import AllEntry from "./pages/AllEntry.jsx";
 import AllExit from "./pages/AllExit.jsx";
@@ -34,8 +35,10 @@ import AllScrap from "./pages/AllScrap.jsx";
 import AllPurchase from "./pages/AllPurchase.jsx";
 import AllCustody from "./pages/AllCustody.jsx";
 import AllInstall from "./pages/AllInstall.jsx";
+import AllInstallStore from "./pages/AllInstallStore.jsx";
+import AllInstallReports from "./pages/AllInstallReports.jsx";
 import AllUserRequests from "./pages/AllUserRequests.jsx";
-
+import AllUsers from "./pages/AllUsers.jsx";
 import CreateEntryNote from "./pages/CreateEntryNote.jsx";
 import CreateExitNote from "./pages/CreateExitNote.jsx";
 import CreateReceivingNote from "./pages/CreateReceivingNote.jsx";
@@ -43,6 +46,13 @@ import CreateScrapNote from "./pages/CreateScrapNote.jsx";
 import CreatePurchaseNote from "./pages/CreatePurchaseNote.jsx";
 import CreateCustodyNote from "./pages/CreateCustodyNote.jsx";
 import Settings from "./pages/Settings.jsx";
+import AddUsers from "./pages/AddUsers.jsx";
+import Manager from "./pages/Manager/Manager.jsx";
+import CreateInstallBuyNote from "./pages/CreateInstallBuyNote.jsx";
+import CreateInstallmosNote from "./pages/CreateInstallmosNote.jsx";
+
+
+
 
 export default function App() {
   const [mode, setMode] = useState("light");
@@ -121,101 +131,64 @@ export default function App() {
             element={<AddProduct3 mode={mode} toggleTheme={toggleTheme} />}
           />
 
-          <Route
-            path="/EntryNotes"
-            element={<EntryNotes mode={mode} toggleTheme={toggleTheme} />}
-          />
-          <Route path="/EntryNotes/:id" element={<EntryNotes />} />
-          <Route
-            path="/ExitNotes"
-            element={<ExitNotes mode={mode} toggleTheme={toggleTheme} />}
-          />
-          <Route path="/ExitNotes/:id" element={<ExitNotes />} />
+           <Route path="/EntryNotes" 
+            element={<EntryNotes mode={mode} toggleTheme={toggleTheme}/>} 
+            />
 
-          <Route
-            path="/ReceivingNotes"
-            element={<ReceivingNotes mode={mode} toggleTheme={toggleTheme} />}
-          />
-          <Route path="/ReceivingNotes/:id" element={<ReceivingNotes />} />
+            <Route path="/ExitNotes" 
+             element={<ExitNotes mode={mode} toggleTheme={toggleTheme}/>} 
+             />
 
-          <Route
-            path="/ScrapNotes"
-            element={<ScrapNotes mode={mode} toggleTheme={toggleTheme} />}
-          />
-          <Route path="/scrapNote/:id" element={<ScrapNotes />} />
+             <Route path="/ReceivingNotes" 
+             element={<ReceivingNotes mode={mode} toggleTheme={toggleTheme}/>} 
+             />
 
-          <Route
-            path="/InstallReportsUser"
-            element={
-              <InstallReportsUser mode={mode} toggleTheme={toggleTheme} />
-            }
-          />
+           <Route path="/ScrapNotes" 
+            element={<ScrapNotes mode={mode} toggleTheme={toggleTheme}/>} 
+            />
 
-          <Route
-            path="/InstallReportsStore"
-            element={
-              <InstallReportsStore mode={mode} toggleTheme={toggleTheme} />
-            }
-          />
+            <Route path="/InstallReportsUser" 
+            element={<InstallReportsUser mode={mode} toggleTheme={toggleTheme}/>} />
 
-          <Route
-            path="/PurchaseRequests"
-            element={<PurchaseRequests mode={mode} toggleTheme={toggleTheme} />}
-          />
+            <Route path="/InstallReportsStore" 
+            element={<InstallReportsStore mode={mode} toggleTheme={toggleTheme}/>} />
 
-          <Route
-            path="/CustodyManagement"
-            element={
-              <CustodyManagement mode={mode} toggleTheme={toggleTheme} />
-            }
-          />
+             <Route path="/PurchaseRequests" 
+             element={<PurchaseRequests mode={mode} toggleTheme={toggleTheme}/>} />
 
-          <Route
-            path="/Notification"
-            element={<Notification mode={mode} toggleTheme={toggleTheme} />}
-          />
 
-          <Route
-            path="/AllEntry"
-            element={<AllEntry mode={mode} toggleTheme={toggleTheme} />}
-          />
+            <Route path="/CustodyManagement"  
+            element={<CustodyManagement mode={mode} toggleTheme={toggleTheme}/>} />
+            
 
-          <Route
-            path="/AllExit"
-            element={<AllExit mode={mode} toggleTheme={toggleTheme} />}
-          />
+            <Route path="/Notification"  
+            element={<Notification mode={mode} toggleTheme={toggleTheme}/>} />
 
-          <Route
-            path="/AllReceiving"
-            element={<AllReceiving mode={mode} toggleTheme={toggleTheme} />}
-          />
+            <Route path="/AllEntry"  
+            element={<AllEntry mode={mode} toggleTheme={toggleTheme}/>} />
 
-          <Route
-            path="/AllScrap"
-            element={<AllScrap mode={mode} toggleTheme={toggleTheme} />}
-          />
+            <Route path="/AllExit"  
+            element={<AllExit mode={mode} toggleTheme={toggleTheme}/>} />
+            
+            <Route path="/AllReceiving"  
+            element={<AllReceiving mode={mode} toggleTheme={toggleTheme}/>} />
+            
+            <Route path="/AllScrap"  
+            element={<AllScrap mode={mode} toggleTheme={toggleTheme}/>} />
 
-          <Route
-            path="/AllPurchase"
-            element={<AllPurchase mode={mode} toggleTheme={toggleTheme} />}
-          />
+             <Route path="/AllPurchase"  
+             element={<AllPurchase mode={mode} toggleTheme={toggleTheme}/>} />
 
-          <Route
-            path="/AllCustody"
-            element={<AllCustody mode={mode} toggleTheme={toggleTheme} />}
-          />
+             <Route path="/AllCustody"  
+             element={<AllCustody mode={mode} toggleTheme={toggleTheme}/>} />
 
-          <Route
-            path="/AllInstall"
-            element={<AllInstall mode={mode} toggleTheme={toggleTheme} />}
-          />
+             <Route path="/AllInstall"  
+             element={<AllInstall mode={mode} toggleTheme={toggleTheme}/>} />
 
-          <Route
-            path="/AllUserRequests"
-            element={<AllUserRequests mode={mode} toggleTheme={toggleTheme} />}
-          />
+             <Route path="/AllUserRequests"  
+             element={<AllUserRequests mode={mode} toggleTheme={toggleTheme}/>} />
 
-          <Route
+             <Route
             path="/CreateEntryNote"
             element={<CreateEntryNote mode={mode} toggleTheme={toggleTheme} />}
           />
@@ -227,9 +200,7 @@ export default function App() {
 
           <Route
             path="/CreateReceivingNote"
-            element={
-              <CreateReceivingNote mode={mode} toggleTheme={toggleTheme} />
-            }
+            element={<CreateReceivingNote mode={mode} toggleTheme={toggleTheme} />}
           />
 
           <Route
@@ -237,29 +208,61 @@ export default function App() {
             element={<CreateScrapNote mode={mode} toggleTheme={toggleTheme} />}
           />
 
-          <Route
-            path="/CreatePurchaseNote"
-            element={
-              <CreatePurchaseNote mode={mode} toggleTheme={toggleTheme} />
-            }
-          />
+<Route
+  path="/CreatePurchaseNote"
+  element={<CreatePurchaseNote mode={mode} toggleTheme={toggleTheme} />}
+/>
 
-          <Route
-            path="/CreateCustodyNote"
-            element={
-              <CreateCustodyNote mode={mode} toggleTheme={toggleTheme} />
-            }
-          />
-          <Route
-            path="/warehouses"
-            element={<Warehouses mode={mode} toggleTheme={toggleTheme} />}
-          />
+<Route
+  path="/CreateCustodyNote"
+  element={<CreateCustodyNote mode={mode} toggleTheme={toggleTheme} />}
+/>
 
-          <Route
-            path="/Settings"
-            element={<Settings mode={mode} toggleTheme={toggleTheme} />}
-          />
-        </Routes>
+            
+<Route
+  path="/Settings"
+  element={<Settings mode={mode} toggleTheme={toggleTheme} />}
+/>
+        
+<Route
+  path="/AddUsers"
+  element={<AddUsers mode={mode} toggleTheme={toggleTheme} />}
+/>
+
+<Route path="/AddUsers2"
+ element={<AddUsers2 mode={mode} toggleTheme={toggleTheme} />} />
+
+<Route path="/AddUsers3"
+ element={<AddUsers3 mode={mode} toggleTheme={toggleTheme} />} />
+
+<Route path="/AddUsers4"
+ element={<AddUsers4 mode={mode} toggleTheme={toggleTheme} />} />
+
+<Route path="/AllUsers"
+ element={<AllUsers mode={mode} toggleTheme={toggleTheme} />} />
+
+
+ <Route path="/Manager"
+ element={<Manager mode={mode} toggleTheme={toggleTheme} />} />
+
+<Route path="/CreateInstallBuyNote"
+element={<CreateInstallBuyNote mode={mode} toggleTheme={toggleTheme} />} />
+
+<Route path="/CreateInstallmosNote"
+element={<CreateInstallmosNote mode={mode} toggleTheme={toggleTheme} />} />
+
+
+<Route path="/AllInstallReports"
+element={<AllInstallReports mode={mode} toggleTheme={toggleTheme} />} />
+
+
+<Route path="/AllInstallStore"
+element={<AllInstallStore mode={mode} toggleTheme={toggleTheme} />} />
+
+                    </Routes>
+
+                    
+        
       </Router>
     </ThemeProvider>
   );

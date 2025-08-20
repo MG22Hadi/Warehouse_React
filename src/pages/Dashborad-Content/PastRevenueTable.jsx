@@ -1,61 +1,17 @@
 import React, { useState } from "react";
-import { useTheme } from "@mui/material/styles";
 
 const allProducts = [
-  {
-    name: "كتاب",
-    desc: "الوصف",
-    orders: 8000,
-    price: "$130",
-    warehouse: "000000",
-    refunds: "> 13",
-  },
-  {
-    name: "كاميرا",
-    desc: "الوصف",
-    orders: 3000,
-    price: "$45",
-    warehouse: "000000",
-    refunds: "> 18",
-  },
-  {
-    name: "---",
-    desc: "الوصف",
-    orders: 6000,
-    price: "$80",
-    warehouse: "000000",
-    refunds: "< 11",
-  },
-  {
-    name: "---",
-    desc: "الوصف",
-    orders: 4000,
-    price: "$500",
-    warehouse: "000000",
-    refunds: "> 18",
-  },
-  {
-    name: "-----",
-    desc: "الوصف",
-    orders: 2000,
-    price: "$15",
-    warehouse: "000000",
-    refunds: "< 10",
-  },
-  {
-    name: "جهاز",
-    desc: "الوصف",
-    orders: 1000,
-    price: "$75",
-    warehouse: "000000",
-    refunds: "> 20",
-  },
+  { name: "كتاب", desc: "الوصف", orders: 8000, price: "$130", warehouse: "000000", refunds: "> 13" },
+  { name: "كاميرا", desc: "الوصف", orders: 3000, price: "$45", warehouse: "000000", refunds: "> 18" },
+  { name: "", desc: "الوصف", orders: 6000, price: "$80", warehouse: "000000", refunds: "< 11" },
+  { name: "", desc: "الوصف", orders: 4000, price: "$500", warehouse: "000000", refunds: "> 18" },
+  { name: "", desc: "الوصف", orders: 2000, price: "$15", warehouse: "000000", refunds: "< 10" },
+  { name: "جهاز", desc: "الوصف", orders: 1000, price: "$75", warehouse: "000000", refunds: "> 20" },
 ];
 
 const pageSize = 5;
 
 export default function PastRevenueTable() {
-  const theme = useTheme();
   const [page, setPage] = useState(0);
 
   const pageCount = Math.ceil(allProducts.length / pageSize);
@@ -66,43 +22,43 @@ export default function PastRevenueTable() {
 
   return (
     <div
-      className="rounded-2xl shadow-md p-4 mt-6 mx-6 w-[795px] h-min-[622px]"
-      style={{ backgroundColor: theme.palette.background.paper }}
+      className="rounded-2xl shadow-md p-4 mt-1 ml-4 mr-0 flex flex-col items-center"
+      style={{ backgroundColor: "#FFFFFF", height: "476px" }}
     >
       <h2
-        className="text-right font-semibold text-lg mb-2"
-        style={{ color: theme.palette.text.primary }}
+        className="text-right font-semibold text-lg mb-2 w-full"
+        style={{ color: "#000000" }}
       >
         الإيرادات السابقة
       </h2>
 
-      <div
-        className="mb-4"
-        style={{ height: "1px", backgroundColor: theme.palette.divider }}
-      />
+      <div className="mb-4 w-full" style={{ height: "1px", backgroundColor: "#E0E0E0" }} />
 
-      <div className="overflow-x-auto">
-        <table className="min-w-full text-sm text-right rtl">
+      <div className="flex justify-center w-full">
+        <table
+          className="text-sm text-right rtl h-full border-collapse"
+          style={{ width: "700px", tableLayout: "auto", backgroundColor: "#FFFFFF", border: "1px solid #E0E0E0" }}
+        >
           <thead>
-            <tr style={{ color: theme.palette.text.secondary }}>
-              <th className="px-4 py-2">المنتج</th>
-              <th className="px-4 py-2">الطلبات</th>
-              <th className="px-4 py-2">السعر</th>
-              <th className="px-4 py-2">المستودع</th>
-              <th className="px-4 py-2">المرتجعات</th>
+            <tr style={{ color: "#000000" }}>
+              <th className="px-4 py-2 border border-gray-200">المنتج</th>
+              <th className="px-4 py-2 border border-gray-200">الطلبات</th>
+              <th className="px-4 py-2 border border-gray-200">السعر</th>
+              <th className="px-4 py-2 border border-gray-200">المستودع</th>
+              <th className="px-4 py-2 border border-gray-200">المرتجعات</th>
             </tr>
           </thead>
           <tbody>
             {products.map((p, idx) => (
-              <tr key={idx} style={{ color: theme.palette.text.primary }}>
-                <td className="px-4 py-2">
+              <tr key={idx} style={{ color: "#6F757E" }}>
+                <td className="px-4 py-2 border border-gray-200">
                   {p.name}
-                  <div className="text-xs text-gray-400">{p.desc}</div>
+                  <div className="text-xs" style={{ color: "#6F757E" }}>{p.desc}</div>
                 </td>
-                <td className="px-4 py-2">{p.orders}</td>
-                <td className="px-4 py-2">{p.price}</td>
-                <td className="px-4 py-2">{p.warehouse}</td>
-                <td className="px-4 py-2">{p.refunds}</td>
+                <td className="px-4 py-2 border border-gray-200">{p.orders}</td>
+                <td className="px-4 py-2 border border-gray-200">{p.price}</td>
+                <td className="px-4 py-2 border border-gray-200">{p.warehouse}</td>
+                <td className="px-4 py-2 border border-gray-200">{p.refunds}</td>
               </tr>
             ))}
           </tbody>
@@ -110,49 +66,46 @@ export default function PastRevenueTable() {
       </div>
 
       {/* Pagination Section */}
-      <div className="flex items-center justify-between mt-4 flex-wrap gap-4">
-        <span className="text-xs text-gray-400">
+      <div className="flex items-center justify-between mt-6 flex-wrap gap-4 w-full">
+        <span className="text-xs" style={{ color: "#6F757E", marginTop: "50px" }}>
           عرض {products.length} من {allProducts.length} منتج
         </span>
 
         <div className="flex items-center gap-2 text-sm">
-          {/* السابق */}
           <button
             onClick={prevPage}
             disabled={page === 0}
-            className={`px-3 py-1 rounded-md transition ${
-              page === 0
-                ? "text-gray-400 cursor-not-allowed"
-                : "text-orange-400"
-            }`}
+            className="px-3 py-1 rounded-md transition"
+            style={{
+              color: page === 0 ? "#C0C0C0" : "#6F757E",
+              cursor: page === 0 ? "not-allowed" : "pointer"
+            }}
           >
             السابق
           </button>
 
-          {/* ترقيم الصفحات */}
           {[...Array(pageCount)].map((_, i) => (
             <button
               key={i}
               onClick={() => setPage(i)}
-              className={`w-8 h-8 rounded-4xl text-center transition ${
-                i === page
-                  ? "bg-orange-500 text-white"
-                  : "text-orange-400 hover:bg-gray-200"
-              }`}
+              className="w-8 h-8 rounded-4xl text-center transition"
+              style={{
+                backgroundColor: i === page ? "#FF8E29" : "transparent",
+                color: i === page ? "#FFFFFF" : i === 0 ? "#FF8E29" : "#6F757E",
+              }}
             >
               {i + 1}
             </button>
           ))}
 
-          {/* التالي */}
           <button
             onClick={nextPage}
             disabled={page >= pageCount - 1}
-            className={`px-3 py-1 rounded-md transition ${
-              page >= pageCount - 1
-                ? "text-gray-400 cursor-not-allowed"
-                : "text-orange-400"
-            }`}
+            className="px-3 py-1 rounded-md transition"
+            style={{
+              color: "#FF8E29",
+              cursor: page >= pageCount - 1 ? "not-allowed" : "pointer"
+            }}
           >
             التالي
           </button>

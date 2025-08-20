@@ -3,12 +3,26 @@ body {
   background-color: #fff;
 }
 
+.table-input {
+  width: 90%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 16px;
+  text-align: center;
+}
+.table-input:focus {
+  background: #f0f0f0;
+  border-radius: 4px;
+}
+
+
 .container {
   max-width: 1200px;
   /* margin: 0 auto; */
 }
 .header {
-  margin-top: -50px;
+  margin-top: 32px;
 }
 .header,
 .footer {
@@ -22,11 +36,6 @@ body {
   margin-top: 30px;
   text-align: center;
 }
-.entry-header {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px; /* تخليها تحت شوي */
-}
 
 table {
   width: 1150px;
@@ -39,7 +48,7 @@ table {
 th,
 td {
   border: 1px solid #ccc;
-  padding: 8px;
+  padding: 18px;
   text-align: center;
 }
 

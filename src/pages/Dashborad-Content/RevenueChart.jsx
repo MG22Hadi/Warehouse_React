@@ -25,7 +25,7 @@ const chartData = (theme) => ({
   datasets: [
     {
       label: "الإيرادات",
-      data: [12000, 15000, 11000, 18000, 20000, 17000],
+      data: [12000, 15000, 11000, 18000, 20000, 17000].map(v => v - 6000),
       borderColor: "#FF8E29",
       backgroundColor: "rgba(255, 142, 41, 0.2)",
       tension: 0.4,
@@ -33,11 +33,22 @@ const chartData = (theme) => ({
       pointRadius: 4,
       pointBackgroundColor: "#FF8E29",
     },
+    {
+      label: "الإيرادات الخضراء",
+      data: [18000, 14000, 16000, 12000, 15000, 13000].map(v => v - 6000),
+      borderColor: "#27D095",
+      backgroundColor: "rgba(39, 208, 149, 0.15)",
+      tension: 0.4,
+      fill: true,
+      pointRadius: 4,
+      pointBackgroundColor: "#27D095",
+    },
   ],
 });
 
 const chartOptions = (theme) => ({
   responsive: true,
+  maintainAspectRatio: false, // مهم عشان الرسم يملأ الكارت بالكامل
   plugins: {
     legend: {
       display: false,
@@ -70,8 +81,12 @@ export default function RevenueChart() {
 
   return (
     <div
-      className="rounded-2xl shadow-md p-4 mt-6 mx-6 w-[795px] h-min-[460px]"
-      style={{ backgroundColor: theme.palette.background.paper }}
+      className="rounded-2xl shadow-md p-6 mt-6 ml-auto mr-0 flex flex-col"
+      style={{
+        backgroundColor: theme.palette.background.paper,
+        width: "758px",
+        height: "500px",
+      }}
     >
       <h2
         className="text-right font-semibold text-lg mb-4"
@@ -79,7 +94,12 @@ export default function RevenueChart() {
       >
         الإيرادات خلال الأشهر
       </h2>
-      <Line data={chartData(theme)} options={chartOptions(theme)} />
+      <div className="flex-1">
+        <Line
+          data={chartData(theme)}
+          options={chartOptions(theme)}
+        />
+      </div>
     </div>
   );
 }

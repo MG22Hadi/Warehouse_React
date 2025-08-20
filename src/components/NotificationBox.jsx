@@ -51,9 +51,9 @@ const NotificationBox = () => {
         <div className="order-actions">
           <button className="view-btn">▼ عرض التفاصيل</button>
           {i % 2 === 1 ? (
-            <button className="approve-btn">موافقة ✅</button>
+            <button className="approve-btn">موافقة </button>
           ) : (
-            <button className="deny-btn">رفض ❌</button>
+            <button className="deny-btn">رفض</button>
           )}
         </div>
       </div>
@@ -68,7 +68,7 @@ const NotificationBox = () => {
 
         {/* الجهة اليمنى: تنبيهات المخزون */}
 <div className="right-side">
-  <h2 className="section-title">⚠️ تنبيهات انخفاض المخزون</h2>
+  <h2 className="section-title"> تنبيهات انخفاض المخزون</h2>
   <p style={{ color: "gray", marginBottom: "1rem" }}>
     بعض المواد منخفضة المخزون، يرجى اتخاذ إجراء:
   </p>
@@ -79,7 +79,7 @@ const NotificationBox = () => {
       style={{ backgroundColor: i % 2 === 0 ? "#F5F5F5" : "#FFF4EA" }}
     >
       <div className="order-header">
-        <span className="order-type">⚠️ تنبيه: مادة منخفضة</span>
+        <span className="order-type"> تنبيه: مادة منخفضة</span>
       </div>
 
       <div className="order-info" style={{ marginTop: "10px" }}>
@@ -103,7 +103,7 @@ const NotificationBox = () => {
 
       <div className="order-actions">
         <button className="view-btn">🛒 اطلب الآن</button>
-        <button className="deny-btn">❌ تجاهل</button>
+        <button className="deny-btn"> تجاهل</button>
       </div>
     </div>
   </div>

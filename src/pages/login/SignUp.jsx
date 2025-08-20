@@ -106,7 +106,7 @@ export default function SignUp({ mode, toggleTheme }) {
             navigate("/data-entry");
             break;
           default:
-            navigate("/");
+            navigate("/login");
         }
       } else {
         if (result.errors) {

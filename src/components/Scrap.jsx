@@ -1,22 +1,23 @@
-import React from "react";
-import "./Entry.css";
+import React, { useState } from "react";
+import "./Scrap.css";
 
-const ScrapNote = ({ note }) => {
+const ScrapNote = () => {
+
   return (
     <div className="container" dir="rtl">
-      <div className="entry-header">
+      <div className="header">
         <div className="top-right">
           <p>
             <span className="black"> رقم التسلسل:</span>
-            <span className="storage"> {note.serial_number}</span>
+            <span className="storage"> 12345678</span>
           </p>
-          <p className="gray">{note.warehouse?.name || "—"}</p>
+          <p className="gray">مستودع الرياض</p>
         </div>
         <div className="title">
           <p className="text-lg font-semibold">مذكرة اتلاف</p>
           <p className="Date">
             <span className="black"> التاريخ :</span>
-            <span className="storage"> {note.date?.slice(0, 10)}</span>
+            <span className="storage"> 2024-05-20</span>
           </p>
         </div>
         <div className="top-left">
@@ -29,38 +30,29 @@ const ScrapNote = ({ note }) => {
         <table>
           <thead>
             <tr>
-              <th rowSpan="2" className="center-text">
-                الرقم التسلسلي
-              </th>
+              <th rowSpan="2" className="center-text">الرقم التسلسلي</th>
               <th colSpan="3">المواد</th>
-              <th rowSpan="2" className="center-text">
-                الكمية
-              </th>
-              <th rowSpan="2" className="center-text">
-                الملاحظات
-              </th>
+              <th rowSpan="2" className="center-text">الكمية</th>
+              <th rowSpan="2" className="center-text">الملاحظات</th>
             </tr>
-
+            
             <tr>
               <th>كود المادة</th>
-              <th>اسم المادة و الوصف</th>
+              <th  >اسم المادة و الوصف</th>
               <th>الوحدة</th>
             </tr>
           </thead>
           <tbody>
-            {Array.from({ length: 11 }).map((_, index) => {
-              const item = note.items?.[index]; // جرب جيب الصف من الداتا إذا موجود
-              return (
-                <tr key={index}>
-                  <td className="center-text">{index + 1}</td>
-                  <td>{item ? item.product?.code : ""}</td>
-                  <td>{item ? item.product?.name : ""}</td>
-                  <td>{item ? item.product?.unit : ""}</td>
-                  <td>{item ? item.quantity : ""}</td>
-                  <td className="center-text">{item ? item.notes : ""}</td>
-                </tr>
-              );
-            })}
+            {Array(9).fill().map((_, index) => (
+              <tr key={index}>
+                <td className="center-text">1</td>
+                <td>ITM-1001</td>
+                <td>Printer Canon</td>
+                <td>لاسلكي، بحجم A4</td>
+                <td> 10 قطعة</td>
+                <td className="center-text">تسليم عاجل</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
@@ -68,11 +60,11 @@ const ScrapNote = ({ note }) => {
       <div className="footer">
         <p>
           <span className="grand_total">أمين المستودع:</span>
-          <span className="price"> {note.created_by?.name || "—"}</span>
+          <span className="price"> ملك مبارك</span>
         </p>
         <p>
           <span className="grand_total"> المستلم:</span>
-          <span className="price"> {note.user?.name || "—"}</span>
+          <span className="price"> ملك مبارك</span>
         </p>
       </div>
     </div>

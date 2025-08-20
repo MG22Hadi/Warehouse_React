@@ -89,40 +89,6 @@ const Installuser = () => {
           <span className="price"> ملك مبارك</span>
         </p>
       </div>
-
-      <button className="creat" onClick={() => setShowConfirm(true)}>
-        إنشاء ضبط تركيب
-      </button>
-
-      {showConfirm && (
-        <div className="overlay">
-          <div className="custom-modal" dir="rtl">
-            <p className="first_line">تأكيد إنشاء ضبط تركيب</p>
-            <p>
-            <span>
-            هل أنت متأكد  
-                ؟
-            </span>
-            <br />
-            <span className="">
-                بمجرد التأكيد، سيتم خصم المواد تلقائيًا من المخزون. 
-                </span>
-            </p>
-            
-            <div className="modal-buttons">
-              <button className="btn confirm" onClick={handleConfirm}>
-                نعم 
-              </button>
-              <button className="btn cancel" onClick={() => setShowConfirm(false)}>
-                لا
-              </button>
-            </div>
-            <p className="small-text">
-             
-            </p>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

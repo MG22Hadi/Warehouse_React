@@ -25,7 +25,6 @@ export default function EntryNotes({ mode, toggleTheme }) {
             },
           }
         );
-        console.log("📌 تفاصيل المذكرة:", response.data);
         setNote(response.data.data);
       } catch (error) {
         console.error("فشل في جلب تفاصيل المذكرة", error);

@@ -11,7 +11,7 @@ export default function SmallCalendar() {
 
   return (
     <div
-      className="rounded-2xl shadow-md p-4 mt-6 mx-6 w-[355px] h-min-[456px]"
+      className="rounded-2xl shadow-md p-4 mt-6 mx-1 w-[355px] h-min-[456px]"
       style={{ backgroundColor: theme.palette.background.paper }}
     >
       <div className="flex justify-between items-center mb-4">

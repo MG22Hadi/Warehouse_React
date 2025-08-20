@@ -1,20 +1,22 @@
 body {
   font-family: sans-serif;
   background-color: #fff;
+  
 }
 
 .container {
   max-width: 1200px;
   /* margin: 0 auto; */
 }
-.header {
-  margin-top: -50px;
+.header{
+margin-top: -50px;
 }
-.footer {
-  margin-top: 30px;
+.footer{
+    margin-top: 30px;
 }
 .header,
 .footer {
+
   display: flex;
   justify-content: space-between;
   /* margin-bottom: 20px; */
@@ -22,7 +24,7 @@ body {
 }
 
 .title {
-  margin-top: 30px;
+  margin-top : 30px;
   text-align: center;
 }
 
@@ -42,18 +44,18 @@ td {
 }
 
 thead tr:first-child {
-  background-color: #ff8e29;
+  background-color: #FF8E29;
   color: black;
 }
 
 thead tr:nth-child(2) {
-  background-color: #ff8e29;
+  background-color: #FF8E29;
   color: black;
 }
 
 tbody tr {
-  background-color: #fff4ea;
-  color: #6f757e;
+  background-color: #FFF4EA;
+  color: #6F757E ;
 }
 
 .total {
@@ -61,42 +63,43 @@ tbody tr {
   text-align: center;
 }
 
-.Serial_Number {
-  padding-top: 1px;
+.Serial_Number{
+    padding-top: 1px;
 }
-.grand_total {
+.grand_total{
   font-weight: bold;
-  color: #ff8e29;
-  font-size: 20px;
+  color:#FF8E29;
+  font-size: 20px; 
 }
-.price {
-  color: #6f757e;
-  font-size: 20px;
+.price{
+  color : #6F757E;
+  font-size: 20px; 
 }
-.storage {
-  color: #6f757e;
+.storage{
+ color : #6F757E;
 }
-.black {
-  color: black;
+.black{
+  color:black;
   font-weight: bold;
 }
-.gray {
-  color: black;
+.gray{
+  color : black;
 }
-.Date {
+.Date{
   margin-top: 15px;
 }
 .creat {
-  margin-top: 30px;
-  background: #ff8e29;
+  margin-top : 30px;
+  background: #FF8E29;
   color: white;
-  border-radius: 30px;
-  padding: 10px 30px;
-  font-size: 16px;
-  text-align: center;
-  display: inline-block;
+  border-radius: 30px; 
+  padding: 10px 30px; 
+  font-size: 16px; 
+  text-align: center; 
+  display: inline-block; 
   cursor: pointer; /* شكل اليد عند المرور */
-  border: none;
+  border: none; 
+  
 }
 .overlay {
   position: fixed;
@@ -104,7 +107,7 @@ tbody tr {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0,0,0,0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -112,14 +115,14 @@ tbody tr {
 }
 
 .custom-modal {
-  padding-left: 20px;
-  padding-right: 20px;
+    padding-left:20px;
+    padding-right: 20px;
   background: white;
   border-radius: 20px;
   width: 340px;
   text-align: center;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  max-height: 250px;
+  max-height: 250px; 
   overflow-y: auto;
 }
 
@@ -146,6 +149,7 @@ tbody tr {
   justify-content: center;
   gap: 5px;
   margin-top: 15px;
+  
 }
 
 .btn {
@@ -155,11 +159,11 @@ tbody tr {
   font-size: 14px;
   cursor: pointer;
   font-weight: bold;
-  transition: 0.2s ease;
+  transition:  0.2s ease;
 }
 
 .btn.confirm {
-  background-color: #ff8e29;
+  background-color: #FF8E29;
   color: white;
   padding: 10px 70px;
 }
@@ -169,24 +173,25 @@ tbody tr {
 }
 
 .btn.cancel {
-  padding: 10px 70px;
-  cursor: pointer;
+    padding: 10px 70px;
+    cursor: pointer;
   background-color: white;
-  color: #ff8e29;
-  border: 1px solid #ff8e29;
+  color: #FF8E29;
+  border: 1px solid #FF8E29;
 }
 
 .btn.cancel:hover {
   background-color: #c7c7c7;
 }
-.custom-modal .first_line {
-  margin-top: 20px;
-  font-size: 20px;
-  font-weight: bold;
+.custom-modal .first_line{
+margin-top: 20px;
+font-size: 20px;
+font-weight: bold;
 }
-.Date {
+.Date{
   margin-top: 15px;
   justify-content: center;
+
 }
 .header {
   display: flex;
@@ -210,3 +215,4 @@ tbody tr {
   align-items: center;
   margin-top: 15px;
 }
+
