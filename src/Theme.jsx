@@ -9,6 +9,9 @@ export const getTheme = (mode) =>
             background: {
               default: "#FFF4EA", // خلفية الصفحة
               paper: "#FFFFFF", // كروت أو الحاويات
+              ma: "#F5F5F5",
+              ma1: "#F5F5F5",
+              ma2: "#FFFFFF",
               calender: "#FFFFFF",
               card1: "#F5F5F5",
               card2: "#FFFFFF",
@@ -18,21 +21,24 @@ export const getTheme = (mode) =>
               secondary: "#6F757E", // رمادي معتدل للنصوص الثانوية
             },
             primary: {
-              main: "#FF8E29", 
+              main: "#FF8E29",
             },
             action: {
               selected: "#FFE9D6",
-              hover :"#FFF4EA",
+              hover: "#FFF4EA",
             },
             error: {
-              main: "#DC2626", 
+              main: "#DC2626",
               light: "#FEE2E2",
             },
           }
         : {
             background: {
-              default: "#151D32", 
+              default: "#151D32",
               paper: "#292F45", // سطح العناصر
+              ma: "#292F45",
+              ma1: "#151D32",
+              ma2: "#151D32",
               calender: "#151D32",
               card1: "#353C56",
               card2: "#151D32",
@@ -40,13 +46,14 @@ export const getTheme = (mode) =>
             text: {
               primary: "#FFFFFF", // نص واضح وأنيق
               secondary: "#9199AD", // رمادي فاتح للنص الثانوي
+              default: "#151D32",
             },
             primary: {
               main: "#FF8E29", // يبقى ثابت لتمييز الزر الأساسي
             },
             action: {
-              selected: "#3D2B1F", 
-              hover :"#151D32",
+              selected: "#3D2B1F",
+              hover: "#151D32",
             },
             error: {
               main: "#F87171",

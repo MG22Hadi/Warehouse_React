@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import MainLayout from "../../MainLayout";
 import ProductDetailsCard from "./ProductDetailsCard";
-import AddProductModal from "./AddProductModal";
+// import AddProductModal from "./AddProductModal";
+// import AddProduct1 from "../AddProduct1";
 import FilterBar from "./FilterBar";
 import axios from "axios";
 
@@ -11,41 +12,68 @@ export default function Products({ mode, toggleTheme }) {
   const theme = useTheme();
   const { warehouseId } = useParams();
 
+  const navigate = useNavigate();
+  const handleNext = () => {
+    navigate("/Addproduct1");
+  };
   const [products, setProducts] = useState([]);
   const [selectedProductId, setSelectedProductId] = useState(null);
   const [warehouseName, setWarehouseName] = useState("");
-  const [showAddModal, setShowAddModal] = useState(false);
   const [filters, setFilters] = useState({});
 
   const token = localStorage.getItem("token");
 
   const fetchProducts = async (appliedFilters = {}) => {
     try {
-      const url = "/api/products";
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        params: {},
-      };
-
       if (warehouseId) {
-        config.params.warehouse_id = warehouseId;
+        const res = await axios.get(`/api/warehouses/show/${warehouseId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        let stock = res.data?.data?.warehouse?.stock || [];
+
+        // حوّل لـ مصفوفة منتجات مع الكمية
+        let mappedProducts = stock.map((item) => ({
+          ...item.product,
+          quantity: item.quantity,
+        }));
+
+        // فلترة بالـ frontend
+        if (appliedFilters.consumable !== undefined) {
+          mappedProducts = mappedProducts.filter(
+            (p) =>
+              p.consumable ===
+              (appliedFilters.consumable === "true" ||
+                appliedFilters.consumable === 1)
+          );
+        }
+
+        if (appliedFilters.code) {
+          mappedProducts = mappedProducts.filter((p) =>
+            p.code.includes(appliedFilters.code)
+          );
+        }
+
+        if (appliedFilters.name) {
+          mappedProducts = mappedProducts.filter((p) =>
+            p.name.includes(appliedFilters.name)
+          );
+        }
+
+        setProducts(mappedProducts);
+      } else {
+        // حالة عرض جميع المنتجات (الـ API فيه فلترة جاهزة)
+        const res = await axios.get("/api/products", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params: appliedFilters,
+        });
+
+        setProducts(res.data?.data?.products || []);
       }
-
-      // تحويل قيمة 'consumable' من "true"/"false" لنوع Boolean
-      const transformedFilters = { ...appliedFilters };
-      if (transformedFilters.consumable === "true")
-        transformedFilters.consumable = 1;
-      if (transformedFilters.consumable === "false")
-        transformedFilters.consumable = 0;
-
-      config.params = { ...config.params, ...transformedFilters };
-
-      console.log("Request URL:", url, config.params);
-      
-      const res = await axios.get(url, config);
-      setProducts(res.data?.data?.products || []);
     } catch (err) {
       console.error("خطأ في تحميل المنتجات:", err);
       alert("فشل تحميل المنتجات.");
@@ -111,7 +139,7 @@ export default function Products({ mode, toggleTheme }) {
           <button
             className="text-sm font-medium py-2 px-4 rounded-md hover:bg-[#e57d18] transition"
             style={{ backgroundColor: "#FF8E29", color: "#fff" }}
-            onClick={() => setShowAddModal(true)}
+            onClick={handleNext}
           >
             إضافة منتج جديد
           </button>
@@ -223,14 +251,6 @@ export default function Products({ mode, toggleTheme }) {
           </div>
         )}
       </div>
-
-      {showAddModal && (
-        <AddProductModal
-          onClose={() => setShowAddModal(false)}
-          onSuccess={() => fetchProducts(filters)} // إعادة تحميل بنفس الفلاتر
-          warehouseId={warehouseId}
-        />
-      )}
     </MainLayout>
   );
 }

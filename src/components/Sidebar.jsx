@@ -14,6 +14,8 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import PeopleIcon from "@mui/icons-material/People";
 import SettingsIcon from "@mui/icons-material/Settings";
 import BuildIcon from "@mui/icons-material/Build";
+import WarehouseIcon from "@mui/icons-material/Warehouse";
+import Inventory2Icon from "@mui/icons-material/Inventory2";
 
 const menuItems = [
   { icon: <HomeIcon />, label: "الصفحة الرئيسية", path: "/Dashboard" },
@@ -27,9 +29,8 @@ const menuItems = [
   { icon: <ShoppingCartIcon />, label: "طلبات الشراء", path: "/AllPurchase" },
   { icon: <AccountBoxIcon />, label: "العهدة الشخصية", path: "/AllCustody" },
   { icon: <NotificationsIcon />, label: "الإشعارات", path: "/Notification" },
-  { icon: <PeopleIcon />, label: "المستخدمين", path: "/AllUsers" }, 
+  { icon: <PeopleIcon />, label: "المستخدمين", path: "/AllUsers" },
   { icon: <SettingsIcon />, label: "الإعدادات", path: "/Settings" },
-  
 ];
 
 export default function Sidebar() {
@@ -51,7 +52,10 @@ export default function Sidebar() {
   }, [location.pathname]);
 
   return (
-    <div className="w-[218px] pt-[37px] pb-[37px] pl-[30px] pr-[30px]" dir="rtl">
+    <div
+      className="w-[218px] pt-[37px] pb-[37px] pl-[30px] pr-[30px]"
+      dir="rtl"
+    >
       <div
         className="w-[200px] h-full flex flex-col justify-between py-5 px-5 rounded-[30px] font-sans shadow-lg"
         style={{
@@ -79,7 +83,8 @@ export default function Sidebar() {
                 : "#6F757E",
             }}
             onMouseEnter={(e) => {
-              if (!isActive("/Dashboard")) e.currentTarget.style.color = "#FFFFFF";
+              if (!isActive("/Dashboard"))
+                e.currentTarget.style.color = "#FFFFFF";
             }}
             onMouseLeave={(e) => {
               if (!isActive("/Dashboard"))
@@ -108,7 +113,8 @@ export default function Sidebar() {
                 : "#6F757E",
             }}
             onMouseEnter={(e) => {
-              if (!isActive("/calendar")) e.currentTarget.style.color = "#FFFFFF";
+              if (!isActive("/calendar"))
+                e.currentTarget.style.color = "#FFFFFF";
             }}
             onMouseLeave={(e) => {
               if (!isActive("/calendar"))
@@ -123,47 +129,76 @@ export default function Sidebar() {
             <span className="truncate">التقويم</span>
           </li>
 
+          {/* المستودعات */}
+          <li
+            onClick={() => navigate("/warehouses")}
+            className={`flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-all duration-200 ${
+              isActive("/warehouses") ? "bg-[#FF8E29]" : "hover:bg-[#FF8E29]"
+            }`}
+            style={{
+              color: isActive("/warehouses")
+                ? "#FFFFFF"
+                : theme.palette.mode === "dark"
+                ? "#CCCDCD"
+                : "#6F757E",
+            }}
+            onMouseEnter={(e) => {
+              if (!isActive("/warehouses"))
+                e.currentTarget.style.color = "#FFFFFF";
+            }}
+            onMouseLeave={(e) => {
+              if (!isActive("/warehouses"))
+                e.currentTarget.style.color =
+                  theme.palette.mode === "dark" ? "#CCCDCD" : "#6F757E";
+            }}
+          >
+            <WarehouseIcon
+              style={{ color: isActive("/warehouses") ? "#FFFFFF" : undefined }}
+              className="w-4 h-4"
+            />
+            <span className="truncate">المستودعات</span>
+          </li>
+
           {/* جميع المنتجات */}
-          <li>
-            <div
-              onClick={() => navigate("/products")}
-              className={`flex items-center justify-between px-3 py-2 rounded-md cursor-pointer transition-all duration-200 ${
-                location.pathname.startsWith("/products")
-                  ? "bg-[#FF8E29]"
-                  : "hover:bg-[#FF8E29]"
-              }`}
-              style={{
-                color: location.pathname.startsWith("/products")
-                  ? "#FFFFFF"
-                  : theme.palette.mode === "dark"
-                  ? "#CCCDCD"
-                  : "#6F757E",
-              }}
-              onMouseEnter={(e) => {
-                if (!location.pathname.startsWith("/products"))
-                  e.currentTarget.style.color = "#FFFFFF";
-              }}
-              onMouseLeave={(e) => {
-                if (!location.pathname.startsWith("/products"))
-                  e.currentTarget.style.color =
-                    theme.palette.mode === "dark" ? "#CCCDCD" : "#6F757E";
-              }}
-            >
-              <div className="flex items-center gap-2">
-                <img
-                  src="/assets/icons-dashboard/Products.svg"
-                  className="w-4 h-4"
-                  alt="products"
-                />
-                <span className="truncate">جميع المنتجات</span>
-              </div>
-            </div>
+          <li
+            onClick={() => navigate("/products")}
+            className={`flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-all duration-200 ${
+              isActive("/products") ? "bg-[#FF8E29]" : "hover:bg-[#FF8E29]"
+            }`}
+            style={{
+              color: isActive("/products")
+                ? "#FFFFFF"
+                : theme.palette.mode === "dark"
+                ? "#CCCDCD"
+                : "#6F757E",
+            }}
+            onMouseEnter={(e) => {
+              if (!isActive("/products"))
+                e.currentTarget.style.color = "#FFFFFF";
+            }}
+            onMouseLeave={(e) => {
+              if (!isActive("/products"))
+                e.currentTarget.style.color =
+                  theme.palette.mode === "dark" ? "#CCCDCD" : "#6F757E";
+            }}
+          >
+            <Inventory2Icon
+              style={{ color: isActive("/products") ? "#FFFFFF" : undefined }}
+              className="w-4 h-4"
+            />
+            <span className="truncate">جميع المنتجات</span>
           </li>
 
           {/* باقي العناصر */}
           {menuItems
             .filter((item) =>
-              ["اضافة منتج", "مذكرات إدخال", "مذكرات إخراج", "مذكرات الاستلام", "مذكرات إتلاف"].includes(item.label)
+              [
+                "اضافة منتج",
+                "مذكرات إدخال",
+                "مذكرات إخراج",
+                "مذكرات الاستلام",
+                "مذكرات إتلاف",
+              ].includes(item.label)
             )
             .map((item, index) => (
               <li
@@ -180,7 +215,8 @@ export default function Sidebar() {
                     : "#6F757E",
                 }}
                 onMouseEnter={(e) => {
-                  if (!isActive(item.path)) e.currentTarget.style.color = "#FFFFFF";
+                  if (!isActive(item.path))
+                    e.currentTarget.style.color = "#FFFFFF";
                 }}
                 onMouseLeave={(e) => {
                   if (!isActive(item.path))
@@ -195,102 +231,112 @@ export default function Sidebar() {
                 <span className="truncate">{item.label}</span>
               </li>
             ))}
-            {/* ضبط التركيب */}
-<li>
-  <div
-    className={`flex items-center justify-between px-3 py-2 cursor-pointer transition-all duration-200 ${
-      showInstallReports ||
-      location.pathname === "/AllInstall" ||
-      location.pathname === "/InstallReportsUser" ||
-      location.pathname === "/InstallReportsStore"
-        ? "bg-[#FF8E29]"
-        : "hover:bg-[#FF8E29]"
-    } ${showInstallReports ? "rounded-t-[8px]" : "rounded-[8px]"}`}
-    style={{
-      color:
-        hoverInstall ||
-        showInstallReports ||
-        location.pathname === "/AllInstall" ||
-        location.pathname === "/InstallReportsUser" ||
-        location.pathname === "/InstallReportsStore"
-          ? "#FFFFFF"
-          : theme.palette.mode === "dark"
-          ? "#CCCDCD"
-          : "#6F757E",
-    }}
-  >
-    <div
-      className="flex items-center gap-2"
-      onClick={() => navigate("/AllInstall")} // الضغط على النص يذهب للصفحة
-      onMouseEnter={() => setHoverInstall(true)}
-      onMouseLeave={() => setHoverInstall(false)}
-    >
-      <BuildIcon
-        className="w-4 h-4"
-        style={{
-          color:
-            hoverInstall ||
-            showInstallReports ||
-            location.pathname === "/AllInstall" ||
-            location.pathname === "/InstallReportsUser" ||
-            location.pathname === "/InstallReportsStore"
-              ? "#FFFFFF"
-              : theme.palette.mode === "dark"
-              ? "#CCCDCD"
-              : "#6F757E",
-        }}
-      />
-      <span className="truncate">ضبط التركيب</span>
-    </div>
+          {/* ضبط التركيب */}
+          <li>
+            <div
+              className={`flex items-center justify-between px-3 py-2 cursor-pointer transition-all duration-200 ${
+                showInstallReports ||
+                location.pathname === "/AllInstall" ||
+                location.pathname === "/InstallReportsUser" ||
+                location.pathname === "/InstallReportsStore"
+                  ? "bg-[#FF8E29]"
+                  : "hover:bg-[#FF8E29]"
+              } ${showInstallReports ? "rounded-t-[8px]" : "rounded-[8px]"}`}
+              style={{
+                color:
+                  hoverInstall ||
+                  showInstallReports ||
+                  location.pathname === "/AllInstall" ||
+                  location.pathname === "/InstallReportsUser" ||
+                  location.pathname === "/InstallReportsStore"
+                    ? "#FFFFFF"
+                    : theme.palette.mode === "dark"
+                    ? "#CCCDCD"
+                    : "#6F757E",
+              }}
+            >
+              <div
+                className="flex items-center gap-2"
+                onClick={() => navigate("/AllInstall")} // الضغط على النص يذهب للصفحة
+                onMouseEnter={() => setHoverInstall(true)}
+                onMouseLeave={() => setHoverInstall(false)}
+              >
+                <BuildIcon
+                  className="w-4 h-4"
+                  style={{
+                    color:
+                      hoverInstall ||
+                      showInstallReports ||
+                      location.pathname === "/AllInstall" ||
+                      location.pathname === "/InstallReportsUser" ||
+                      location.pathname === "/InstallReportsStore"
+                        ? "#FFFFFF"
+                        : theme.palette.mode === "dark"
+                        ? "#CCCDCD"
+                        : "#6F757E",
+                  }}
+                />
+                <span className="truncate">ضبط التركيب</span>
+              </div>
 
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={`w-[20px] h-[20px] transition-transform duration-300 ${
-        showInstallReports ? "rotate-180" : ""
-      }`}
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      strokeWidth={2}
-      onClick={() => setShowInstallReports(!showInstallReports)} // السهم فقط يفتح/يغلق القائمة
-    >
-      <path strokeLinecap="round" strokeLinejoin="round" d="M6 9l6 6 6-6" />
-    </svg>
-  </div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className={`w-[20px] h-[20px] transition-transform duration-300 ${
+                  showInstallReports ? "rotate-180" : ""
+                }`}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+                onClick={() => setShowInstallReports(!showInstallReports)} // السهم فقط يفتح/يغلق القائمة
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 9l6 6 6-6"
+                />
+              </svg>
+            </div>
 
-  {showInstallReports && (
-    <ul
-      className="mt-0 pr-1 pb-1 space-y-1 text-right rounded-b-[8px] overflow-hidden"
-      style={{ backgroundColor: "#FF8E29" }}
-    >
-      <li
-        className={`cursor-pointer px-4 py-2 transition text-[16px] font-medium ${
-          location.pathname === "/InstallReportsUser"
-            ? "text-white"
-            : "text-[#FFC794] hover:text-white"
-        }`}
-        onClick={() => navigate("/AllInstallStore")} // القائمة تبقى مفتوحة
-      >
-        شراء
-      </li>
-      <li
-        className={`cursor-pointer px-4 py-2 transition text-[16px] font-medium ${
-          location.pathname === "/InstallReportsStore"
-            ? "text-white"
-            : "text-[#FFC794] hover:text-white"
-        }`}
-        onClick={() => navigate("/AllInstallReports")} // القائمة تبقى مفتوحة
-      >
-        استخدام من المستودع
-      </li>
-    </ul>
-  )}
-</li>
+            {showInstallReports && (
+              <ul
+                className="mt-0 pr-1 pb-1 space-y-1 text-right rounded-b-[8px] overflow-hidden"
+                style={{ backgroundColor: "#FF8E29" }}
+              >
+                <li
+                  className={`cursor-pointer px-4 py-2 transition text-[16px] font-medium ${
+                    location.pathname === "/InstallReportsUser"
+                      ? "text-white"
+                      : "text-[#FFC794] hover:text-white"
+                  }`}
+                  onClick={() => navigate("/AllInstallStore")} // القائمة تبقى مفتوحة
+                >
+                  شراء
+                </li>
+                <li
+                  className={`cursor-pointer px-4 py-2 transition text-[16px] font-medium ${
+                    location.pathname === "/InstallReportsStore"
+                      ? "text-white"
+                      : "text-[#FFC794] hover:text-white"
+                  }`}
+                  onClick={() => navigate("/AllInstallReports")} // القائمة تبقى مفتوحة
+                >
+                  استخدام من المستودع
+                </li>
+              </ul>
+            )}
+          </li>
 
           {/* باقي القائمة: طلبات، عهدة، إشعارات، مستخدمين، إعدادات */}
           {menuItems
             .filter((item) =>
-              ["طلبات الشراء", "العهدة الشخصية", "الإشعارات", "المستخدمين", "الإعدادات"].includes(item.label)
+              [
+                "طلبات الشراء",
+                "العهدة الشخصية",
+                "الإشعارات",
+                "المستخدمين",
+                "الإعدادات",
+              ].includes(item.label)
             )
             .map((item, index) => (
               <li
@@ -307,7 +353,8 @@ export default function Sidebar() {
                     : "#6F757E",
                 }}
                 onMouseEnter={(e) => {
-                  if (!isActive(item.path)) e.currentTarget.style.color = "#FFFFFF";
+                  if (!isActive(item.path))
+                    e.currentTarget.style.color = "#FFFFFF";
                 }}
                 onMouseLeave={(e) => {
                   if (!isActive(item.path))

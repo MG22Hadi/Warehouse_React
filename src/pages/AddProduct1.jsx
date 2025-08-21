@@ -22,6 +22,7 @@ export default function AddProduct1({ mode, toggleTheme }) {
         dir="rtl"
         style={{
           backgroundColor: theme.palette.background.paper,
+          color: theme.palette.text.primary,
         }}
       >
         <Product1 onNext={handleNext} initialData={initialFormData} />

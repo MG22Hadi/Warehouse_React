@@ -4,13 +4,12 @@
   margin: 0 auto;
 }
 
-
 /* الشكل الدائري الأساسي */
 .step-number {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: #FFC794; /* الافتراضي للخطوات غير المفعلة */
+  transition: background-color 0.3s ease;
 }
 
 /* ترتيب الخطوات */
@@ -37,33 +36,31 @@
 .step-label1 {
   margin-top: 6px;
   font-size: 16px;
-  color: #FFC794;
+  transition: color 0.3s ease;
   font-weight: 600;
 }
-.progress-step .step-number1{
-    background-color: #FFC794;
+.progress-step .step-number1 {
+  border: 2px solid #ffc794; /* ممكن تغيّر حسب الثيم */
 }
 
 .progress-line1 {
   width: 120px;
   height: 2px;
-  background-color: white;
-  margin-top:-40px;
+  border: 2px solid #ffc794; /* ممكن تغيّر حسب الثيم */
+  margin-top: -40px;
 }
 
 .progress-line {
   width: 120px;
   height: 2px;
-  background-color: #FFC794;
-  margin-top:-40px;
+  background-color: #ffc794;
+  margin-top: -40px;
 }
 
 .step span {
   font-size: 14px;
   font-weight: 500;
 }
-
-
 
 .step .circle {
   width: 20px;
@@ -78,9 +75,6 @@
   border-radius: 50%;
   background-color: rgba(255, 255, 255, 0.3);
 }
-
-
-
 
 .progress-step {
   display: flex;
@@ -172,17 +166,17 @@
 /* زر السابق */
 .back-button {
   background: transparent;
-  color: #FF8E29;
-  border: 1.5px solid #FF8E29;
+  color: #ff8e29;
+  border: 1.5px solid #ff8e29;
 }
 
 .back-button:hover {
-  background-color: #FFC794;
+  background-color: #ffc794;
 }
 
 /* زر التالي */
 .nextbutton {
-  background-color: #FF8E29;
+  background-color: #ff8e29;
   color: white;
 }
 

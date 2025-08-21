@@ -9,7 +9,7 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: #FFC794; /* الافتراضي للخطوات غير المفعلة */
+  transition: background-color 0.3s ease;
 }
 
 /* ترتيب الخطوات */
@@ -36,25 +36,24 @@
 .step-label1 {
   margin-top: 6px;
   font-size: 16px;
-  color: #FFC794;
+  transition: color 0.3s ease;
   font-weight: 600;
 }
-.progress-step .step-number1{
-    background-color: #FFC794;
+.progress-step .step-number1 {
+  border: 2px solid #ffc794; /* ممكن تغيّر حسب الثيم */
 }
 
 .progress-line {
   width: 120px;
   height: 2px;
-  background-color: #FFC794;
-  margin-top:-40px;
+  border: 2px solid #ffc794; /* ممكن تغيّر حسب الثيم */
+  margin-top: -40px;
 }
 
 .step span {
   font-size: 14px;
   font-weight: 500;
 }
-
 
 .media-content {
   padding: 30px;
@@ -105,8 +104,8 @@
 
 .back-button {
   background: transparent;
-  color: #FF8E29;
-  border: 1.5px solid #FF8E29;
+  color: #ff8e29;
+  border: 1.5px solid #ff8e29;
 }
 
 .back-button:hover {
@@ -114,7 +113,7 @@
 }
 
 .nextbutton {
-  background-color: #FF8E29;
+  background-color: #ff8e29;
   color: white;
 }
 
@@ -176,7 +175,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #FF8E29;
+  background-color: #ff8e29;
   border-radius: 12px;
   color: white;
   box-shadow: 0 2px 8px rgba(255, 140, 66, 0.3);
@@ -194,7 +193,7 @@
 .input-fields input {
   padding: 15px 10px;
   font-size: 16px;
-  border: 2px solid #E1E1E1;
+  border: 2px solid #e1e1e1;
   border-radius: 12px;
   background-color: #f5f5f5;
   width: 100%;
@@ -212,13 +211,12 @@
   width: 100%;
   padding: 15px 10px;
   font-size: 16px;
-  border: 2px solid #E1E1E1;
+  border: 2px solid #e1e1e1;
   border-radius: 12px;
   background-color: #f5f5f5;
   width: 100%;
   box-sizing: border-box;
   transition: border-color 0.3s ease;
-
 }
 .input-wrapper {
   position: relative;
@@ -233,7 +231,7 @@
   margin-right: 5px;
   text-align: right;
 }
-.text{
+.text {
   padding-top: 20px;
   padding-right: 100px;
 }
@@ -257,7 +255,7 @@
 .input-wrapper input {
   padding: 12px;
   font-size: 16px;
-  border: 2px solid #E1E1E1;
+  border: 2px solid #e1e1e1;
   border-radius: 12px;
   background-color: #f5f5f5;
   text-align: right;
@@ -273,4 +271,3 @@
   margin-top: 4px;
   min-height: 16px;
 }
-

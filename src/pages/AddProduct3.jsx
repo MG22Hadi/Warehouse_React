@@ -12,6 +12,7 @@ export default function AddProduct3({ mode, toggleTheme }) {
         dir="rtl"
         style={{
           backgroundColor: theme.palette.background.paper,
+          color: theme.palette.text.primary,
         }}
       >
         <Product3 />

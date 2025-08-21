@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import "./Product3.css";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
 
 export default function Product3() {
   const navigate = useNavigate();
   const location = useLocation();
+  const theme = useTheme();
 
   const token = localStorage.getItem("token");
 
@@ -16,7 +18,6 @@ export default function Product3() {
   const [showConfirm, setShowConfirm] = useState(false);
 
   const handleBack = () => {
-    // رجع كل البيانات مع الملاحظات
     navigate("/Addproduct2", { state: { ...productData, notes } });
   };
 
@@ -24,13 +25,11 @@ export default function Product3() {
     const { image, ...formDataWithoutImage } = productData.formData;
 
     const finalProduct = {
-      name: productData.formData.name || "", // اسم المنتج
-      code: productData.formData.code || "", // كود المنتج
-      unit: productData.formData.unit || "", // وحدة المنتج
+      name: productData.formData.name || "", 
+      code: productData.formData.code || "", 
+      unit: productData.formData.unit || "", 
       consumable: productData.formData.consumable === "مستهلك" ? true : false,
-      warehouse_id: productData.formData.warehouse_id || "", // معرف المخزن
-      // أي حقول أخرى مطلوبة حسب الـ API
-
+      warehouse_id: productData.formData.warehouse_id || "", 
       notes,
     };
     console.log("سيتم إرسال البيانات:", finalProduct);
@@ -72,45 +71,101 @@ export default function Product3() {
     setShowConfirm(false);
   };
 
+  const inactiveStepColor =
+    theme.palette.mode === "dark" ? "#FFC794" : "#FFC794";
+
+  const activeStepColor = theme.palette.mode === "dark" ? "#151D32" : "#F5F5F5";
+
+  const textColor = theme.palette.mode === "dark" ? "#292F45" : "#FFFFFF";
+
   return (
     <div className="media-container">
-      <div className="new_product">اضافة منتج جديد</div>
-      <div className="under_new_product">
+      <div
+        className="new_product"
+        style={{ color: theme.palette.text.primary }}
+      >
+        اضافة منتج جديد
+      </div>
+      <div
+        className="under_new_product"
+        style={{ color: theme.palette.text.secondary }}
+      >
         يرجى تعبئة بيانات المنتج بشكل مفصل
       </div>
 
-      <div className="form-box">
+      <div
+        className="form-box"
+        style={{ backgroundColor: theme.palette.background.paper }}
+      >
         <div className="progress-bar">
           <div className="progress-step active">
-            <div className="step-number"></div>
-            <div className="step-label">معلومات المنتج</div>
+            <div
+              className="step-number"
+              style={{ backgroundColor: activeStepColor }}
+            ></div>
+            <div className="step-label" style={{ color: textColor }}>
+              معلومات المنتج
+            </div>
           </div>
-          <div className="progress-line1"></div>
-          <div className="progress-step active">
-            <div className="step-number"></div>
-            <div className="step-label">صورة المنتج</div>
+          <div
+            className="progress-line"
+            style={{ backgroundColor: activeStepColor }}
+          ></div>
+          <div className="progress-step">
+            <div
+              className="step-number"
+              style={{ backgroundColor: inactiveStepColor }}
+            ></div>
+            <div className="step-label" style={{ color: textColor }}>
+              صورة المنتج
+            </div>
           </div>
-          <div className="progress-line1"></div>
-          <div className="progress-step active">
-            <div className="step-number"></div>
-            <div className="step-label">ملاحظات</div>
+          <div
+            className="progress-line"
+            style={{ backgroundColor: inactiveStepColor }}
+          ></div>
+          <div className="progress-step">
+            <div
+              className="step-number"
+              style={{ backgroundColor: inactiveStepColor }}
+            ></div>
+            <div className="step-label" style={{ color: textColor }}>
+              ملاحظات
+            </div>
           </div>
         </div>
 
         <div className="media-content">
-          <p className="info_product">الملاحظات</p>
+          <p
+            className="info_product"
+            style={{ color: theme.palette.text.primary }}
+          >
+            الملاحظات
+          </p>
           <textarea
             className="description-box"
             placeholder="الوصف"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
+            style={{
+              backgroundColor: theme.palette.background.ma, 
+              color: theme.palette.text.primary,
+              border: `1px solid ${theme.palette.divider}`,
+            }}
           />
 
           <div className="nav-buttons">
             <button className="back-button" onClick={handleBack}>
               السابق
             </button>
-            <button className="nextbutton" onClick={() => setShowConfirm(true)}>
+            <button
+              className="nextbutton"
+              onClick={() => setShowConfirm(true)}
+              style={{
+                backgroundColor: theme.palette.primary.main,
+                color: theme.palette.mode === "dark" ? "#292F45" : "#FFFFFF",
+              }}
+            >
               التالي
             </button>
           </div>
@@ -126,6 +181,7 @@ export default function Product3() {
               <button
                 className="btn cancel"
                 onClick={() => setShowConfirm(false)}
+
               >
                 لا
               </button>
