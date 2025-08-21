@@ -1,12 +1,20 @@
 import React, { useRef, useState } from "react";
 import { Box, Paper, Typography, TextField, Button } from "@mui/material";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation,useParams } from "react-router-dom";
 import MainLayout from "../MainLayout";
 
 export default function AddUsers2({ mode, toggleTheme }) {
   const navigate = useNavigate();
   const location = useLocation();
+  const { id } = useParams();
   const prevData = location.state || {};
+
+  const [address, setAddress] = useState(prevData.address || "");
+  const [detailedAddress, setDetailedAddress] = useState(
+    prevData.detailedAddress || ""
+  );
+  const [city, setCity] = useState(prevData.city || "");
+  const [country, setCountry] = useState(prevData.country || "");
 
   const sectionsRef = {
     info: useRef(null),
@@ -26,11 +34,6 @@ export default function AddUsers2({ mode, toggleTheme }) {
     { label: "مواقع التواصل", key: "twofa" },
     { label: "مراجعة", key: "delete" },
   ];
-
-  const [address, setAddress] = useState("");
-  const [detailedAddress, setDetailedAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [country, setCountry] = useState("");
 
   return (
     <MainLayout mode={mode} toggleTheme={toggleTheme} pageTitle="اضافة مستخدم">
@@ -260,6 +263,7 @@ export default function AddUsers2({ mode, toggleTheme }) {
                       detailedAddress,
                       city,
                       country,
+                      id,
                     },
                   })
                 }

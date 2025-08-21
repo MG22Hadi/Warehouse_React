@@ -38,27 +38,30 @@ export default function AddUsers4({ mode, toggleTheme }) {
   const token = localStorage.getItem("token");
   const handleSave = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:8000/api/v1/users",
-        data,
-        {
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      let response;
+      if (data.id) {
+        // تعديل المستخدم
+        response = await axios.put(
+          `http://localhost:8000/api/v1/users/${data.id}`,
+          data,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+      } else {
+        // إضافة مستخدم جديد
+        response = await axios.post(
+          "http://localhost:8000/api/v1/users",
+          data,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+      }
 
-      const data = response.data;
-      console.log("🚀 ارسال البيانات للـ API:", data);
-
-      if (data.success) {
+      if (response.data.success) {
         navigate("/AllUsers");
       } else {
-        alert("حدث خطأ أثناء حفظ المعلومات: " + data.message);
+        alert("حدث خطأ: " + response.data.message);
       }
     } catch (error) {
-      console.error("خطأ في الاتصال بالـ API:", error);
+      console.error(error);
     }
     setOpenSnackbar(true);
   };

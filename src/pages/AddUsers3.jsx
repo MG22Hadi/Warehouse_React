@@ -7,13 +7,14 @@ import {
   Button,
   InputAdornment,
 } from "@mui/material";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation ,useParams} from "react-router-dom";
 import { Facebook, Instagram } from "@mui/icons-material";
 import MainLayout from "../MainLayout";
 
 export default function AddUsers3({ mode, toggleTheme }) {
   const navigate = useNavigate();
   const location = useLocation();
+  const { id } = useParams();
   const prevData = location.state || {};
 
   const sectionsRef = {
@@ -34,8 +35,8 @@ export default function AddUsers3({ mode, toggleTheme }) {
     { label: "مراجعة", key: "final" },
   ];
 
-  const [facebook, setFacebook] = useState("");
-  const [instagram, setInstagram] = useState("");
+  const [facebook, setFacebook] = useState(prevData.facebook || "");
+  const [instagram, setInstagram] = useState(prevData.instagram || "");
 
   return (
     <MainLayout mode={mode} toggleTheme={toggleTheme} pageTitle="اضافة مستخدم">
@@ -242,7 +243,7 @@ export default function AddUsers3({ mode, toggleTheme }) {
                 }}
                 onClick={() =>
                   navigate("/AddUsers4", {
-                    state: { ...prevData, facebook, instagram },
+                    state: { ...prevData, facebook, instagram ,id},
                   })
                 }
               >

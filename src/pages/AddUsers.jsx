@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState ,useEffect} from "react";
 import {
   Box,
   Paper,
@@ -7,7 +7,7 @@ import {
   Button,
   MenuItem,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import MainLayout from "../MainLayout";
 import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
@@ -15,9 +15,29 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import LockIcon from "@mui/icons-material/Lock";
 import WorkIcon from "@mui/icons-material/Work";
 import CategoryIcon from "@mui/icons-material/Category";
+import axios from "axios";
 
 export default function AddUsers({ mode, toggleTheme }) {
   const navigate = useNavigate();
+  const { id } = useParams();
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (id) {
+      axios
+        .get(`http://localhost:8000/api/v1/users/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => {
+          setName(res.data.name);
+          setPhone(res.data.phone);
+          setEmail(res.data.email);
+          setPassword(""); // كلمة المرور عادة لا تُرجع
+          setJobTitle(res.data.jobTitle);
+          setDepartmentId(res.data.departmentId);
+        });
+    }
+  }, [id, token]);
 
   const sectionsRef = {
     info: useRef(null),

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Box, Paper, Typography, TextField, Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import MainLayout from "../MainLayout";
 import PersonIcon from "@mui/icons-material/Person";
 import PhoneIcon from "@mui/icons-material/Phone";
@@ -8,42 +8,82 @@ import axios from "axios";
 
 export default function AddSupplier({ mode, toggleTheme }) {
   const navigate = useNavigate();
+  const { id } = useParams();
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
-
   const token = localStorage.getItem("token");
 
-  const handleAddSupplier = async () => {
-    try {
-      const response = await axios.post(
-        "http://localhost:8000/api/suppliers/store",
-        {
-          name: name,
-          contact_info: contact,
-        },
-        {
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-          },
+  //  إذا في id → جلب بيانات المورد
+  useEffect(() => {
+    if (id) {
+      const fetchSupplier = async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:8000/api/suppliers/${id}`,
+            {
+              headers: {
+                Accept: "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          const supplier = response.data;
+          setName(supplier.name);
+          setContact(supplier.contact_info);
+        } catch (error) {
+          console.error("خطأ في جلب بيانات المورد:", error);
         }
-      );
+      };
+      fetchSupplier();
+    }
+  }, [id, token]);
+
+  //  إضافة أو تعديل مورد
+  const handleSaveSupplier = async () => {
+    try {
+      let response;
+      if (id) {
+        // تعديل
+        response = await axios.put(
+          `http://localhost:8000/api/suppliers/${id}`,
+          { name, contact_info: contact },
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      } else {
+        // إضافة
+        response = await axios.post(
+          "http://localhost:8000/api/suppliers/store",
+          { name, contact_info: contact },
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      }
 
       if (response.data.success) {
         alert(response.data.message);
-        // مسح الحقول بعد الإضافة
-        setName("");
-        setContact("");
         navigate("/AllUsers");
       }
     } catch (error) {
-      console.error("خطأ في إضافة المورد:", error);
-      alert("حدث خطأ أثناء إضافة المورد");
+      console.error("خطأ في الحفظ:", error);
+      alert("حدث خطأ أثناء حفظ المورد");
     }
   };
 
   return (
-    <MainLayout mode={mode} toggleTheme={toggleTheme} pageTitle="اضافة مستخدم">
+    <MainLayout
+      mode={mode}
+      toggleTheme={toggleTheme}
+      pageTitle={id ? "تعديل مورد" : "إضافة مورد"}
+    >
       <Box
         dir="rtl"
         sx={{
@@ -69,15 +109,11 @@ export default function AddSupplier({ mode, toggleTheme }) {
           }}
         >
           <Typography variant="h6" gutterBottom>
-            المعلومات الأساسية
+            {id ? "تعديل المعلومات الأساسية" : "المعلومات الأساسية"}
           </Typography>
 
           {/* الحقول */}
-          <Box
-            display="grid"
-            gridTemplateColumns="1fr" // بدل ما تكون 1fr 1fr
-            gap={3}
-          >
+          <Box display="grid" gridTemplateColumns="1fr" gap={3}>
             {/* الاسم */}
             <TextField
               label="الاسم الكامل"
@@ -160,9 +196,9 @@ export default function AddSupplier({ mode, toggleTheme }) {
                 "&:hover": { bgcolor: "#ff7f00" },
                 ml: "auto",
               }}
-              onClick={handleAddSupplier}
+              onClick={handleSaveSupplier}
             >
-              التالي
+              {id ? "حفظ التعديلات" : "التالي"}
             </Button>
           </Box>
         </Paper>

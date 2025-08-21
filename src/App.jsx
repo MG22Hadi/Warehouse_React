@@ -315,10 +315,17 @@ export default function App() {
           />
 
           <Route
+            path="/AddSupplier/:id"
+            element={<AddSupplier mode={mode} toggleTheme={toggleTheme} />}
+          />
+          <Route
             path="/AddUsers"
             element={<AddUsers mode={mode} toggleTheme={toggleTheme} />}
           />
-
+          <Route
+            path="/AddUsers/:id"
+            element={<AddUsers mode={mode} toggleTheme={toggleTheme} />}
+          />
           <Route
             path="/AddUsers2"
             element={<AddUsers2 mode={mode} toggleTheme={toggleTheme} />}
