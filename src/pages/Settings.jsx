@@ -1,4 +1,8 @@
 import React, { useState, useRef } from "react";
+import axios from "axios";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   Box,
   Typography,
@@ -32,8 +36,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useTheme } from "@mui/material/styles";
 
 const fields = [
-  { label: "الاسم الأول", icon: <PersonIcon /> },
-  { label: "الكنية", icon: <BadgeIcon /> },
+  { label: "الاسم الكامل", icon: <PersonIcon /> },
   { label: "تاريخ الميلاد", icon: <CalendarTodayIcon /> },
   { label: "البريد الإلكتروني", icon: <EmailIcon /> },
   { label: "رقم الهاتف", icon: <PhoneIcon /> },
@@ -42,6 +45,119 @@ const fields = [
 
 export default function Settings({ mode, toggleTheme }) {
   const theme = useTheme();
+  const navigate = useNavigate();
+
+  const token = localStorage.getItem("token");
+  const [selectedTab, setSelectedTab] = useState(0);
+  const [userData, setUserData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+    birth_date: "",
+    gender: "",
+  });
+
+  const [passwordData, setPasswordData] = useState({
+    current_password: "",
+    new_password: "",
+    new_password_confirmation: "",
+  });
+
+  const handleSaveChanges = async () => {
+    try {
+      const response = await axios.put(
+        "http://localhost:8000/api/warehouse-keepers/1",
+        {
+          name: userData.name,
+          email: userData.email,
+          phone: userData.phone,
+          gender: userData.gender,
+          address: userData.address,
+          birth_date: userData.birth_date,
+        },
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        alert("تم تحديث بيانات أمين المستودع بنجاح");
+        navigate("/Settings");
+        setUserData(response.data.data);
+      }
+    } catch (error) {
+      console.error("خطأ في تحديث بيانات المستخدم:", error);
+      alert("حدث خطأ أثناء تحديث البيانات");
+    }
+  };
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/api/warehouse-keeper/me",
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.data.success) {
+          const data = response.data.data;
+          setUserData({
+            name: data.name || "",
+            email: data.email || "",
+            phone: data.phone || "",
+            address: data.address || "",
+            birth_date: data.birth_date || "",
+            gender: data.gender || "",
+          });
+          navigate("/Settings");
+        }
+      } catch (error) {
+        console.error("خطأ في جلب بيانات المستخدم:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  const handleUpdatePassword = async () => {
+    try {
+      const response = await axios.put(
+        "http://localhost:8000/api/warehouse-keepers/update-password/1",
+        {
+          current_password: passwordData.current_password,
+          new_password: passwordData.new_password,
+          new_password_confirmation: passwordData.new_password_confirmation,
+        },
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        alert(response.data.message);
+        setPasswordData({
+          current_password: "",
+          new_password: "",
+          new_password_confirmation: "",
+        });
+        navigate("/Settings");
+      }
+    } catch (error) {
+      console.error("خطأ في تحديث كلمة المرور:", error);
+      alert("حدث خطأ أثناء تحديث كلمة المرور");
+    }
+  };
 
   const sectionsRef = {
     info: useRef(null),
@@ -62,7 +178,7 @@ export default function Settings({ mode, toggleTheme }) {
         sx={{
           minHeight: "100vh",
           bgcolor: (theme) => theme.palette.background.paper,
-          
+
           borderRadius: 6,
           px: 4,
           py: 6,
@@ -84,6 +200,8 @@ export default function Settings({ mode, toggleTheme }) {
             }}
           >
             <Tabs
+              value={selectedTab}
+              onChange={(e, newValue) => setSelectedTab(newValue)}
               orientation="vertical"
               variant="scrollable"
               aria-label="settings tabs"
@@ -165,11 +283,7 @@ export default function Settings({ mode, toggleTheme }) {
                     onChange={toggleTheme}
                     color="primary"
                   />
-                  {theme ? (
-                    <Moon color="#FF8E29" />
-                  ) : (
-                    <Sun color="#FF8E29" />
-                  )}
+                  {theme ? <Moon color="#FF8E29" /> : <Sun color="#FF8E29" />}
                 </Box>
               </Box>
             </Paper>
@@ -197,7 +311,32 @@ export default function Settings({ mode, toggleTheme }) {
                     key={field.label}
                     label={field.label}
                     fullWidth
-                    value=""
+                    value={
+                      field.label === "الاسم الكامل"
+                        ? userData.name
+                        : field.label === "البريد الإلكتروني"
+                        ? userData.email
+                        : field.label === "رقم الهاتف"
+                        ? userData.phone
+                        : field.label === "العنوان"
+                        ? userData.address
+                        : field.label === "تاريخ الميلاد"
+                        ? userData.birth_date
+                        : ""
+                    }
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (field.label === "الاسم الكامل")
+                        setUserData({ ...userData, name: value });
+                      else if (field.label === "البريد الإلكتروني")
+                        setUserData({ ...userData, email: value });
+                      else if (field.label === "رقم الهاتف")
+                        setUserData({ ...userData, phone: value });
+                      else if (field.label === "العنوان")
+                        setUserData({ ...userData, address: value });
+                      else if (field.label === "تاريخ الميلاد")
+                        setUserData({ ...userData, birth_date: value });
+                    }}
                     InputProps={{
                       startAdornment: field.icon && (
                         <Box
@@ -239,8 +378,11 @@ export default function Settings({ mode, toggleTheme }) {
                 >
                   <InputLabel>الجنس</InputLabel>
                   <Select
-                    value=""
+                    value={userData.gender || ""}
                     label="الجنس"
+                    onChange={(e) =>
+                      setUserData({ ...userData, gender: e.target.value })
+                    }
                     sx={{
                       borderRadius: "30px",
                       backgroundColor: (theme) => theme.palette.background.ma,
@@ -262,6 +404,7 @@ export default function Settings({ mode, toggleTheme }) {
                   color: "#fff",
                   borderRadius: "30px",
                 }}
+                onClick={handleSaveChanges}
               >
                 حفظ التغييرات
               </Button>
@@ -291,6 +434,13 @@ export default function Settings({ mode, toggleTheme }) {
                     label={field.label}
                     type={field.type}
                     fullWidth
+                    value={passwordData[field.name]}
+                    onChange={(e) =>
+                      setPasswordData({
+                        ...passwordData,
+                        [field.name]: e.target.value,
+                      })
+                    }
                     sx={{
                       borderRadius: "30px",
                       backgroundColor: (theme) => theme.palette.background.ma,
@@ -326,6 +476,7 @@ export default function Settings({ mode, toggleTheme }) {
                     color: "#fff",
                     borderRadius: "30px",
                   }}
+                  onClick={handleUpdatePassword}
                 >
                   تحديث كلمة المرور
                 </Button>

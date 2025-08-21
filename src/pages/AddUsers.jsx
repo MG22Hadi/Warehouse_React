@@ -2,13 +2,12 @@ import React, { useRef, useState } from "react";
 import {
   Box,
   Paper,
-  Tabs,
   Typography,
   TextField,
-  MenuItem,
   Button,
+  MenuItem,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import MainLayout from "../MainLayout";
 import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
@@ -19,6 +18,7 @@ import CategoryIcon from "@mui/icons-material/Category";
 
 export default function AddUsers({ mode, toggleTheme }) {
   const navigate = useNavigate();
+
   const sectionsRef = {
     info: useRef(null),
     password: useRef(null),
@@ -31,7 +31,6 @@ export default function AddUsers({ mode, toggleTheme }) {
   };
 
   const [activeStep, setActiveStep] = useState(0);
-  const [role, setRole] = useState("");
 
   const steps = [
     { label: "معلومات المستخدم", key: "info" },
@@ -40,13 +39,47 @@ export default function AddUsers({ mode, toggleTheme }) {
     { label: "مراجعة", key: "delete" },
   ];
 
+  // State لكل الحقول
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [jobTitle, setJobTitle] = useState("");
+  const [departmentId, setDepartmentId] = useState("");
+
   const fields = [
-    { label: "الاسم الكامل", icon: <PersonIcon /> },
-    { label: "الهاتف", icon: <PhoneIcon /> },
-    { label: "البريد الإلكتروني", icon: <EmailIcon /> },
-    { label: "كلمة المرور", icon: <LockIcon /> },
-    { label: "القسم", icon: <CategoryIcon /> },
-    { label: "المسمى الوظيفي", icon: <WorkIcon /> },
+    {
+      label: "الاسم الكامل",
+      icon: <PersonIcon />,
+      value: name,
+      setter: setName,
+    },
+    { label: "الهاتف", icon: <PhoneIcon />, value: phone, setter: setPhone },
+    {
+      label: "البريد الإلكتروني",
+      icon: <EmailIcon />,
+      value: email,
+      setter: setEmail,
+    },
+    {
+      label: "كلمة المرور",
+      icon: <LockIcon />,
+      value: password,
+      setter: setPassword,
+    },
+    {
+      label: "القسم",
+      icon: <CategoryIcon />,
+      value: departmentId,
+      setter: setDepartmentId,
+      select: true,
+    },
+    {
+      label: "المسمى الوظيفي",
+      icon: <WorkIcon />,
+      value: jobTitle,
+      setter: setJobTitle,
+    },
   ];
 
   return (
@@ -69,7 +102,7 @@ export default function AddUsers({ mode, toggleTheme }) {
             gap: 4,
           }}
         >
-          {/* العمود الجانبي للخطوات */}
+          {/* العمود الجانبي */}
           <Paper
             sx={{
               position: "relative",
@@ -101,7 +134,6 @@ export default function AddUsers({ mode, toggleTheme }) {
                     position: "relative",
                   }}
                 >
-                  {/* الدائرة */}
                   <Box
                     sx={{
                       position: "relative",
@@ -132,7 +164,6 @@ export default function AddUsers({ mode, toggleTheme }) {
                       />
                     )}
                   </Box>
-
                   <Box
                     sx={{
                       color: index === activeStep ? "#FF8E29" : "#A0A0A0",
@@ -150,36 +181,9 @@ export default function AddUsers({ mode, toggleTheme }) {
                 </Box>
               ))}
             </Box>
-
-            <Tabs
-              orientation="vertical"
-              variant="scrollable"
-              aria-label="users tabs"
-              sx={{
-                mt: 4,
-                "& .MuiTab-root": {
-                  display: "flex",
-                  justifyContent: "flex-start",
-                  gap: 1.5,
-                  alignItems: "center",
-                  minHeight: "48px",
-                  borderRadius: "12px",
-                  transition: "all 0.2s ease",
-                  "&:hover": {
-                    backgroundColor: "rgba(255, 142, 41, 0.1)",
-                    color: "#FF8E29",
-                  },
-                },
-                "& .MuiSvgIcon-root": {
-                  fontSize: "20px",
-                  color: "inherit",
-                },
-              }}
-              TabIndicatorProps={{ style: { background: "#FF8E29" } }}
-            />
           </Paper>
 
-          {/* العمود الرئيسي للمحتوى */}
+          {/* العمود الرئيسي */}
           <Paper
             sx={{
               bgcolor: "#fff",
@@ -191,8 +195,6 @@ export default function AddUsers({ mode, toggleTheme }) {
             <Typography variant="h6" gutterBottom>
               المعلومات الأساسية
             </Typography>
-
-            {/* الحقول */}
             <Box
               display="grid"
               gridTemplateColumns={{ sm: "1fr 1fr", xs: "1fr" }}
@@ -202,8 +204,10 @@ export default function AddUsers({ mode, toggleTheme }) {
                 <TextField
                   key={field.label}
                   label={field.label}
+                  value={field.value}
+                  onChange={(e) => field.setter(e.target.value)}
                   fullWidth
-                  value=""
+                  // select={field.select || false}
                   InputProps={{
                     startAdornment: field.icon && (
                       <Box
@@ -228,56 +232,47 @@ export default function AddUsers({ mode, toggleTheme }) {
                       "& fieldset": { border: "none" },
                     },
                   }}
-                />
+                >
+                  {/* {field.select &&  (
+                    <>
+                      <MenuItem value={1}>IT</MenuItem>
+                      <MenuItem value={2}>HR</MenuItem>
+                      <MenuItem value={3}>Finance</MenuItem>
+                    </>
+                  )} */}
+                </TextField>
               ))}
             </Box>
 
-            {/* حقل نوع الحساب */}
-            <Box display="flex" justifyContent="center" alignItems="center" mt={4}>
-              <TextField
-                select
-                label="نوع الحساب"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
+            <Box display="flex" mt={8}>
+              <Button
+                variant="contained"
                 sx={{
-                  width: 300,
+                  bgcolor: "#FF8E29",
+                  color: "#fff",
                   borderRadius: "30px",
-                  backgroundColor: "#F5F5F5",
-                  boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: "30px",
-                    backgroundColor: "#F5F5F5",
-                    "& fieldset": { border: "none" },
-                  },
-                  "& .MuiSelect-select": {
-                    textAlign: "center",
-                  },
+                  px: 6,
+                  py: 1.5,
+                  fontSize: "16px",
+                  "&:hover": { bgcolor: "#ff7f00" },
+                  ml: "auto",
                 }}
+                onClick={() =>
+                  navigate("/AddUsers2", {
+                    state: {
+                      name,
+                      phone,
+                      email,
+                      password,
+                      jobTitle,
+                      departmentId,
+                    },
+                  })
+                }
               >
-                <MenuItem value="user">موظف</MenuItem>
-                <MenuItem value="moderator">مورد</MenuItem>
-              </TextField>
+                التالي
+              </Button>
             </Box>
-            {/* زر التالي أسفل كل الحقول وعلى اليمين */}
-<Box display="flex" mt={8}>
-  <Button
-    variant="contained"
-    sx={{
-      bgcolor: "#FF8E29",
-      color: "#fff",
-      borderRadius: "30px",
-      px: 6,
-      py: 1.5,
-      fontSize: "16px",
-      "&:hover": { bgcolor: "#ff7f00" },
-      ml: "auto", // يحرك الزر لليمين مهما كان اتجاه الصفحة
-    }}
-    onClick={() => navigate("/AddUsers2")}
-  >
-    التالي
-  </Button>
-</Box>
-
           </Paper>
         </Box>
       </Box>

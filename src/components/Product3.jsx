@@ -59,7 +59,7 @@ export default function Product3() {
       console.log("النتيجة من السيرفر:", data);
 
       if (data.success) {
-        navigate("/dashboard");
+        navigate("/products");
       } else {
         alert("حدث خطأ أثناء حفظ المنتج: " + data.message);
       }

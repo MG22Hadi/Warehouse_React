@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Box, Paper, Typography, Button, Snackbar, Alert } from "@mui/material";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate, useLocation } from "react-router-dom";
 import MainLayout from "../MainLayout";
 import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
@@ -8,9 +8,13 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import WorkIcon from "@mui/icons-material/Work";
 import CategoryIcon from "@mui/icons-material/Category";
 import PublicIcon from "@mui/icons-material/Public";
+import axios from "axios";
 
 export default function AddUsers4({ mode, toggleTheme }) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const data = location.state || {};
+
   const sectionsRef = {
     info: useRef(null),
     password: useRef(null),
@@ -23,7 +27,7 @@ export default function AddUsers4({ mode, toggleTheme }) {
   };
 
   const [activeStep, setActiveStep] = useState(0);
-  const [openSnackbar, setOpenSnackbar] = useState(false); // حالة الرسالة
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const steps = [
     { label: "معلومات المستخدم", key: "info" },
@@ -31,28 +35,67 @@ export default function AddUsers4({ mode, toggleTheme }) {
     { label: "مواقع التواصل", key: "twofa" },
     { label: "مراجعة", key: "delete" },
   ];
+  const token = localStorage.getItem("token");
+  const handleSave = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/v1/users",
+        data,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-  const fields = [
-    { label: "الاسم", value: "ملك مبارك", icon: <PersonIcon /> },
-    { label: "الهاتف", value: "0995658340", icon: <PhoneIcon /> },
-    { label: "البريد الإلكتروني", value: "malak@gmail.com", icon: <EmailIcon /> },
-    { label: "البلد", value: "سوريا", icon: <PublicIcon /> },
-    { label: "القسم", value: "IT", icon: <CategoryIcon /> },
-    { label: "مواقع التواصل", value: "Malak Mobark", icon: <WorkIcon /> },
-    { label: "المدينة", value: "دمشق" },
-    { label: "الدولة", value: "سوريا" },
-  ];
+      const data = response.data;
+      console.log("🚀 ارسال البيانات للـ API:", data);
 
-  const handleSave = () => {
+      if (data.success) {
+        navigate("/AllUsers");
+      } else {
+        alert("حدث خطأ أثناء حفظ المعلومات: " + data.message);
+      }
+    } catch (error) {
+      console.error("خطأ في الاتصال بالـ API:", error);
+    }
     setOpenSnackbar(true);
   };
 
-  const handleCloseSnackbar = () => {
-    setOpenSnackbar(false);
-  };
+  const handleCloseSnackbar = () => setOpenSnackbar(false);
+
+  // إعادة تنظيم الحقول لعرضها بشكل متطابق مع التصميم
+  const fields = [
+    { label: "الاسم", value: data.name || "", icon: <PersonIcon /> },
+    { label: "الهاتف", value: data.phone || "", icon: <PhoneIcon /> },
+    {
+      label: "البريد الإلكتروني",
+      value: data.email || "",
+      icon: <EmailIcon />,
+    },
+    { label: "البلد", value: data.country || "", icon: <PublicIcon /> },
+    { label: "القسم", value: data.department || "", icon: <CategoryIcon /> },
+    {
+      label: "Facebook",
+      value: data.facebook || "",
+      icon: <WorkIcon />,
+    },
+    {
+      label: "Instagram",
+      value: data.instagram || "",
+      icon: <WorkIcon />,
+    },
+    { label: "المدينة", value: data.city || "" },
+    { label: "الدولة", value: data.state || "" },
+  ];
 
   return (
-    <MainLayout mode={mode} toggleTheme={toggleTheme} pageTitle="مراجعة المستخدم">
+    <MainLayout
+      mode={mode}
+      toggleTheme={toggleTheme}
+      pageTitle="مراجعة المستخدم"
+    >
       <Box
         dir="rtl"
         sx={{
@@ -133,7 +176,6 @@ export default function AddUsers4({ mode, toggleTheme }) {
                       />
                     )}
                   </Box>
-
                   <Box
                     sx={{
                       color: "#FF8E29",
@@ -180,12 +222,21 @@ export default function AddUsers4({ mode, toggleTheme }) {
                 {fields.slice(0, 6).map((field, index) => (
                   <Box key={index}>
                     <Box display="flex" alignItems="center" gap={1} mb={0.5}>
-                      {field.icon && <Box sx={{ color: "#FF8E29" }}>{field.icon}</Box>}
-                      <Typography variant="subtitle2" color="black" sx={{ fontSize: "18px" }}>
+                      {field.icon && (
+                        <Box sx={{ color: "#FF8E29" }}>{field.icon}</Box>
+                      )}
+                      <Typography
+                        variant="subtitle2"
+                        color="black"
+                        sx={{ fontSize: "18px" }}
+                      >
                         {field.label}
                       </Typography>
                     </Box>
-                    <Typography variant="body1" sx={{ color: "#6F757E", fontSize: "16px" }}>
+                    <Typography
+                      variant="body1"
+                      sx={{ color: "#6F757E", fontSize: "16px" }}
+                    >
                       {field.value}
                     </Typography>
                   </Box>
@@ -194,10 +245,17 @@ export default function AddUsers4({ mode, toggleTheme }) {
 
               {fields.slice(6).map((field, index) => (
                 <Box key={index}>
-                  <Typography variant="subtitle2" color="black" sx={{ fontSize: "18px" }}>
+                  <Typography
+                    variant="subtitle2"
+                    color="black"
+                    sx={{ fontSize: "18px" }}
+                  >
                     {field.label}
                   </Typography>
-                  <Typography variant="body1" sx={{ color: "#6F757E", mt: 0.5, fontSize: "16px" }}>
+                  <Typography
+                    variant="body1"
+                    sx={{ color: "#6F757E", mt: 0.5, fontSize: "16px" }}
+                  >
                     {field.value}
                   </Typography>
                 </Box>
@@ -207,6 +265,13 @@ export default function AddUsers4({ mode, toggleTheme }) {
             {/* أزرار */}
             <Box display="flex" mt={4} justifyContent="space-between">
               <Button
+                variant="outlined"
+                sx={{ borderRadius: "30px", px: 4, py: 1.5, fontSize: "16px" }}
+                onClick={() => navigate("/AddUsers")}
+              >
+                تعديل المعلومات
+              </Button>
+              <Button
                 variant="contained"
                 sx={{
                   bgcolor: "#FF8E29",
@@ -215,32 +280,24 @@ export default function AddUsers4({ mode, toggleTheme }) {
                   px: 6,
                   py: 1.5,
                   fontSize: "16px",
-                  "&:hover": { bgcolor: "#ff7f00" },
                 }}
                 onClick={handleSave}
               >
                 حفظ المستخدم
               </Button>
-              <Button
-                variant="outlined"
-                sx={{
-                  borderRadius: "30px",
-                  px: 4,
-                  py: 1.5,
-                  fontSize: "16px",
-                }}
-                onClick={() => navigate("/AddUsers")}
-              >
-                تعديل المعلومات
-              </Button>
             </Box>
+
             <Snackbar
               open={openSnackbar}
               autoHideDuration={3000}
               onClose={handleCloseSnackbar}
               anchorOrigin={{ vertical: "top", horizontal: "center" }}
             >
-              <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: "100%" }}>
+              <Alert
+                onClose={handleCloseSnackbar}
+                severity="success"
+                sx={{ width: "100%" }}
+              >
                 تم حفظ المستخدم بنجاح!
               </Alert>
             </Snackbar>

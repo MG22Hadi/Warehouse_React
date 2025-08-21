@@ -7,12 +7,14 @@ import {
   Button,
   InputAdornment,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate, useLocation } from "react-router-dom";
 import { Facebook, Instagram } from "@mui/icons-material";
 import MainLayout from "../MainLayout";
 
 export default function AddUsers3({ mode, toggleTheme }) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const prevData = location.state || {};
 
   const sectionsRef = {
     info: useRef(null),
@@ -20,7 +22,6 @@ export default function AddUsers3({ mode, toggleTheme }) {
     review: useRef(null),
     final: useRef(null),
   };
-
   const handleScroll = (section) => {
     sectionsRef[section].current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -32,6 +33,9 @@ export default function AddUsers3({ mode, toggleTheme }) {
     { label: "مواقع التواصل", key: "review" },
     { label: "مراجعة", key: "final" },
   ];
+
+  const [facebook, setFacebook] = useState("");
+  const [instagram, setInstagram] = useState("");
 
   return (
     <MainLayout mode={mode} toggleTheme={toggleTheme} pageTitle="اضافة مستخدم">
@@ -53,7 +57,7 @@ export default function AddUsers3({ mode, toggleTheme }) {
             gap: 4,
           }}
         >
-          {/* العمود الجانبي للخطوات */}
+          {/* العمود الجانبي */}
           <Paper
             sx={{
               position: "relative",
@@ -80,7 +84,6 @@ export default function AddUsers3({ mode, toggleTheme }) {
                 const circleColor = isFirstThree ? "#FF8E29" : "#FFC794";
                 const lineColor = isFirstThree ? "#FF8E29" : "#FFC794";
                 const textColor = isFirstThree ? "#FF8E29" : "#A0A0A0";
-
                 return (
                   <Box
                     key={index}
@@ -121,7 +124,6 @@ export default function AddUsers3({ mode, toggleTheme }) {
                         />
                       )}
                     </Box>
-
                     <Box
                       sx={{
                         color: textColor,
@@ -142,7 +144,7 @@ export default function AddUsers3({ mode, toggleTheme }) {
             </Box>
           </Paper>
 
-          {/* العمود الرئيسي للمحتوى */}
+          {/* العمود الرئيسي */}
           <Paper
             sx={{
               bgcolor: "#fff",
@@ -151,18 +153,26 @@ export default function AddUsers3({ mode, toggleTheme }) {
               p: 4,
             }}
           >
-            {/* العنوان */}
-            <Typography variant="h6" gutterBottom sx={{ color: "#000", fontWeight: "bold" }}>
+            <Typography
+              variant="h6"
+              gutterBottom
+              sx={{ color: "#000", fontWeight: "bold" }}
+            >
               ملف التواصل الاجتماعي
             </Typography>
-            <Typography variant="body2" gutterBottom sx={{ color: "#6F757E", mb: 3 }}>
+            <Typography
+              variant="body2"
+              gutterBottom
+              sx={{ color: "#6F757E", mb: 3 }}
+            >
               اربط ملفات التواصل الاجتماعي
             </Typography>
 
-            {/* الحقول مع أيقونات */}
             <Box display="grid" gridTemplateColumns="1fr" gap={3}>
               <TextField
                 label="Facebook"
+                value={facebook}
+                onChange={(e) => setFacebook(e.target.value)}
                 fullWidth
                 InputProps={{
                   startAdornment: (
@@ -183,6 +193,8 @@ export default function AddUsers3({ mode, toggleTheme }) {
               />
               <TextField
                 label="Instagram"
+                value={instagram}
+                onChange={(e) => setInstagram(e.target.value)}
                 fullWidth
                 InputProps={{
                   startAdornment: (
@@ -203,23 +215,7 @@ export default function AddUsers3({ mode, toggleTheme }) {
               />
             </Box>
 
-            {/* أزرار التالي والسابق */}
             <Box display="flex" justifyContent="space-between" mt={8}>
-              <Button
-                variant="contained"
-                sx={{
-                  bgcolor: "#FF8E29",
-                  color: "#fff",
-                  borderRadius: "30px",
-                  px: 6,
-                  py: 1.5,
-                  fontSize: "16px",
-                  "&:hover": { bgcolor: "#ff7f00" },
-                }}
-                onClick={() => navigate("/AddUsers4")}
-              >
-                التالي
-              </Button>
               <Button
                 variant="outlined"
                 sx={{
@@ -229,11 +225,28 @@ export default function AddUsers3({ mode, toggleTheme }) {
                   fontSize: "16px",
                   color: "#FF8E29",
                   borderColor: "#FF8E29",
-                  "&:hover": { borderColor: "#ff7f00", color: "#ff7f00" },
                 }}
-                onClick={() => navigate("/AddUsers2")}
+                onClick={() => navigate("/AddUsers2", { state: prevData })}
               >
                 السابق
+              </Button>
+              <Button
+                variant="contained"
+                sx={{
+                  bgcolor: "#FF8E29",
+                  color: "#fff",
+                  borderRadius: "30px",
+                  px: 6,
+                  py: 1.5,
+                  fontSize: "16px",
+                }}
+                onClick={() =>
+                  navigate("/AddUsers4", {
+                    state: { ...prevData, facebook, instagram },
+                  })
+                }
+              >
+                التالي
               </Button>
             </Box>
           </Paper>

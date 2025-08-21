@@ -1,18 +1,12 @@
 import React, { useRef, useState } from "react";
-import {
-  Box,
-  Paper,
-  Tabs,
-  Typography,
-  TextField,
-  MenuItem,
-  Button,
-} from "@mui/material";
-import { useNavigate } from "react-router-dom"; 
+import { Box, Paper, Typography, TextField, Button } from "@mui/material";
+import { useNavigate, useLocation } from "react-router-dom";
 import MainLayout from "../MainLayout";
 
 export default function AddUsers2({ mode, toggleTheme }) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const prevData = location.state || {};
 
   const sectionsRef = {
     info: useRef(null),
@@ -20,13 +14,11 @@ export default function AddUsers2({ mode, toggleTheme }) {
     twofa: useRef(null),
     delete: useRef(null),
   };
-
   const handleScroll = (section) => {
     sectionsRef[section].current?.scrollIntoView({ behavior: "smooth" });
   };
 
   const [activeStep, setActiveStep] = useState(1);
-  const [role, setRole] = useState("");
 
   const steps = [
     { label: "معلومات المستخدم", key: "info" },
@@ -34,6 +26,11 @@ export default function AddUsers2({ mode, toggleTheme }) {
     { label: "مواقع التواصل", key: "twofa" },
     { label: "مراجعة", key: "delete" },
   ];
+
+  const [address, setAddress] = useState("");
+  const [detailedAddress, setDetailedAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [country, setCountry] = useState("");
 
   return (
     <MainLayout mode={mode} toggleTheme={toggleTheme} pageTitle="اضافة مستخدم">
@@ -55,7 +52,7 @@ export default function AddUsers2({ mode, toggleTheme }) {
             gap: 4,
           }}
         >
-          {/* العمود الجانبي للخطوات */}
+          {/* العمود الجانبي */}
           <Paper
             sx={{
               position: "relative",
@@ -128,9 +125,7 @@ export default function AddUsers2({ mode, toggleTheme }) {
                           ? "#FF8E29"
                           : "#A0A0A0",
                       fontWeight:
-                        index === 0 || index === activeStep
-                          ? "bold"
-                          : "normal",
+                        index === 0 || index === activeStep ? "bold" : "normal",
                       cursor: "pointer",
                       mr: 2,
                     }}
@@ -146,7 +141,7 @@ export default function AddUsers2({ mode, toggleTheme }) {
             </Box>
           </Paper>
 
-          {/* العمود الرئيسي للمحتوى */}
+          {/* العمود الرئيسي */}
           <Paper
             sx={{
               bgcolor: "#fff",
@@ -158,71 +153,81 @@ export default function AddUsers2({ mode, toggleTheme }) {
             <Typography variant="h6" gutterBottom sx={{ color: "#000" }}>
               العنوان
             </Typography>
-            <Typography variant="body2" gutterBottom sx={{ color: "#6F757E", mb: 3 }}>
+            <Typography
+              variant="body2"
+              gutterBottom
+              sx={{ color: "#6F757E", mb: 3 }}
+            >
               ضع عنوانك الشخصي
             </Typography>
 
-            {/* الحقول */}
             <Box display="grid" gridTemplateColumns="1fr" gap={3}>
               <TextField
                 label="عنوان المنزل"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
                 fullWidth
                 sx={{
                   borderRadius: "30px",
                   backgroundColor: "#F5F5F5",
-                  "& .MuiOutlinedInput-root": { borderRadius: "30px", backgroundColor: "#F5F5F5", "& fieldset": { border: "none" } },
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "30px",
+                    backgroundColor: "#F5F5F5",
+                    "& fieldset": { border: "none" },
+                  },
                 }}
               />
               <TextField
                 label="العنوان التفصيلي"
+                value={detailedAddress}
+                onChange={(e) => setDetailedAddress(e.target.value)}
                 fullWidth
                 sx={{
                   borderRadius: "30px",
                   backgroundColor: "#F5F5F5",
-                  "& .MuiOutlinedInput-root": { borderRadius: "30px", backgroundColor: "#F5F5F5", "& fieldset": { border: "none" } },
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "30px",
+                    backgroundColor: "#F5F5F5",
+                    "& fieldset": { border: "none" },
+                  },
                 }}
               />
             </Box>
 
-            {/* City و Syria جنب بعض */}
             <Box display="grid" gridTemplateColumns="1fr 1fr" gap={3} mt={3}>
               <TextField
                 label="المدينة"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
                 fullWidth
                 sx={{
                   borderRadius: "30px",
                   backgroundColor: "#F5F5F5",
-                  "& .MuiOutlinedInput-root": { borderRadius: "30px", backgroundColor: "#F5F5F5", "& fieldset": { border: "none" } },
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "30px",
+                    backgroundColor: "#F5F5F5",
+                    "& fieldset": { border: "none" },
+                  },
                 }}
               />
               <TextField
                 label="البلد"
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
                 fullWidth
                 sx={{
                   borderRadius: "30px",
                   backgroundColor: "#F5F5F5",
-                  "& .MuiOutlinedInput-root": { borderRadius: "30px", backgroundColor: "#F5F5F5", "& fieldset": { border: "none" } },
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "30px",
+                    backgroundColor: "#F5F5F5",
+                    "& fieldset": { border: "none" },
+                  },
                 }}
               />
             </Box>
 
-            {/* أزرار التالي والسابق */}
             <Box display="flex" justifyContent="space-between" mt={8}>
-              <Button
-                variant="contained"
-                sx={{
-                  bgcolor: "#FF8E29",
-                  color: "#fff",
-                  borderRadius: "30px",
-                  px: 6,
-                  py: 1.5,
-                  fontSize: "16px",
-                  "&:hover": { bgcolor: "#ff7f00" },
-                }}
-                onClick={() => navigate("/AddUsers3")}
-              >
-                التالي
-              </Button>
               <Button
                 variant="outlined"
                 sx={{
@@ -232,11 +237,34 @@ export default function AddUsers2({ mode, toggleTheme }) {
                   fontSize: "16px",
                   color: "#FF8E29",
                   borderColor: "#FF8E29",
-                  "&:hover": { borderColor: "#ff7f00", color: "#ff7f00" },
                 }}
                 onClick={() => navigate("/AddUsers")}
               >
                 السابق
+              </Button>
+              <Button
+                variant="contained"
+                sx={{
+                  bgcolor: "#FF8E29",
+                  color: "#fff",
+                  borderRadius: "30px",
+                  px: 6,
+                  py: 1.5,
+                  fontSize: "16px",
+                }}
+                onClick={() =>
+                  navigate("/AddUsers3", {
+                    state: {
+                      ...prevData,
+                      address,
+                      detailedAddress,
+                      city,
+                      country,
+                    },
+                  })
+                }
+              >
+                التالي
               </Button>
             </Box>
           </Paper>

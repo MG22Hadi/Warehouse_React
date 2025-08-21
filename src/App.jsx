@@ -50,8 +50,9 @@ import CreateCustodyNote from "./pages/CreateCustodyNote.jsx";
 import Warehouses from "./pages/Warehouses.jsx";
 import AddUsers3 from "./pages/AddUsers3";
 import AddUsers2 from "./pages/AddUsers2";
-
 import AddUsers4 from "./pages/AddUsers4.jsx";
+
+import AddSupplier from "./pages/AddSupplier.jsx";
 
 import AllInstallStore from "./pages/AllInstallStore.jsx";
 import AllInstallReports from "./pages/AllInstallReports.jsx";
@@ -306,6 +307,11 @@ export default function App() {
           <Route
             path="/warehouses"
             element={<Warehouses mode={mode} toggleTheme={toggleTheme} />}
+          />
+
+          <Route
+            path="/AddSupplier"
+            element={<AddSupplier mode={mode} toggleTheme={toggleTheme} />}
           />
 
           <Route
