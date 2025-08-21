@@ -15,10 +15,13 @@ export const getTheme = (mode) =>
               calender: "#FFFFFF",
               card1: "#F5F5F5",
               card2: "#FFFFFF",
+              note1: "#F5F5F5",
+              note2: "#FFFFFF",
             },
             text: {
               primary: "#050F24", // النص الأساسي
               secondary: "#6F757E", // رمادي معتدل للنصوص الثانوية
+              third : "#6F757E",
             },
             primary: {
               main: "#FF8E29",
@@ -42,11 +45,14 @@ export const getTheme = (mode) =>
               calender: "#151D32",
               card1: "#353C56",
               card2: "#151D32",
+              note1: "#353C56",
+              note2: "#292F45",
             },
             text: {
               primary: "#FFFFFF", // نص واضح وأنيق
               secondary: "#9199AD", // رمادي فاتح للنص الثانوي
               default: "#151D32",
+              third : "#CCCDCD",
             },
             primary: {
               main: "#FF8E29", // يبقى ثابت لتمييز الزر الأساسي

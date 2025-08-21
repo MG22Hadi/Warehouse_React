@@ -11,40 +11,53 @@ import Dashboard from "./pages/Dashborad-Content/Dashboard.jsx";
 import Products from "./pages/Product/Products.jsx";
 import ProductDetailsCard from "./pages/Product/ProductDetailsCard.jsx";
 import CalendarPage from "./pages/Calendar.jsx";
-import Warehouses from "./pages/Warehouses.jsx";
-import AddUsers3 from "./pages/AddUsers3";
-import AddUsers2 from "./pages/AddUsers2";
+
 import AddProduct1 from "./pages/AddProduct1.jsx";
 import AddProduct2 from "./pages/AddProduct2.jsx";
 import AddProduct3 from "./pages/AddProduct3.jsx";
-import AddUsers4 from "./pages/AddUsers4.jsx";
-import EntryNotes from "./pages/EntryNotes.jsx";
-import ExitNotes from "./pages/ExitNotes.jsx";
 
-import ReceivingNotes from "./pages/ReceivingNotes.jsx";
+import AllEntry from "./pages/AllEntry.jsx";
+import EntryNotes from "./pages/EntryNotes.jsx";
+import CreateEntryNote from "./pages/CreateEntryNote.jsx";
+
+import AllExit from "./pages/AllExit.jsx";
+import ExitNotes from "./pages/ExitNotes.jsx";
+import CreateExitNote from "./pages/CreateExitNote.jsx";
+
+import AllScrap from "./pages/AllScrap.jsx";
 import ScrapNotes from "./pages/ScrapNotes.jsx";
+import CreateScrapNote from "./pages/CreateScrapNote.jsx";
+
+import AllReceiving from "./pages/AllReceiving.jsx";
+import ReceivingNotes from "./pages/ReceivingNotes.jsx";
+import CreateReceivingNote from "./pages/CreateReceivingNote.jsx";
+
+import AllInstall from "./pages/AllInstall.jsx";
 import InstallReportsUser from "./pages/InstallReportsUser.jsx";
 import InstallReportsStore from "./pages/InstallReportsStore";
+
+import AllPurchase from "./pages/AllPurchase.jsx";
 import PurchaseRequests from "./pages/PurchaseRequests";
+import CreatePurchaseNote from "./pages/CreatePurchaseNote.jsx";
+
 import CustodyManagement from "./pages/CustodyManagement";
 import Notification from "./pages/Notification.jsx";
-import AllEntry from "./pages/AllEntry.jsx";
-import AllExit from "./pages/AllExit.jsx";
-import AllReceiving from "./pages/AllReceiving.jsx";
-import AllScrap from "./pages/AllScrap.jsx";
-import AllPurchase from "./pages/AllPurchase.jsx";
+
 import AllCustody from "./pages/AllCustody.jsx";
-import AllInstall from "./pages/AllInstall.jsx";
+import AllUserRequests from "./pages/AllUserRequests.jsx";
+import CreateCustodyNote from "./pages/CreateCustodyNote.jsx";
+
+import Warehouses from "./pages/Warehouses.jsx";
+import AddUsers3 from "./pages/AddUsers3";
+import AddUsers2 from "./pages/AddUsers2";
+
+import AddUsers4 from "./pages/AddUsers4.jsx";
+
 import AllInstallStore from "./pages/AllInstallStore.jsx";
 import AllInstallReports from "./pages/AllInstallReports.jsx";
-import AllUserRequests from "./pages/AllUserRequests.jsx";
+
 import AllUsers from "./pages/AllUsers.jsx";
-import CreateEntryNote from "./pages/CreateEntryNote.jsx";
-import CreateExitNote from "./pages/CreateExitNote.jsx";
-import CreateReceivingNote from "./pages/CreateReceivingNote.jsx";
-import CreateScrapNote from "./pages/CreateScrapNote.jsx";
-import CreatePurchaseNote from "./pages/CreatePurchaseNote.jsx";
-import CreateCustodyNote from "./pages/CreateCustodyNote.jsx";
+
 import Settings from "./pages/Settings.jsx";
 import AddUsers from "./pages/AddUsers.jsx";
 import Manager from "./pages/Manager/Manager.jsx";
@@ -132,12 +145,40 @@ export default function App() {
             path="/EntryNotes"
             element={<EntryNotes mode={mode} toggleTheme={toggleTheme} />}
           />
-
+          <Route
+            path="/EntryNotes/:id"
+            element={<EntryNotes mode={mode} toggleTheme={toggleTheme} />}
+          />
           <Route
             path="/ExitNotes"
             element={<ExitNotes mode={mode} toggleTheme={toggleTheme} />}
           />
+          <Route path="/ExitNotes/:id" element={<ExitNotes />} />
 
+          <Route
+            path="/CreateEntryNote"
+            element={<CreateEntryNote mode={mode} toggleTheme={toggleTheme} />}
+          />
+          <Route
+            path="/CreateExitNote"
+            element={<CreateExitNote mode={mode} toggleTheme={toggleTheme} />}
+          />
+          <Route
+            path="/CreatePurchaseNote"
+            element={
+              <CreatePurchaseNote mode={mode} toggleTheme={toggleTheme} />
+            }
+          />
+          <Route
+            path="/CreateReceivingNote"
+            element={
+              <CreateReceivingNote mode={mode} toggleTheme={toggleTheme} />
+            }
+          />
+          <Route
+            path="/CreateScrapNote"
+            element={<CreateScrapNote mode={mode} toggleTheme={toggleTheme} />}
+          />
           <Route
             path="/ReceivingNotes"
             element={<ReceivingNotes mode={mode} toggleTheme={toggleTheme} />}
@@ -173,6 +214,8 @@ export default function App() {
               <CustodyManagement mode={mode} toggleTheme={toggleTheme} />
             }
           />
+
+          <Route path="/custody/specific/:id" element={<ScrapNotes />} />
 
           <Route
             path="/Notification"

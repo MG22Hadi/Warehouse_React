@@ -16,11 +16,126 @@ body {
   border-radius: 4px;
 }
 
+.container {
+  max-width: 1200px;
+}
+
+/* تعديل خفيف لتقليل الفراغ العلوي */
+.header {
+  margin-top: 16px; /* كان 32px */
+}
+
+/* تنسيق العنوان بدون زيادة فراغ زائد */
+.title {
+  margin: 10px 0; /* كان 30px */
+  text-align: center;
+}
+
+table {
+  width: 100%; /* كان ثابت 1150px */
+  max-width: 1150px; /* لضبط الحجم الأقصى */
+  border-collapse: collapse;
+  margin: 10px auto; /* تقليل المسافة من فوق وتوسيط الجدول */
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+th,
+td {
+  border: 1px solid #ccc;
+  padding: 18px;
+  text-align: center;
+}
+
+thead tr:first-child {
+  background-color: #ff8e29;
+  color: white;
+}
+
+thead tr:nth-child(2) {
+  background-color: #ff8e29;
+  color: white;
+}
+
+tbody tr {
+  background-color: #fff4ea;
+  color: #6f757e;
+}
+
+.total {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.Serial_Number {
+  padding-top: 1px;
+}
+
+.grand_total {
+  font-weight: bold;
+  color: #ff8e29;
+  font-size: 20px;
+}
+
+.price {
+  color: #6f757e;
+  font-size: 20px;
+}
+
+.storage {
+  color: #6f757e;
+}
+
+.black {
+  color: black;
+  font-weight: bold;
+}
+
+.gray {
+  color: black;
+}
+
+.Date {
+  margin-top: 15px;
+}
+
+.center-text {
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* تحسين محاذاة الهيدر */
+.entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+/* //////////////////////!SECTION
+/* body {
+  font-family: sans-serif;
+  background-color: #fff;
+}
+
+.table-input {
+  width: 90%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 16px;
+  text-align: center;
+}
+.table-input:focus {
+  background: #f0f0f0;
+  border-radius: 4px;
+}
+
 
 .container {
   max-width: 1200px;
   /* margin: 0 auto; */
-}
+/* }
 .header {
   margin-top: 32px;
 }
@@ -29,9 +144,9 @@ body {
   display: flex;
   justify-content: space-between;
   /* margin-bottom: 20px; */
-  /* margin-left : 50px */
-}
-
+/* margin-left : 50px */
+/* } */
+/* 
 .title {
   margin-top: 30px;
   text-align: center;
@@ -55,12 +170,12 @@ td {
 thead tr:first-child {
   background-color: #ff8e29;
   color: white;
-}
+} */
 /* thead th { */
 /* color: #FFDAB9 ; */
 /* } */
 /*  */
-thead tr:nth-child(2) {
+/* thead tr:nth-child(2) {
   background-color: #ff8e29;
   color: white;
 }
@@ -103,4 +218,4 @@ tbody tr {
 .center-text {
   text-align: center;
   vertical-align: middle;
-}
+} */
