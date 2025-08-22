@@ -69,7 +69,7 @@ import CreateInstallmosNote from "./pages/CreateInstallmosNote.jsx";
 import InstallReportsStoreManager from "./pages/InstallReportsStoreManager.jsx"
 import InstallReportsUserManager from "./pages/InstallReportsUserManager.jsx"
 import ScrapNoteManager from "./pages/ScrapNoteManager"
-
+import SortingMaterials from "./pages/SortingMaterials" 
 
 export default function App() {
   const [mode, setMode] = useState("light");
@@ -399,6 +399,15 @@ export default function App() {
     element={<ScrapNoteManager mode={mode} toggleTheme={toggleTheme} />}
     />
 
+    
+
+<Route
+  path="/SortingMaterials"
+  element={<SortingMaterials mode={mode} toggleTheme={toggleTheme} />}
+  />
+
+
+  
         </Routes>
       </Router>
     </ThemeProvider>
