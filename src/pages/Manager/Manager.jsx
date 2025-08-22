@@ -67,7 +67,7 @@ const sampleDataInitial = [
       { name: "مادة D", quantity: 2, total: 40 },
     ],
   },
-  
+
   {
     id: 3,
     user: "خالد يوسف",
@@ -133,7 +133,9 @@ const Manager = () => {
     <div className="flex min-h-screen bg-[#FFF4EA] justify-between items-start px-8">
       {/* الجزء الرئيسي */}
       <div className="flex-1 flex flex-col items-center justify-start pt-10 bg-white rounded-2xl shadow-md p-6 mt-8 mb-8 mr-4">
-        <h1 className="text-4xl font-bold text-gray-800 mb-8">Manager Dashboard</h1>
+        <h1 className="text-4xl font-bold text-gray-800 mb-8">
+          Manager Dashboard
+        </h1>
 
         {/* تبويبات */}
         <div className="flex space-x-4 mb-10">
@@ -181,7 +183,10 @@ const Manager = () => {
 
                   <div className="flex-1 overflow-y-auto mb-4 space-y-3">
                     {card.materials.map((mat, idx) => (
-                      <div key={idx} className="flex justify-between text-[#6F757E] text-sm">
+                      <div
+                        key={idx}
+                        className="flex justify-between text-[#6F757E] text-sm"
+                      >
                         <span>{mat.name}</span>
                         <span>{mat.quantity}</span>
                         <span>{mat.total} د.ع</span>
@@ -193,13 +198,17 @@ const Manager = () => {
                   {activeTab === "composition" ? (
                     <div className="flex justify-center mt-2 gap-2">
                       <button
-                        onClick={() => alert(`تمت الموافقة على الطلب رقم ${card.id}`)}
+                        onClick={() =>
+                          alert(`تمت الموافقة على الطلب رقم ${card.id}`)
+                        }
                         className="bg-[#28A745] text-white rounded-xl px-6 py-2 font-bold hover:bg-[#218838]"
                       >
                         موافقة
                       </button>
                       <button
-                        onClick={() => alert(`تم الرفض على الطلب رقم ${card.id}`)}
+                        onClick={() =>
+                          alert(`تم الرفض على الطلب رقم ${card.id}`)
+                        }
                         className="bg-[#EB001B] text-white rounded-xl px-6 py-2 font-bold hover:bg-[#b30015]"
                       >
                         رفض
@@ -245,80 +254,83 @@ const Manager = () => {
             style={{ backgroundColor: "rgba(110, 104, 104, 0.4)" }}
           ></div>
           {/* المودال */}
-<div className="relative bg-white rounded-xl p-6 w-2/5 max-h-[80vh] overflow-y-auto shadow-lg z-50">
-  <h2 className="text-xl font-bold mb-4 text-[#FF8E29]">تفاصيل الطلب</h2>
+          <div className="relative bg-white rounded-xl p-6 w-2/5 max-h-[80vh] overflow-y-auto shadow-lg z-50">
+            <h2 className="text-xl font-bold mb-4 text-[#FF8E29]">
+              تفاصيل الطلب
+            </h2>
 
-  {/* محتوى الطلب على اليمين */}
-  <div className="mb-6 space-y-2 text-right">
-    <p>
-      <strong>الاسم:</strong> أحمد علي
-    </p>
-    <p>
-      <strong>قسم:</strong> المستودع الرئيسي
-    </p>
-    <p>
-      <strong>الملاحظات:</strong> طلب عاجل
-    </p>
-  </div>
+            {/* محتوى الطلب على اليمين */}
+            <div className="mb-6 space-y-2 text-right">
+              <p>
+                <strong>الاسم:</strong> أحمد علي
+              </p>
+              <p>
+                <strong>قسم:</strong> المستودع الرئيسي
+              </p>
+              <p>
+                <strong>الملاحظات:</strong> طلب عاجل
+              </p>
+            </div>
 
-  {/* جدول المواد */}
-  <div className="space-y-3 mb-6 bg-white rounded p-3">
-    {/* رؤوس الجدول */}
-    <div className="flex justify-between font-bold border-b border-gray-300 pb-2 mb-2">
-      <span>المادة</span>
-      <span>الكمية</span>
-      <span>السعر</span>
-    </div>
+            {/* جدول المواد */}
+            <div className="space-y-3 mb-6 bg-white rounded p-3">
+              {/* رؤوس الجدول */}
+              <div className="flex justify-between font-bold border-b border-gray-300 pb-2 mb-2">
+                <span>المادة</span>
+                <span>الكمية</span>
+                <span>السعر</span>
+              </div>
 
-    {/* صفوف المواد مع تظليل الصفوف البديلة */}
-    {tempMaterials.map((mat, idx) => (
-      <div
-        key={idx}
-        className={`flex justify-between items-center mb-1 px-2 py-1 rounded ${
-          idx % 2 === 0 ? "bg-gray-50" : "bg-white"
-        }`}
-      >
-        <span>{mat.name}</span>
-        {editMode ? (
-          <input
-            type="number"
-            min={0}
-            value={mat.quantity}
-            onChange={(e) => handleQuantityChange(idx, e.target.value)}
-            className="border border-gray-300 rounded px-2 py-1 w-20 text-center"
-          />
-        ) : (
-          <span>{mat.quantity}</span>
-        )}
-        <span>{mat.total} د.ع</span>
-      </div>
-    ))}
-  </div>
+              {/* صفوف المواد مع تظليل الصفوف البديلة */}
+              {tempMaterials.map((mat, idx) => (
+                <div
+                  key={idx}
+                  className={`flex justify-between items-center mb-1 px-2 py-1 rounded ${
+                    idx % 2 === 0 ? "bg-gray-50" : "bg-white"
+                  }`}
+                >
+                  <span>{mat.name}</span>
+                  {editMode ? (
+                    <input
+                      type="number"
+                      min={0}
+                      value={mat.quantity}
+                      onChange={(e) =>
+                        handleQuantityChange(idx, e.target.value)
+                      }
+                      className="border border-gray-300 rounded px-2 py-1 w-20 text-center"
+                    />
+                  ) : (
+                    <span>{mat.quantity}</span>
+                  )}
+                  <span>{mat.total} د.ع</span>
+                </div>
+              ))}
+            </div>
 
-  {/* أزرار المودال */}
-  <div className="flex gap-4 justify-center mt-6 flex-wrap">             
-    <button
-      onClick={handleReject}
-      className="bg-[#EB001B] text-white rounded-xl px-6 py-2 font-bold hover:bg-[#b30015]"
-    >
-      رفض
-    </button>
-    <button
-      onClick={handleApprove}
-      className="bg-[#28A745] text-white rounded-xl px-6 py-2 font-bold hover:bg-[#218838]"
-    >
-      موافقة
-    </button>
+            {/* أزرار المودال */}
+            <div className="flex gap-4 justify-center mt-6 flex-wrap">
+              <button
+                onClick={handleReject}
+                className="bg-[#EB001B] text-white rounded-xl px-6 py-2 font-bold hover:bg-[#b30015]"
+              >
+                رفض
+              </button>
+              <button
+                onClick={handleApprove}
+                className="bg-[#28A745] text-white rounded-xl px-6 py-2 font-bold hover:bg-[#218838]"
+              >
+                موافقة
+              </button>
 
-    <button
-      onClick={() => setEditMode(!editMode)}
-      className="bg-[#FF8E29] text-white rounded-xl px-6 py-2 font-bold hover:bg-[#e07a1b]"
-    >
-      {editMode ? "إلغاء التعديل" : "تعديل الكمية"}
-    </button>         
-  </div>
-</div>
-
+              <button
+                onClick={() => setEditMode(!editMode)}
+                className="bg-[#FF8E29] text-white rounded-xl px-6 py-2 font-bold hover:bg-[#e07a1b]"
+              >
+                {editMode ? "إلغاء التعديل" : "تعديل الكمية"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

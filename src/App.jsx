@@ -65,6 +65,7 @@ import Manager from "./pages/Manager/Manager.jsx";
 import CreateInstallBuyNote from "./pages/CreateInstallBuyNote.jsx";
 import CreateInstallmosNote from "./pages/CreateInstallmosNote.jsx";
 
+
 export default function App() {
   const [mode, setMode] = useState("light");
   const theme = useMemo(() => getTheme(mode), [mode]);
