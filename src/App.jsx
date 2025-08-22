@@ -65,6 +65,12 @@ import Manager from "./pages/Manager/Manager.jsx";
 import CreateInstallBuyNote from "./pages/CreateInstallBuyNote.jsx";
 import CreateInstallmosNote from "./pages/CreateInstallmosNote.jsx";
 
+
+import InstallReportsStoreManager from "./pages/InstallReportsStoreManager.jsx"
+import InstallReportsUserManager from "./pages/InstallReportsUserManager.jsx"
+import ScrapNoteManager from "./pages/ScrapNoteManager"
+
+
 export default function App() {
   const [mode, setMode] = useState("light");
   const theme = useMemo(() => getTheme(mode), [mode]);
@@ -376,6 +382,23 @@ export default function App() {
             path="/AllInstallStore"
             element={<AllInstallStore mode={mode} toggleTheme={toggleTheme} />}
           />
+          <Route
+            path="/InstallReportsStoreManager"
+            element={<InstallReportsStoreManager mode={mode} toggleTheme={toggleTheme} />}
+            
+/>
+
+          <Route
+            path="/InstallReportsUserManager"
+            element={<InstallReportsUserManager mode={mode} toggleTheme={toggleTheme} />}
+            
+/>
+ 
+  <Route
+    path="/ScrapNoteManager"
+    element={<ScrapNoteManager mode={mode} toggleTheme={toggleTheme} />}
+    />
+
         </Routes>
       </Router>
     </ThemeProvider>
