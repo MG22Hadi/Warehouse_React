@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { Box, Paper, Typography, TextField, Button } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import MainLayout from "../MainLayout";
@@ -69,7 +69,7 @@ export default function AddSupplier({ mode, toggleTheme }) {
       }
 
       if (response.data.success) {
-        alert(response.data.message);
+        // alert(response.data.message);
         navigate("/AllUsers");
       }
     } catch (error) {

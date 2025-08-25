@@ -14,7 +14,7 @@ const AllPurchaseBox = () => {
     const fetchNotes = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/allEntryNote",
+          "http://localhost:8000/api/purchase-requests",
           {
             headers: {
               Accept: "application/json",
@@ -22,10 +22,10 @@ const AllPurchaseBox = () => {
             },
           }
         );
-        console.log("📥 المذكرات:", response.data);
-        setData(response.data.data);
+        console.log("📥 الطلبات:", response.data);
+        setData(response.data.data.purchase_requests || []);
       } catch (error) {
-        console.error("فشل في جلب المذكرات", error);
+        console.error("فشل في جلب الطلبات", error);
       }
     };
 
@@ -33,7 +33,7 @@ const AllPurchaseBox = () => {
   }, []);
 
   const handleClick = (id) => {
-    navigate(`/purchase-requests/show/${id}`);
+    navigate(`/PurchaseRequests/${id}`);
   };
 
   const handleCreateNote = () => {
@@ -51,7 +51,7 @@ const AllPurchaseBox = () => {
       <div className="cards-row">
         {data.length === 0 ? (
           <div className="no-data-message">
-            <p>لا توجد طلبات شراءy بعد</p>
+            <p>لا توجد طلبات شراء بعد</p>
           </div>
         ) : (
           data.map((item, index) => (

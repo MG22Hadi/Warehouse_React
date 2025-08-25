@@ -34,7 +34,7 @@ const PurchaseNote = ({ note }) => {
             className="text-lg font-semibold"
             style={{ color: theme.palette.text.primary }}
           >
-            مذكرة إدخال
+            طلب شراء 
           </p>
           <p className="Date">
             <span

@@ -30,7 +30,6 @@ export default function CreateEntryNote({ mode, toggleTheme }) {
   );
 
   const [entryDate, setEntryDate] = useState("");
-  // const [warehouse, setWarehouse] = useState("");
 
   const inputStyle = {
     padding: "6px 8px",

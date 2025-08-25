@@ -1,26 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./AllNotesBox.css";
 
-const data = [];
-
-for (let i = 1; i <= 4; i++) {
-  const isEven = i % 2 === 0;
-  data.push({
-    serial: `OUT-2024-00${i}`,
-    date: "2024-05-20",
-    count: 5,
-    recipient: "نور",
-    action: isEven ? "شراء" : " شراء",
-    link: isEven ? "/InstallReportsUser" : "/InstallReportsUser",
-  });
-}
-
 const AllInstallStoreBox = () => {
+  const [data, setData] = useState([]);
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
-  const handleClick = (link) => {
-    navigate(link);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+          "http://localhost:8000/api/allInstallationReport?type=purchase",
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        setData(response.data.data.reports);
+      } catch (error) {
+        console.error("خطأ في جلب بيانات الشراء:", error);
+      }
+    };
+    fetchData();
+  }, [token]);
+
+  const handleClick = (id) => {
+    navigate(`/InstallReportsStore/${id}`);
   };
 
   const handleCreateNote1 = () => {
@@ -30,46 +35,53 @@ const AllInstallStoreBox = () => {
     <div className="all-exit-box-container">
       <div className="create-note-button-wrapper">
         <button className="create-note-button ml-5" onClick={handleCreateNote1}>
-         ضبط تركيب شراء
+          ضبط تركيب شراء
         </button>
       </div>
 
       <div className="cards-row">
-        {data.map((item, index) => (
-          <div
-            key={index}
-            className={`card ${index % 2 === 0 ? "bg-white" : "bg-gray"} clickable`}
-            onClick={() => handleClick(item.link)}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") handleClick(item.link);
-            }}
-          >
-            <div className="card-content">
-              <div className="info-item">
-                <span className="label">الرقم</span>
-                <span className="value">{item.serial}</span>
-              </div>
-              <div className="info-item">
-                <span className="label">التاريخ</span>
-                <span className="value">{item.date}</span>
-              </div>
-              <div className="info-item">
-                <span className="label">العدد</span>
-                <span className="value">{item.count}</span>
-              </div>
-              <div className="info-item">
-                <span className="label">المستلم</span>
-                <span className="value">{item.recipient}</span>
-              </div>
-              <div className="info-item">
-                <span className="label">الحالة</span>
-                <span className="value">{item.action}</span>
+        {data.length === 0 ? (
+          <div className="no-data-message">
+            <p>لا توجد مذكرات تركيب خاصة بالشراء بعد</p>
+          </div>
+        ) : (
+          data.map((item, index) => (
+            <div
+              key={item.id}
+              className={`card ${
+                index % 2 === 0 ? "bg-white" : "bg-gray"
+              } clickable`}
+              onClick={() => handleClick(item.id)}
+            >
+              <div className="card-content">
+                <div className="info-item">
+                  <span className="label">الرقم</span>
+                  <span className="value">{item.serial_number}</span>
+                </div>
+                <div className="info-item">
+                  <span className="label">التاريخ</span>
+                  <span className="value">{item.date?.slice(0, 10)}</span>
+                </div>
+                <div className="info-item">
+                  <span className="label">العدد</span>
+                  <span className="value">{item.materials_count ?? 0}</span>
+                </div>
+                <div className="info-item">
+                  <span className="label">المستلم</span>
+                  <span className="value">
+                    {typeof item.created_by === "object"
+                      ? item.created_by?.name
+                      : item.created_by}
+                   </span>
+                </div>
+                <div className="info-item">
+                  <span className="label">الحالة</span>
+                  <span className="value">{item.status}</span>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );
