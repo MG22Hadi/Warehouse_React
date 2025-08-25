@@ -1,4 +1,4 @@
-import React, { useRef, useState ,useEffect} from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   Box,
   Paper,
@@ -7,7 +7,7 @@ import {
   Button,
   MenuItem,
 } from "@mui/material";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import MainLayout from "../MainLayout";
 import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
@@ -20,6 +20,8 @@ import axios from "axios";
 export default function AddUsers({ mode, toggleTheme }) {
   const navigate = useNavigate();
   const { id } = useParams();
+  const location = useLocation();
+  const initialData = location.state?.data || {};
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -58,13 +60,14 @@ export default function AddUsers({ mode, toggleTheme }) {
     { label: "مواقع التواصل", key: "twofa" },
     { label: "مراجعة", key: "delete" },
   ];
-
+  
   // State لكل الحقول
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
+  const [departments, setDepartments] = useState([]);
+  const [name, setName] = useState(initialData.name || "");
+  const [phone, setPhone] = useState(initialData.phone || "");
+  const [email, setEmail] = useState(initialData.email || "");
   const [password, setPassword] = useState("");
-  const [jobTitle, setJobTitle] = useState("");
+  const [jobTitle, setJobTitle] = useState(initialData.jobTitle || "");
   const [departmentId, setDepartmentId] = useState("");
 
   const fields = [
@@ -93,6 +96,7 @@ export default function AddUsers({ mode, toggleTheme }) {
       value: departmentId,
       setter: setDepartmentId,
       select: true,
+      options: departments.map((d) => ({ value: d.id, label: d.name })),
     },
     {
       label: "المسمى الوظيفي",
@@ -101,6 +105,20 @@ export default function AddUsers({ mode, toggleTheme }) {
       setter: setJobTitle,
     },
   ];
+
+  useEffect(() => {
+    const fetchDepartments = async () => {
+      try {
+        const res = await axios.get("http://localhost:8000/api/departments", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (res.data.success) setDepartments(res.data.data);
+      } catch (err) {
+        console.error("خطأ في جلب الأقسام:", err);
+      }
+    };
+    fetchDepartments();
+  }, [token]);
 
   return (
     <MainLayout mode={mode} toggleTheme={toggleTheme} pageTitle="اضافة مستخدم">
@@ -227,7 +245,7 @@ export default function AddUsers({ mode, toggleTheme }) {
                   value={field.value}
                   onChange={(e) => field.setter(e.target.value)}
                   fullWidth
-                  // select={field.select || false}
+                  select={field.select || false}
                   InputProps={{
                     startAdornment: field.icon && (
                       <Box
@@ -253,13 +271,12 @@ export default function AddUsers({ mode, toggleTheme }) {
                     },
                   }}
                 >
-                  {/* {field.select &&  (
-                    <>
-                      <MenuItem value={1}>IT</MenuItem>
-                      <MenuItem value={2}>HR</MenuItem>
-                      <MenuItem value={3}>Finance</MenuItem>
-                    </>
-                  )} */}
+                  {field.select &&
+                    field.options?.map((opt) => (
+                      <MenuItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </MenuItem>
+                    ))}
                 </TextField>
               ))}
             </Box>
@@ -284,8 +301,9 @@ export default function AddUsers({ mode, toggleTheme }) {
                       phone,
                       email,
                       password,
-                      jobTitle,
-                      departmentId,
+                      job_title: jobTitle, 
+                      department_id: Number(departmentId),
+                      department_name: departments.find(d => d.id === Number(departmentId))?.name || ""
                     },
                   })
                 }

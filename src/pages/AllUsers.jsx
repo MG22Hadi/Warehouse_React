@@ -66,24 +66,8 @@ export default function AllUsers({ mode, toggleTheme }) {
   }, []);
 
   // دالة عرض البيانات
-  const handleView = async (id, type) => {
-    try {
-      let url =
-        type === "user"
-          ? `http://localhost:8000/api/v1/users/${id}`
-          : `http://localhost:8000/api/supplier/show/${id}`;
-
-      const response = await axios.get(url, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      if (response.data.success) {
-        alert(JSON.stringify(response.data.data, null, 2));
-      }
-    } catch (err) {
-      console.error("خطأ في جلب البيانات:", err);
-      alert("فشل جلب البيانات");
-    }
+  const handleView = (id, type) => {
+    navigate("/ViewUserOrSupplier", { state: { id, type } });
   };
 
   // دالة تعديل البيانات

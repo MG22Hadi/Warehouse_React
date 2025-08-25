@@ -38,20 +38,33 @@ export default function AddUsers4({ mode, toggleTheme }) {
   const token = localStorage.getItem("token");
   const handleSave = async () => {
     try {
+      const payload = { ...data };
+      delete payload.department_name;
+      
       let response;
       if (data.id) {
         // تعديل المستخدم
         response = await axios.put(
           `http://localhost:8000/api/v1/users/${data.id}`,
-          data,
-          { headers: { Authorization: `Bearer ${token}` } }
+          payload,
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
       } else {
         // إضافة مستخدم جديد
         response = await axios.post(
           "http://localhost:8000/api/v1/users",
-          data,
-          { headers: { Authorization: `Bearer ${token}` } }
+          payload,
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
       }
 
@@ -78,7 +91,7 @@ export default function AddUsers4({ mode, toggleTheme }) {
       icon: <EmailIcon />,
     },
     { label: "البلد", value: data.country || "", icon: <PublicIcon /> },
-    { label: "القسم", value: data.department || "", icon: <CategoryIcon /> },
+    { label: "القسم", value: data.department_name  || "", icon: <CategoryIcon /> },
     {
       label: "Facebook",
       value: data.facebook || "",

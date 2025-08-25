@@ -14,7 +14,7 @@ const AllPurchaseBox = () => {
     const fetchNotes = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/purchase-requests",
+          "http://localhost:8000/api/purchase-requests/my-requests",
           {
             headers: {
               Accept: "application/json",

@@ -5,8 +5,7 @@ import { useParams } from "react-router-dom";
 import MainLayout from "../MainLayout";
 import ProductDetailsCard from "./ProductDetailsCard";
 import ProductForm from "../components/productform";
-import InstallUser from "../components/InstallUser"
- 
+import InstallUser from "../components/InstallUser";
 
 export default function InstallReportsUserManager({ mode, toggleTheme }) {
   const theme = useTheme();
@@ -24,7 +23,7 @@ export default function InstallReportsUserManager({ mode, toggleTheme }) {
       }
 
       const response = await axios.get(url);
-      setProducts(response.data.data.products); 
+      setProducts(response.data.data.products);
     } catch (error) {
       console.error("فشل في جلب المنتجات", error);
     } finally {
@@ -61,7 +60,7 @@ export default function InstallReportsUserManager({ mode, toggleTheme }) {
             {warehouseId ? `منتجات المستودع (${warehouseId})` : ""}
           </h1>
         </div>
-            <InstallUser/>
+        <InstallUser />
         {selectedProductId && (
           <div
             className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-50"

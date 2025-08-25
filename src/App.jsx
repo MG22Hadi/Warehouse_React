@@ -73,6 +73,8 @@ import InstallReportsStoreManager from "./pages/InstallReportsStoreManager.jsx";
 import InstallReportsUserManager from "./pages/InstallReportsUserManager.jsx";
 import ScrapNoteManager from "./pages/ScrapNoteManager.jsx";
 
+import ViewUserOrSupplier from "./pages/ViewUserOrSupplier.jsx";
+
 export default function App() {
   const [mode, setMode] = useState("light");
   const theme = useMemo(() => getTheme(mode), [mode]);
@@ -165,6 +167,8 @@ export default function App() {
 
     { path: "/Notification", element: Notification },
     { path: "/Settings", element: Settings },
+    
+    { path: "/ViewUserOrSupplier", element: ViewUserOrSupplier },
   ];
 
   return (

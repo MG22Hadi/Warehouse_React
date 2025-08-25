@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Paper, Typography, TextField, Button } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import MainLayout from "../MainLayout";
@@ -8,18 +8,18 @@ import axios from "axios";
 
 export default function AddSupplier({ mode, toggleTheme }) {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { id } = useParams(); // هنا ناخد ال id من الرابط
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
   const token = localStorage.getItem("token");
 
-  //  إذا في id → جلب بيانات المورد
+  // جلب بيانات المورد من API عند فتح الصفحة
   useEffect(() => {
     if (id) {
       const fetchSupplier = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:8000/api/suppliers/${id}`,
+            `http://localhost:8000/api/supplier/show/${id}`, // استخدام API الصحيح
             {
               headers: {
                 Accept: "application/json",
@@ -27,7 +27,7 @@ export default function AddSupplier({ mode, toggleTheme }) {
               },
             }
           );
-          const supplier = response.data;
+          const supplier = response.data.data;
           setName(supplier.name);
           setContact(supplier.contact_info);
         } catch (error) {
@@ -38,14 +38,14 @@ export default function AddSupplier({ mode, toggleTheme }) {
     }
   }, [id, token]);
 
-  //  إضافة أو تعديل مورد
+  // حفظ أو تعديل المورد
   const handleSaveSupplier = async () => {
     try {
       let response;
       if (id) {
         // تعديل
         response = await axios.put(
-          `http://localhost:8000/api/suppliers/${id}`,
+          `http://localhost:8000/api/supplier/update/${id}`,
           { name, contact_info: contact },
           {
             headers: {
@@ -69,7 +69,6 @@ export default function AddSupplier({ mode, toggleTheme }) {
       }
 
       if (response.data.success) {
-        // alert(response.data.message);
         navigate("/AllUsers");
       }
     } catch (error) {
@@ -112,9 +111,7 @@ export default function AddSupplier({ mode, toggleTheme }) {
             {id ? "تعديل المعلومات الأساسية" : "المعلومات الأساسية"}
           </Typography>
 
-          {/* الحقول */}
           <Box display="grid" gridTemplateColumns="1fr" gap={3}>
-            {/* الاسم */}
             <TextField
               label="الاسم الكامل"
               fullWidth
@@ -146,7 +143,6 @@ export default function AddSupplier({ mode, toggleTheme }) {
               }}
             />
 
-            {/* معلومات الاتصال */}
             <TextField
               label="معلومات الاتصال"
               fullWidth
@@ -160,7 +156,6 @@ export default function AddSupplier({ mode, toggleTheme }) {
                       width: 60,
                       height: 24,
                       borderRadius: "50%",
-
                       cursor: "pointer",
                       zIndex: 2,
                     }}
@@ -182,7 +177,6 @@ export default function AddSupplier({ mode, toggleTheme }) {
             />
           </Box>
 
-          {/* زر التالي */}
           <Box display="flex" mt={8}>
             <Button
               variant="contained"
