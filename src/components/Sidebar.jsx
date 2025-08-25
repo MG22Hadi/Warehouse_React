@@ -16,6 +16,9 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import BuildIcon from "@mui/icons-material/Build";
 import WarehouseIcon from "@mui/icons-material/Warehouse";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
+// --- 1. استيراد الأيقونة الجديدة ---
+import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
+
 
 const menuItems = [
   { icon: <HomeIcon />, label: "الصفحة الرئيسية", path: "/Dashboard" },
@@ -327,11 +330,77 @@ export default function Sidebar() {
             )}
           </li>
 
-          {/* باقي القائمة: طلبات، عهدة، إشعارات، مستخدمين، إعدادات */}
+          {/* --- START: MODIFIED SECTION --- */}
+
+          {/* 1. Render "طلبات الشراء" button from the array */}
+          {menuItems
+            .filter((item) => ["طلبات الشراء"].includes(item.label))
+            .map((item, index) => (
+              <li
+                key={index}
+                onClick={() => navigate(item.path)}
+                className={`flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-all duration-200 ${
+                  isActive(item.path) ? "bg-[#FF8E29]" : "hover:bg-[#FF8E29]"
+                }`}
+                style={{
+                  color: isActive(item.path)
+                    ? "#FFFFFF"
+                    : theme.palette.mode === "dark"
+                    ? "#CCCDCD"
+                    : "#6F757E",
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive(item.path))
+                    e.currentTarget.style.color = "#FFFFFF";
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive(item.path))
+                    e.currentTarget.style.color =
+                      theme.palette.mode === "dark" ? "#CCCDCD" : "#6F757E";
+                }}
+              >
+                {React.cloneElement(item.icon, {
+                  style: { color: isActive(item.path) ? "#FFFFFF" : undefined },
+                  className: "w-4 h-4",
+                })}
+                <span className="truncate">{item.label}</span>
+              </li>
+            ))}
+          
+          {/* 2. Place the hardcoded "فرز المواد" button here */}
+          <li
+            onClick={() => navigate("/SortingMaterials")}
+            className={`flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-all duration-200 ${
+              isActive("/SortingMaterials") ? "bg-[#FF8E29]" : "hover:bg-[#FF8E29]"
+            }`}
+            style={{
+              color: isActive("/SortingMaterials")
+                ? "#FFFFFF"
+                : theme.palette.mode === "dark"
+                ? "#CCCDCD"
+                : "#6F757E",
+            }}
+            onMouseEnter={(e) => {
+              if (!isActive("/SortingMaterials"))
+                e.currentTarget.style.color = "#FFFFFF";
+            }}
+            onMouseLeave={(e) => {
+              if (!isActive("/SortingMaterials"))
+                e.currentTarget.style.color =
+                  theme.palette.mode === "dark" ? "#CCCDCD" : "#6F757E";
+            }}
+          >
+            <CompareArrowsIcon
+              style={{ color: isActive("/SortingMaterials") ? "#FFFFFF" : undefined }}
+              className="w-4 h-4"
+            />
+            <span className="truncate">فرز المواد</span>
+          </li>
+
+          {/* 3. Render the rest of the items */}
           {menuItems
             .filter((item) =>
               [
-                "طلبات الشراء",
                 "العهدة الشخصية",
                 "الإشعارات",
                 "المستخدمين",
@@ -369,6 +438,8 @@ export default function Sidebar() {
                 <span className="truncate">{item.label}</span>
               </li>
             ))}
+            
+          {/* --- END: MODIFIED SECTION --- */}
         </ul>
       </div>
     </div>
