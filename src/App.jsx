@@ -74,6 +74,8 @@ import InstallReportsUserManager from "./pages/InstallReportsUserManager.jsx";
 import ScrapNoteManager from "./pages/ScrapNoteManager.jsx";
 
 import ViewUserOrSupplier from "./pages/ViewUserOrSupplier.jsx";
+import SortingMaterials from "./pages/SortingMaterials.jsx";
+
 
 export default function App() {
   const [mode, setMode] = useState("light");
@@ -169,6 +171,8 @@ export default function App() {
     { path: "/Settings", element: Settings },
     
     { path: "/ViewUserOrSupplier", element: ViewUserOrSupplier },
+    { path: "/SortingMaterials", element: SortingMaterials },
+
   ];
 
   return (
