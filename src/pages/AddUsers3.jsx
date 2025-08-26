@@ -10,8 +10,10 @@ import {
 import { useNavigate, useLocation ,useParams} from "react-router-dom";
 import { Facebook, Instagram } from "@mui/icons-material";
 import MainLayout from "../MainLayout";
+import { useTheme } from "@mui/material/styles";
 
 export default function AddUsers3({ mode, toggleTheme }) {
+  const theme = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const { id } = useParams();
@@ -44,8 +46,8 @@ export default function AddUsers3({ mode, toggleTheme }) {
         dir="rtl"
         sx={{
           minHeight: "100vh",
-          bgcolor: "white",
-          color: "text.primary",
+          bgcolor: theme.palette.background.default,
+          color: theme.palette.text.primary,
           borderRadius: 6,
           px: 4,
           py: 6,
@@ -62,7 +64,7 @@ export default function AddUsers3({ mode, toggleTheme }) {
           <Paper
             sx={{
               position: "relative",
-              bgcolor: "#fff",
+              bgcolor: theme.palette.background.ma2,
               borderRadius: 2,
               boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
               px: 2,
@@ -148,7 +150,7 @@ export default function AddUsers3({ mode, toggleTheme }) {
           {/* العمود الرئيسي */}
           <Paper
             sx={{
-              bgcolor: "#fff",
+              bgcolor: theme.palette.background.ma2,
               borderRadius: 2,
               boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
               p: 4,
@@ -157,14 +159,14 @@ export default function AddUsers3({ mode, toggleTheme }) {
             <Typography
               variant="h6"
               gutterBottom
-              sx={{ color: "#000", fontWeight: "bold" }}
+              sx={{ color: theme.palette.text.primary, fontWeight: "bold" }}
             >
               ملف التواصل الاجتماعي
             </Typography>
             <Typography
               variant="body2"
               gutterBottom
-              sx={{ color: "#6F757E", mb: 3 }}
+              sx={{ color: theme.palette.text.secondary, mb: 3 }}
             >
               اربط ملفات التواصل الاجتماعي
             </Typography>
@@ -184,10 +186,10 @@ export default function AddUsers3({ mode, toggleTheme }) {
                 }}
                 sx={{
                   borderRadius: "30px",
-                  backgroundColor: "#F5F5F5",
+                  backgroundColor: theme.palette.background.note1,
                   "& .MuiOutlinedInput-root": {
                     borderRadius: "30px",
-                    backgroundColor: "#F5F5F5",
+                    backgroundColor: theme.palette.background.note1,
                     "& fieldset": { border: "none" },
                   },
                 }}
@@ -206,10 +208,10 @@ export default function AddUsers3({ mode, toggleTheme }) {
                 }}
                 sx={{
                   borderRadius: "30px",
-                  backgroundColor: "#F5F5F5",
+                  backgroundColor: theme.palette.background.note1,
                   "& .MuiOutlinedInput-root": {
                     borderRadius: "30px",
-                    backgroundColor: "#F5F5F5",
+                    backgroundColor: theme.palette.background.note1,
                     "& fieldset": { border: "none" },
                   },
                 }}
@@ -224,8 +226,8 @@ export default function AddUsers3({ mode, toggleTheme }) {
                   px: 6,
                   py: 1.5,
                   fontSize: "16px",
-                  color: "#FF8E29",
-                  borderColor: "#FF8E29",
+                  color: theme.palette.primary.main,
+                  borderColor: theme.palette.primary.main,
                 }}
                 onClick={() => navigate("/AddUsers2", { state: prevData })}
               >
@@ -234,8 +236,8 @@ export default function AddUsers3({ mode, toggleTheme }) {
               <Button
                 variant="contained"
                 sx={{
-                  bgcolor: "#FF8E29",
-                  color: "#fff",
+                  bgcolor: theme.palette.primary.main,
+                  color: theme.palette.primary.contrastText,
                   borderRadius: "30px",
                   px: 6,
                   py: 1.5,

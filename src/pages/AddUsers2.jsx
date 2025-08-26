@@ -1,9 +1,11 @@
 import React, { useRef, useState } from "react";
 import { Box, Paper, Typography, TextField, Button } from "@mui/material";
-import { useNavigate, useLocation,useParams } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import MainLayout from "../MainLayout";
+import { useTheme } from "@mui/material/styles";
 
 export default function AddUsers2({ mode, toggleTheme }) {
+  const theme = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const { id } = useParams();
@@ -41,8 +43,8 @@ export default function AddUsers2({ mode, toggleTheme }) {
         dir="rtl"
         sx={{
           minHeight: "100vh",
-          bgcolor: "white",
-          color: "text.primary",
+          bgcolor: theme.palette.background.default,
+          color: theme.palette.text.primary,
           borderRadius: 6,
           px: 4,
           py: 6,
@@ -59,7 +61,7 @@ export default function AddUsers2({ mode, toggleTheme }) {
           <Paper
             sx={{
               position: "relative",
-              bgcolor: "#fff",
+              bgcolor: theme.palette.background.ma2,
               borderRadius: 2,
               boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
               px: 2,
@@ -124,9 +126,9 @@ export default function AddUsers2({ mode, toggleTheme }) {
                   <Box
                     sx={{
                       color:
-                        index === 0 || index === activeStep
-                          ? "#FF8E29"
-                          : "#A0A0A0",
+                        index === activeStep
+                          ? theme.palette.primary.main
+                          : theme.palette.text.secondary,
                       fontWeight:
                         index === 0 || index === activeStep ? "bold" : "normal",
                       cursor: "pointer",
@@ -147,19 +149,23 @@ export default function AddUsers2({ mode, toggleTheme }) {
           {/* العمود الرئيسي */}
           <Paper
             sx={{
-              bgcolor: "#fff",
+              bgcolor: theme.palette.background.ma2,
               borderRadius: 2,
               boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
               p: 4,
             }}
           >
-            <Typography variant="h6" gutterBottom sx={{ color: "#000" }}>
+            <Typography
+              variant="h6"
+              gutterBottom
+              sx={{ color: theme.palette.text.primary }}
+            >
               العنوان
             </Typography>
             <Typography
               variant="body2"
               gutterBottom
-              sx={{ color: "#6F757E", mb: 3 }}
+              sx={{ color: theme.palette.text.secondary, mb: 3 }}
             >
               ضع عنوانك الشخصي
             </Typography>
@@ -172,10 +178,10 @@ export default function AddUsers2({ mode, toggleTheme }) {
                 fullWidth
                 sx={{
                   borderRadius: "30px",
-                  backgroundColor: "#F5F5F5",
+                  backgroundColor: theme.palette.background.note1,
                   "& .MuiOutlinedInput-root": {
                     borderRadius: "30px",
-                    backgroundColor: "#F5F5F5",
+                    backgroundColor: theme.palette.background.note1,
                     "& fieldset": { border: "none" },
                   },
                 }}
@@ -187,10 +193,10 @@ export default function AddUsers2({ mode, toggleTheme }) {
                 fullWidth
                 sx={{
                   borderRadius: "30px",
-                  backgroundColor: "#F5F5F5",
+                  backgroundColor: theme.palette.background.note1,
                   "& .MuiOutlinedInput-root": {
                     borderRadius: "30px",
-                    backgroundColor: "#F5F5F5",
+                    backgroundColor: theme.palette.background.note1,
                     "& fieldset": { border: "none" },
                   },
                 }}
@@ -205,10 +211,10 @@ export default function AddUsers2({ mode, toggleTheme }) {
                 fullWidth
                 sx={{
                   borderRadius: "30px",
-                  backgroundColor: "#F5F5F5",
+                  backgroundColor: theme.palette.background.note1,
                   "& .MuiOutlinedInput-root": {
                     borderRadius: "30px",
-                    backgroundColor: "#F5F5F5",
+                    backgroundColor: theme.palette.background.note1,
                     "& fieldset": { border: "none" },
                   },
                 }}
@@ -220,10 +226,10 @@ export default function AddUsers2({ mode, toggleTheme }) {
                 fullWidth
                 sx={{
                   borderRadius: "30px",
-                  backgroundColor: "#F5F5F5",
+                  backgroundColor: theme.palette.background.note1,
                   "& .MuiOutlinedInput-root": {
                     borderRadius: "30px",
-                    backgroundColor: "#F5F5F5",
+                    backgroundColor: theme.palette.background.note1,
                     "& fieldset": { border: "none" },
                   },
                 }}
@@ -238,8 +244,8 @@ export default function AddUsers2({ mode, toggleTheme }) {
                   px: 6,
                   py: 1.5,
                   fontSize: "16px",
-                  color: "#FF8E29",
-                  borderColor: "#FF8E29",
+                  color: theme.palette.primary.main,
+                  borderColor: theme.palette.primary.main,
                 }}
                 onClick={() => navigate("/AddUsers")}
               >
@@ -248,8 +254,8 @@ export default function AddUsers2({ mode, toggleTheme }) {
               <Button
                 variant="contained"
                 sx={{
-                  bgcolor: "#FF8E29",
-                  color: "#fff",
+                  bgcolor: theme.palette.primary.main,
+                  color: theme.palette.primary.contrastText,
                   borderRadius: "30px",
                   px: 6,
                   py: 1.5,

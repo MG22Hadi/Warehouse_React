@@ -5,8 +5,10 @@ import MainLayout from "../MainLayout";
 import PersonIcon from "@mui/icons-material/Person";
 import PhoneIcon from "@mui/icons-material/Phone";
 import axios from "axios";
+import { useTheme } from "@mui/material/styles";
 
 export default function AddSupplier({ mode, toggleTheme }) {
+  const theme = useTheme();
   const navigate = useNavigate();
   const { id } = useParams(); // هنا ناخد ال id من الرابط
   const [name, setName] = useState("");
@@ -87,8 +89,8 @@ export default function AddSupplier({ mode, toggleTheme }) {
         dir="rtl"
         sx={{
           minHeight: "100vh",
-          bgcolor: "white",
-          color: "text.primary",
+          bgcolor: theme.palette.background.default,
+          color: theme.palette.text.primary,
           borderRadius: 6,
           px: 4,
           py: 6,
@@ -97,7 +99,7 @@ export default function AddSupplier({ mode, toggleTheme }) {
         <Paper
           sx={{
             position: "relative",
-            bgcolor: "#fff",
+            bgcolor: theme.palette.background.ma2,
             borderRadius: 2,
             boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
             px: 2,
@@ -107,7 +109,11 @@ export default function AddSupplier({ mode, toggleTheme }) {
             alignItems: "center",
           }}
         >
-          <Typography variant="h6" gutterBottom>
+          <Typography
+            variant="h6"
+            gutterBottom
+            sx={{ color: theme.palette.text.primary }}
+          >
             {id ? "تعديل المعلومات الأساسية" : "المعلومات الأساسية"}
           </Typography>
 
@@ -124,7 +130,7 @@ export default function AddSupplier({ mode, toggleTheme }) {
                       mr: 1,
                       display: "flex",
                       alignItems: "center",
-                      color: "gray",
+                      color: theme.palette.text.secondary,
                     }}
                   >
                     <PersonIcon />
@@ -133,11 +139,11 @@ export default function AddSupplier({ mode, toggleTheme }) {
               }}
               sx={{
                 borderRadius: "30px",
-                backgroundColor: "#F5F5F5",
+                backgroundColor: theme.palette.background.note1,
                 boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
                 "& .MuiOutlinedInput-root": {
                   borderRadius: "30px",
-                  backgroundColor: "#F5F5F5",
+                  backgroundColor: theme.palette.background.note1,
                   "& fieldset": { border: "none" },
                 },
               }}
@@ -166,11 +172,11 @@ export default function AddSupplier({ mode, toggleTheme }) {
               }}
               sx={{
                 borderRadius: "30px",
-                backgroundColor: "#F5F5F5",
+                                backgroundColor: theme.palette.background.note1,
                 boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
                 "& .MuiOutlinedInput-root": {
                   borderRadius: "30px",
-                  backgroundColor: "#F5F5F5",
+                                  backgroundColor: theme.palette.background.note1,
                   "& fieldset": { border: "none" },
                 },
               }}
@@ -181,8 +187,8 @@ export default function AddSupplier({ mode, toggleTheme }) {
             <Button
               variant="contained"
               sx={{
-                bgcolor: "#FF8E29",
-                color: "#fff",
+                bgcolor: theme.palette.primary.main,
+                color: theme.palette.primary.contrastText,
                 borderRadius: "30px",
                 px: 6,
                 py: 1.5,

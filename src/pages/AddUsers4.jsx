@@ -9,8 +9,10 @@ import WorkIcon from "@mui/icons-material/Work";
 import CategoryIcon from "@mui/icons-material/Category";
 import PublicIcon from "@mui/icons-material/Public";
 import axios from "axios";
+import { useTheme } from "@mui/material/styles";
 
 export default function AddUsers4({ mode, toggleTheme }) {
+  const theme = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const data = location.state || {};
@@ -40,7 +42,7 @@ export default function AddUsers4({ mode, toggleTheme }) {
     try {
       const payload = { ...data };
       delete payload.department_name;
-      
+
       let response;
       if (data.id) {
         // تعديل المستخدم
@@ -91,7 +93,11 @@ export default function AddUsers4({ mode, toggleTheme }) {
       icon: <EmailIcon />,
     },
     { label: "البلد", value: data.country || "", icon: <PublicIcon /> },
-    { label: "القسم", value: data.department_name  || "", icon: <CategoryIcon /> },
+    {
+      label: "القسم",
+      value: data.department_name || "",
+      icon: <CategoryIcon />,
+    },
     {
       label: "Facebook",
       value: data.facebook || "",
@@ -116,8 +122,8 @@ export default function AddUsers4({ mode, toggleTheme }) {
         dir="rtl"
         sx={{
           minHeight: "100vh",
-          bgcolor: "white",
-          color: "text.primary",
+          bbgcolor: theme.palette.background.default,
+          color: theme.palette.text.primary,
           borderRadius: 6,
           px: 4,
           py: 6,
@@ -134,7 +140,7 @@ export default function AddUsers4({ mode, toggleTheme }) {
           <Paper
             sx={{
               position: "relative",
-              bgcolor: "#fff",
+              bgcolor: theme.palette.background.ma2,
               borderRadius: 2,
               boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
               px: 2,
@@ -214,20 +220,24 @@ export default function AddUsers4({ mode, toggleTheme }) {
           {/* العمود الرئيسي للمحتوى */}
           <Paper
             sx={{
-              bgcolor: "#fff",
+              bgcolor: theme.palette.background.ma2,
               borderRadius: 2,
               boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
               p: 4,
             }}
           >
-            <Typography variant="h5" gutterBottom sx={{ fontSize: "26px" }}>
+            <Typography
+              variant="h5"
+              gutterBottom
+              sx={{ fontSize: "26px", color: theme.palette.text.primary }}
+            >
               مراجعة الملف الشخصي
             </Typography>
             <Typography
               variant="subtitle1"
               gutterBottom
               color="text.secondary"
-              sx={{ fontSize: "18px" }}
+              sx={{ fontSize: "18px", color: theme.palette.text.secondary }}
             >
               مراجعة المعلومات المقدمة
             </Typography>
@@ -239,19 +249,27 @@ export default function AddUsers4({ mode, toggleTheme }) {
                   <Box key={index}>
                     <Box display="flex" alignItems="center" gap={1} mb={0.5}>
                       {field.icon && (
-                        <Box sx={{ color: "#FF8E29" }}>{field.icon}</Box>
+                        <Box sx={{ color: theme.palette.primary.main }}>
+                          {field.icon}
+                        </Box>
                       )}
                       <Typography
                         variant="subtitle2"
                         color="black"
-                        sx={{ fontSize: "18px" }}
+                        sx={{
+                          fontSize: "18px",
+                          color: theme.palette.text.primary,
+                        }}
                       >
                         {field.label}
                       </Typography>
                     </Box>
                     <Typography
                       variant="body1"
-                      sx={{ color: "#6F757E", fontSize: "16px" }}
+                      sx={{
+                        color: theme.palette.text.secondary,
+                        fontSize: "16px",
+                      }}
                     >
                       {field.value}
                     </Typography>
@@ -264,13 +282,17 @@ export default function AddUsers4({ mode, toggleTheme }) {
                   <Typography
                     variant="subtitle2"
                     color="black"
-                    sx={{ fontSize: "18px" }}
+                    sx={{ fontSize: "18px", color: theme.palette.text.primary }}
                   >
                     {field.label}
                   </Typography>
                   <Typography
                     variant="body1"
-                    sx={{ color: "#6F757E", mt: 0.5, fontSize: "16px" }}
+                    sx={{
+                      color: theme.palette.text.secondary,
+                      mt: 0.5,
+                      fontSize: "16px",
+                    }}
                   >
                     {field.value}
                   </Typography>
@@ -282,7 +304,14 @@ export default function AddUsers4({ mode, toggleTheme }) {
             <Box display="flex" mt={4} justifyContent="space-between">
               <Button
                 variant="outlined"
-                sx={{ borderRadius: "30px", px: 4, py: 1.5, fontSize: "16px" }}
+                sx={{
+                  borderRadius: "30px",
+                  px: 4,
+                  py: 1.5,
+                  fontSize: "16px",
+                  color: theme.palette.primary.main,
+                  borderColor: theme.palette.primary.main,
+                }}
                 onClick={() => navigate("/AddUsers")}
               >
                 تعديل المعلومات
@@ -290,8 +319,8 @@ export default function AddUsers4({ mode, toggleTheme }) {
               <Button
                 variant="contained"
                 sx={{
-                  bgcolor: "#FF8E29",
-                  color: "#fff",
+                  bgcolor: theme.palette.primary.main,
+                  color: theme.palette.primary.contrastText,
                   borderRadius: "30px",
                   px: 6,
                   py: 1.5,

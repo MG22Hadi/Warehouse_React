@@ -126,6 +126,7 @@ export default function App() {
 
     { path: "/AllReceiving", element: AllReceiving },
     { path: "/ReceivingNotes", element: ReceivingNotes },
+    { path: "/ReceivingNotes/:id", element: ReceivingNotes },
     { path: "/CreateReceivingNote", element: CreateReceivingNote },
 
     { path: "/AllInstall", element: AllInstall },

@@ -2,13 +2,16 @@ import React, { useState, useEffect } from "react";
 import MainLayout from "../MainLayout";
 import "../components/Receiving.css";
 import axios from "axios";
+import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 
 export default function CreateInstallBuyNote({ mode, toggleTheme }) {
+  const theme = useTheme();
   const [showModal, setShowModal] = useState(false);
   const [warehouses, setWarehouses] = useState([]);
   const [products, setProducts] = useState([]);
   const [selectedWarehouse, setSelectedWarehouse] = useState("");
+
   const [items, setItems] = useState(
     Array(10)
       .fill()
@@ -23,6 +26,7 @@ export default function CreateInstallBuyNote({ mode, toggleTheme }) {
         notes: "",
       }))
   );
+  const selectedIds = items.map((i) => i.product_id).filter(Boolean);
   const [reportDate, setReportDate] = useState("");
   const [createdBy, setCreatedBy] = useState("");
   const [receiver, setReceiver] = useState("");
@@ -38,7 +42,7 @@ export default function CreateInstallBuyNote({ mode, toggleTheme }) {
     transition: "border 0.2s",
   };
 
-  const tableInputStyle = { ...inputStyle, width: "120px" }; // أو أي عرض مناسب
+  const tableInputStyle = { ...inputStyle, width: "120px" };  
 
   const selectedWh = warehouses.find((wh) => wh.id === selectedWarehouse);
 
@@ -135,20 +139,30 @@ export default function CreateInstallBuyNote({ mode, toggleTheme }) {
   };
 
   return (
-    <MainLayout mode={mode} toggleTheme={toggleTheme} pageTitle="إنشاء مذكرة ">
+    <MainLayout mode={mode} toggleTheme={toggleTheme} pageTitle="إنشاء ضبط ">
       <div
         className="w-full flex justify-center items-start min-h-screen"
         dir="rtl"
       >
         <div
           className="container bg-white rounded-2xl shadow-lg p-8"
-          style={{ maxWidth: "1200px", paddingTop: "75px", marginTop: "8px" }}
+          style={{
+            maxWidth: "1200px",
+            paddingTop: "75px",
+            marginTop: "8px",
+            backgroundColor: theme.palette.background.paper,
+          }}
         >
           {/* ===== Header ===== */}
           <div className="header">
             <div className="top-right">
               <p style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <span className="black">رقم التسلسل:</span>
+                <span
+                  className="black"
+                  style={{ color: theme.palette.text.primary }}
+                >
+                  رقم التسلسل:
+                </span>
                 <input
                   type="text"
                   readOnly
@@ -156,13 +170,31 @@ export default function CreateInstallBuyNote({ mode, toggleTheme }) {
                 />
               </p>
               <p style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <span className="black">المستودع:</span>
+                <span
+                  className="black"
+                  style={{ color: theme.palette.text.primary }}
+                >
+                  المستودع:
+                </span>
                 <select
                   value={selectedWarehouse}
                   onChange={(e) => setSelectedWarehouse(Number(e.target.value))}
-                  style={{ ...inputStyle, flex: 1 }}
+                  style={{
+                    ...inputStyle,
+                    flex: 1,
+                    backgroundColor: theme.palette.background.paper,
+                    color: theme.palette.text.primary,
+                  }}
                 >
-                  <option value="">اختر المستودع...</option>
+                  <option
+                    value=""
+                    style={{
+                      backgroundColor: theme.palette.background.paper,
+                      color: theme.palette.text.primary,
+                    }}
+                  >
+                    اختر المستودع...
+                  </option>
                   {warehouses.map((wh) => (
                     <option key={wh.id} value={wh.id}>
                       {wh.name} - {wh.location}
@@ -173,9 +205,19 @@ export default function CreateInstallBuyNote({ mode, toggleTheme }) {
             </div>
 
             <div className="title">
-              <p className="text-lg font-semibold">ضبط تركيب شراء</p>
+              <p
+                className="text-lg font-semibold"
+                style={{ color: theme.palette.text.primary }}
+              >
+                ضبط تركيب شراء
+              </p>
               <p style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <span className="black">التاريخ:</span>
+                <span
+                  className="black"
+                  style={{ color: theme.palette.text.primary }}
+                >
+                  التاريخ:
+                </span>
                 <input
                   type="date"
                   value={reportDate}
@@ -186,32 +228,69 @@ export default function CreateInstallBuyNote({ mode, toggleTheme }) {
             </div>
 
             <div className="top-left">
-              <p className="black">الجمهورية العربية السورية</p>
-              <p className="gray">وزارة المالية</p>
+              <p
+                className="black"
+                style={{ color: theme.palette.text.primary }}
+              >
+                الجمهورية العربية السورية
+              </p>
+              <p className="gray" style={{ color: theme.palette.text.primary }}>
+                وزارة المالية
+              </p>
             </div>
           </div>
 
           {/* ===== الجدول ===== */}
-          <div className="table-wrapper mt-8">
+          <div
+            className="table-wrapper mt-8"
+            style={{
+              backgroundColor: theme.palette.background.paper,
+              color: theme.palette.text.primary,
+            }}
+          >
             <table>
               <thead>
                 <tr>
-                  <th rowSpan="2" className="center-text">
+                  <th
+                    rowSpan="2"
+                    className="center-text"
+                    style={{ borderColor: theme.palette.divider }}
+                  >
                     الرقم التسلسلي
                   </th>
-                  <th colSpan="3" className="center-text">
+                  <th
+                    colSpan="3"
+                    className="center-text"
+                    style={{ borderColor: theme.palette.divider }}
+                  >
                     المواد
                   </th>
-                  <th rowSpan="2" className="center-text">
+                  <th
+                    rowSpan="2"
+                    className="center-text"
+                    style={{ borderColor: theme.palette.divider }}
+                  >
                     الكمية المستلمة
                   </th>
-                  <th rowSpan="2" className="center-text">
+                  <th
+                    rowSpan="2"
+                    className="center-text"
+                    style={{ borderColor: theme.palette.divider }}
+                  >
                     سعر الواحدة
                   </th>
-                  <th rowSpan="2" className="center-text">
+                  <th
+                    rowSpan="2"
+                    className="center-text"
+                    style={{ borderColor: theme.palette.divider }}
+                  >
                     السعر الإجمالي
                   </th>
-                  <th rowSpan="2" className="center-text">
+                  <th
+                    rowSpan="2"
+                    className="center-text"
+                    style={{ borderColor: theme.palette.divider }}
+                  >
                     ملاحظات
                   </th>
                 </tr>
@@ -223,31 +302,60 @@ export default function CreateInstallBuyNote({ mode, toggleTheme }) {
               </thead>
               <tbody>
                 {items.map((row, rowIndex) => (
-                  <tr key={rowIndex}>
-                    <td className="center-text">{row.serial}</td>
+                  <tr
+                    key={rowIndex}
+                    style={{
+                      borderColor: theme.palette.divider,
+                      backgroundColor: theme.palette.background.default,
+                    }}
+                  >
+                    <td
+                      className="center-text"
+                      style={{ color: theme.palette.text.third }}
+                    >
+                      {row.serial}
+                    </td>
                     <td className="center-text">
                       <input
                         type="text"
                         value={row.product_code || ""}
                         readOnly
-                        style={inputStyle}
+                        style={{ inputStyle, color: theme.palette.text.third }}
                       />
                     </td>
 
                     <td className="center-text">
                       <select
-                        style={inputStyle}
+                        style={{
+                          ...inputStyle,
+                          backgroundColor: theme.palette.background.default,
+                          color: theme.palette.text.primary,
+                        }}
                         value={row.product_id || ""}
                         onChange={(e) =>
                           handleProductChange(rowIndex, e.target.value)
                         }
                       >
-                        <option value="">اختر مادة...</option>
-                        {products.map((p) => (
-                          <option key={p.id} value={p.id}>
-                            {p.name}
-                          </option>
-                        ))}
+                        <option
+                          value=""
+                          style={{
+                            backgroundColor: theme.palette.background.paper,
+                            color: theme.palette.text.primary,
+                          }}
+                        >
+                          اختر مادة...
+                        </option>
+                        {products
+                          .filter(
+                            (p) =>
+                              !selectedIds.includes(p.id) ||
+                              p.id === row.product_id
+                          )
+                          .map((p) => (
+                            <option key={p.id} value={p.id}>
+                              {p.name}
+                            </option>
+                          ))}
                       </select>
                     </td>
 
@@ -256,7 +364,7 @@ export default function CreateInstallBuyNote({ mode, toggleTheme }) {
                         type="text"
                         value={row.product_unit || ""}
                         readOnly
-                        style={inputStyle}
+                        style={{ inputStyle, color: theme.palette.text.third }}
                       />
                     </td>
 
@@ -264,6 +372,7 @@ export default function CreateInstallBuyNote({ mode, toggleTheme }) {
                       <input
                         type="number"
                         value={row.quantity}
+                        min={1}
                         onChange={(e) =>
                           handleChange(rowIndex, "quantity", e.target.value)
                         }
@@ -274,13 +383,14 @@ export default function CreateInstallBuyNote({ mode, toggleTheme }) {
                       <input
                         type="number"
                         value={row.unit_price}
+                        min={1}
                         onChange={(e) =>
                           handleChange(rowIndex, "unit_price", e.target.value)
                         }
                         style={tableInputStyle}
                       />
                     </td>
-                    <td className="center-text">
+                    <td className="center-text" min={1}>
                       {(
                         (Number(row.quantity) || 0) *
                         (Number(row.unit_price) || 0)
@@ -313,23 +423,14 @@ export default function CreateInstallBuyNote({ mode, toggleTheme }) {
                 style={{ ...inputStyle, flex: 1 }}
               />
             </p>
-            <p style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <span className="grand_total">المستلم:</span>
-              <input
-                type="text"
-                value={receiver}
-                onChange={(e) => setReceiver(e.target.value)}
-                style={{ ...inputStyle, flex: 1 }}
-              />
-            </p>
           </div>
 
           {/* ===== زر التأكيد ===== */}
           <div className="w-full flex justify-center mt-8">
             <button
               style={{
-                background: "#FF8E29",
-                color: "#fff",
+                background: theme.palette.primary.main,
+                color: theme.palette.text.default,
                 borderRadius: "30px",
                 padding: "12px 40px",
                 fontSize: "18px",
@@ -340,7 +441,7 @@ export default function CreateInstallBuyNote({ mode, toggleTheme }) {
               }}
               onClick={() => setShowModal(true)}
             >
-              تأكيد إنشاء المذكرة
+              تأكيد إنشاء الضبط
             </button>
           </div>
 
@@ -362,7 +463,8 @@ export default function CreateInstallBuyNote({ mode, toggleTheme }) {
             >
               <div
                 style={{
-                  background: "#fff",
+                  background: theme.palette.background.paper,
+                  color: theme.palette.text.primary,
                   borderRadius: "20px",
                   padding: "32px 40px",
                   minWidth: "320px",
@@ -380,7 +482,7 @@ export default function CreateInstallBuyNote({ mode, toggleTheme }) {
                   تأكيد الإنشاء
                 </h2>
                 <p style={{ fontSize: "16px", marginBottom: "24px" }}>
-                  هل تريد إنشاء مذكرة استلام جديدة؟
+                  هل تريد إنشاء ضبط تركيب شراء جديدة؟
                 </p>
                 <div
                   style={{
@@ -391,8 +493,8 @@ export default function CreateInstallBuyNote({ mode, toggleTheme }) {
                 >
                   <button
                     style={{
-                      background: "#FF8E29",
-                      color: "#fff",
+                      background: theme.palette.primary.main,
+                      color: theme.palette.text.default,
                       borderRadius: "12px",
                       padding: "10px 32px",
                       fontSize: "16px",
@@ -406,8 +508,8 @@ export default function CreateInstallBuyNote({ mode, toggleTheme }) {
                   </button>
                   <button
                     style={{
-                      background: "#eee",
-                      color: "#333",
+                      background: theme.palette.background.default,
+                      color: theme.palette.text.primary,
                       borderRadius: "12px",
                       padding: "10px 32px",
                       fontSize: "16px",

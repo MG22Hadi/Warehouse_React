@@ -26,7 +26,19 @@ const PurchaseNote = ({ note }) => {
             </span>
           </p>
           <p className="gray" style={{ color: theme.palette.text.secondary }}>
-            {note.warehouse?.name || "—"}
+            <span
+              className="black"
+              style={{ color: theme.palette.text.primary }}
+            >
+              {" "}
+              اسم المستودع:
+            </span>
+            <span
+              className="storage"
+              style={{ color: theme.palette.text.secondary }}
+            >
+              {note.warehouse?.name || " "}
+            </span>
           </p>
         </div>
         <div className="title">
@@ -34,7 +46,7 @@ const PurchaseNote = ({ note }) => {
             className="text-lg font-semibold"
             style={{ color: theme.palette.text.primary }}
           >
-            طلب شراء 
+            طلب شراء
           </p>
           <p className="Date">
             <span
@@ -49,7 +61,7 @@ const PurchaseNote = ({ note }) => {
               style={{ color: theme.palette.text.secondary }}
             >
               {" "}
-              {note.date?.slice(0, 10)}
+              {note.request_date?.slice(0, 10)}
             </span>
           </p>
         </div>
@@ -116,7 +128,7 @@ const PurchaseNote = ({ note }) => {
                     {item ? item.product?.unit : ""}
                   </td>
                   <td style={{ color: theme.palette.text.third }}>
-                    {item ? item.quantity : ""}
+                    {item ? item.quantity_requested : ""}
                   </td>
                   <td>{item ? item.notes : ""}</td>
                 </tr>
@@ -128,7 +140,7 @@ const PurchaseNote = ({ note }) => {
 
       <div className="footer">
         <p>
-          <span className="grand_total">أمين المستودع:</span>
+          <span className="grand_total">أمين المستودع : </span>
           <span
             className="price"
             style={{ color: theme.palette.text.secondary }}
@@ -137,12 +149,12 @@ const PurchaseNote = ({ note }) => {
           </span>
         </p>
         <p>
-          <span className="grand_total"> المستلم:</span>
+          <span className="grand_total"> المورد : </span>
           <span
             className="price"
             style={{ color: theme.palette.text.secondary }}
           >
-            {note.user?.name || "—"}
+            {note.supplier?.name || "—"}
           </span>
         </p>
       </div>

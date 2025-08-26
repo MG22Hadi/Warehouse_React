@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./AllNotesBox.css";
+import { useTheme } from "@mui/material/styles";
 
 const AllInstallReportsBox = () => {
+  const theme = useTheme();
   const [data, setData] = useState([]);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -36,7 +38,13 @@ const AllInstallReportsBox = () => {
     navigate("/CreateInstallmosNote");
   };
   return (
-    <div className="all-exit-box-container">
+    <div
+      className="all-exit-box-container"
+      style={{
+        backgroundColor: theme.palette.background.default,
+        color: theme.palette.text.primary,
+      }}
+    >
       <div className="create-note-button-wrapper">
         <button className="create-note-button" onClick={handleCreateNote2}>
           ضبط تركيب من المستودع
@@ -56,31 +64,87 @@ const AllInstallReportsBox = () => {
                 index % 2 === 0 ? "bg-white" : "bg-gray"
               } clickable`}
               onClick={() => handleClick(item.id)}
+              style={{
+                color: theme.palette.text.primary,
+                backgroundColor:
+                  index % 2 === 0
+                    ? theme.palette.background.note1
+                    : theme.palette.background.note2,
+              }}
             >
               <div className="card-content">
                 <div className="info-item">
-                  <span className="label">الرقم</span>
-                  <span className="value">{item.serial_number}</span>
-                </div>
-                <div className="info-item">
-                  <span className="label">التاريخ</span>
-                  <span className="value">{item.date?.slice(0, 10)}</span>
-                </div>
-                <div className="info-item">
-                  <span className="label">العدد</span>
-                  <span className="value">{item.materials_count ?? 0}</span>
-                </div>
-                <div className="info-item">
-                  <span className="label">المستلم</span>
-                  <span className="value">
-                    {typeof item.created_by === "object"
-                      ? item.created_by?.name
-                      : item.created_by}
+                  <span
+                    className="label"
+                    style={{ color: theme.palette.text.secondary }}
+                  >
+                    الرقم
+                  </span>
+                  <span
+                    className="value"
+                    style={{ color: theme.palette.text.primary }}
+                  >
+                    {item.serial_number}
                   </span>
                 </div>
                 <div className="info-item">
-                  <span className="label">الحالة</span>
-                  <span className="value">{item.status}</span>
+                  <span
+                    className="label"
+                    style={{ color: theme.palette.text.secondary }}
+                  >
+                    التاريخ
+                  </span>
+                  <span
+                    className="value"
+                    style={{ color: theme.palette.text.primary }}
+                  >
+                    {item.date?.slice(0, 10)}
+                  </span>
+                </div>
+                <div className="info-item">
+                  <span
+                    className="label"
+                    style={{ color: theme.palette.text.secondary }}
+                  >
+                    العدد
+                  </span>
+                  <span
+                    className="value"
+                    style={{ color: theme.palette.text.primary }}
+                  >
+                    {item.materials_count ?? 0}
+                  </span>
+                </div>
+                <div className="info-item">
+                  <span
+                    className="label"
+                    style={{ color: theme.palette.text.secondary }}
+                  >
+                    المدير
+                  </span>
+                  <span
+                    className="value"
+                    style={{ color: theme.palette.text.primary }}
+                  >
+                   {item.manager?.name || "--"}
+                    {/* {typeof item.created_by === "object"
+                      ? item.created_by?.name
+                      : item.created_by} */}
+                  </span>
+                </div>
+                <div className="info-item">
+                  <span
+                    className="label"
+                    style={{ color: theme.palette.text.secondary }}
+                  >
+                    الحالة
+                  </span>
+                  <span
+                    className="value"
+                    style={{ color: theme.palette.text.primary }}
+                  >
+                    {item.status}
+                  </span>
                 </div>
               </div>
             </div>

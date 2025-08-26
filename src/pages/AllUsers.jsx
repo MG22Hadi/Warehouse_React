@@ -4,8 +4,10 @@ import axios from "axios";
 import MainLayout from "../MainLayout";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
+import { useTheme } from "@mui/material/styles";
 
 export default function AllUsers({ mode, toggleTheme }) {
+  const theme = useTheme();
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const token = localStorage.getItem("token");
@@ -79,26 +81,41 @@ export default function AllUsers({ mode, toggleTheme }) {
   return (
     <MainLayout mode={mode} toggleTheme={toggleTheme} pageTitle="جميع الموظفين">
       <div
-        className="bg-white rounded-[20px] p-6 shadow-md"
-        style={{ minHeight: "90vh" }}
+        className="rounded-[20px] p-6 shadow-md"
+        style={{
+          minHeight: "90vh",
+          backgroundColor: theme.palette.background.paper,
+          color: theme.palette.text.primary,
+        }}
       >
         {/* الهيدر + زر إضافة */}
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-black text-2xl font-bold">
+          <h1
+            className="text-black text-2xl font-bold"
+            style={{ color: theme.palette.text.primary }}
+          >
             كل المستخدمين والموردين
           </h1>
           <div className="flex gap-3">
             <button
               onClick={handleAddUser}
-              style={{ backgroundColor: "#FF8E29", borderRadius: "30px" }}
-              className="text-white px-5 py-2 hover:brightness-90 transition"
+              style={{
+                backgroundColor: "#FF8E29",
+                borderRadius: "30px",
+                color: "#fff",
+              }}
+              className=" px-5 py-2 hover:brightness-90 transition"
             >
               أضف موظف
             </button>
             <button
               onClick={handleAddSupplier}
-              style={{ backgroundColor: "#FF8E29", borderRadius: "30px" }}
-              className="text-white px-5 py-2 hover:brightness-90 transition"
+              style={{
+                backgroundColor: "#FF8E29",
+                borderRadius: "30px",
+                color: "#fff",
+              }}
+              className=" px-5 py-2 hover:brightness-90 transition"
             >
               أضف مورد
             </button>
@@ -106,9 +123,21 @@ export default function AllUsers({ mode, toggleTheme }) {
         </div>
 
         {/* الجدول */}
-        <div className="bg-white rounded-[20px] p-4 mb-6 shadow-sm border border-gray-200">
+        <div
+          className=" rounded-[20px] p-4 mb-6 shadow-sm border "
+          style={{
+            backgroundColor: theme.palette.background.ma2,
+            borderColor: theme.palette.divider,
+          }}
+        >
           {/* العناوين */}
-          <div className="grid grid-cols-7 gap-4 text-black font-semibold text-base border-b border-gray-300 pb-2 mb-2 text-center">
+          <div
+            className="grid grid-cols-7 gap-4 text-black font-semibold text-base border-b pb-2 mb-2 text-center"
+            style={{
+              color: theme.palette.text.primary,
+              borderColor: theme.palette.divider,
+            }}
+          >
             <div>الاسم</div>
             <div>البريد الإلكتروني</div>
             <div>العنوان</div>
@@ -120,14 +149,18 @@ export default function AllUsers({ mode, toggleTheme }) {
 
           {/* صفوف البيانات */}
           {users.length === 0 ? (
-            <p className="text-center text-gray-500 mt-6 text-lg">
+            <p className="text-center mt-6 text-lg"  style={{ color: theme.palette.text.secondary }}>
               لا يوجد مستخدمين أو موردين لعرضهم
             </p>
           ) : (
             users.map((user, index) => (
               <div
                 key={index}
-                className="grid grid-cols-7 gap-4 text-[#6F757E] text-sm py-3 border-b last:border-b-0 border-gray-200 text-center"
+                className="grid grid-cols-7 gap-4  text-sm py-3 border-b last:border-b-0  text-center"
+                  style={{
+                  color: theme.palette.text.secondary,
+                  borderColor: theme.palette.divider,
+                }}
               >
                 <div>{user.name}</div>
                 <div>{user.email}</div>

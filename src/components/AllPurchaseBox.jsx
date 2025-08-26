@@ -41,7 +41,13 @@ const AllPurchaseBox = () => {
   };
 
   return (
-    <div className="all-exit-box-container">
+    <div
+      className="all-exit-box-container"
+      style={{
+        backgroundColor: theme.palette.background.default,
+        color: theme.palette.text.primary,
+      }}
+    >
       <div className="create-note-button-wrapper">
         <button className="create-note-button" onClick={handleCreateNote}>
           إنشاء طلب شراء
@@ -100,7 +106,7 @@ const AllPurchaseBox = () => {
                     className="value"
                     style={{ color: theme.palette.text.primary }}
                   >
-                    {item.date?.slice(0, 10)}
+                    {item.request_date?.slice(0, 10)}
                   </span>
                 </div>
                 <div className="info-item">
@@ -114,7 +120,7 @@ const AllPurchaseBox = () => {
                     className="value"
                     style={{ color: theme.palette.text.primary }}
                   >
-                    {item.items_count}
+                    {item.items?.length}
                   </span>
                 </div>
                 <div className="info-item">
@@ -122,13 +128,13 @@ const AllPurchaseBox = () => {
                     className="label"
                     style={{ color: theme.palette.text.secondary }}
                   >
-                    المستلم
+                    المورد
                   </span>
                   <span
                     className="value"
                     style={{ color: theme.palette.text.primary }}
                   >
-                    {item.user?.name || "—"}
+                    {item.supplier?.name || "—"}
                   </span>
                 </div>
                 <div className="info-item">
@@ -142,7 +148,7 @@ const AllPurchaseBox = () => {
                     className="value"
                     style={{ color: theme.palette.text.primary }}
                   >
-                    {item.action}
+                    {item.status}
                   </span>
                 </div>
               </div>

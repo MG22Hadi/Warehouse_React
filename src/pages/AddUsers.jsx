@@ -16,8 +16,10 @@ import LockIcon from "@mui/icons-material/Lock";
 import WorkIcon from "@mui/icons-material/Work";
 import CategoryIcon from "@mui/icons-material/Category";
 import axios from "axios";
+import { useTheme } from "@mui/material/styles";
 
 export default function AddUsers({ mode, toggleTheme }) {
+  const theme = useTheme();
   const navigate = useNavigate();
   const { id } = useParams();
   const location = useLocation();
@@ -60,7 +62,7 @@ export default function AddUsers({ mode, toggleTheme }) {
     { label: "مواقع التواصل", key: "twofa" },
     { label: "مراجعة", key: "delete" },
   ];
-  
+
   // State لكل الحقول
   const [departments, setDepartments] = useState([]);
   const [name, setName] = useState(initialData.name || "");
@@ -126,8 +128,8 @@ export default function AddUsers({ mode, toggleTheme }) {
         dir="rtl"
         sx={{
           minHeight: "100vh",
-          bgcolor: "white",
-          color: "text.primary",
+          bgcolor: theme.palette.background.default,
+          color: theme.palette.text.primary,
           borderRadius: 6,
           px: 4,
           py: 6,
@@ -144,7 +146,7 @@ export default function AddUsers({ mode, toggleTheme }) {
           <Paper
             sx={{
               position: "relative",
-              bgcolor: "#fff",
+              bgcolor: theme.palette.background.ma2,
               borderRadius: 2,
               boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
               px: 2,
@@ -178,7 +180,10 @@ export default function AddUsers({ mode, toggleTheme }) {
                       width: 24,
                       height: 24,
                       borderRadius: "50%",
-                      bgcolor: index === activeStep ? "#FF8E29" : "#FFC794",
+                     bgcolor:
+                        index === 0 || index === activeStep
+                          ? "#FF8E29"
+                          : "#FFC794",
                       cursor: "pointer",
                       zIndex: 2,
                     }}
@@ -196,7 +201,7 @@ export default function AddUsers({ mode, toggleTheme }) {
                           transform: "translateX(-50%)",
                           width: 2,
                           height: 72,
-                          bgcolor: "#FFC794",
+                          bgcolor: "#FF8E29",
                           zIndex: 1,
                         }}
                       />
@@ -204,7 +209,10 @@ export default function AddUsers({ mode, toggleTheme }) {
                   </Box>
                   <Box
                     sx={{
-                      color: index === activeStep ? "#FF8E29" : "#A0A0A0",
+                      color:
+                        index === activeStep
+                          ? theme.palette.primary.main
+                          : theme.palette.text.secondary,
                       fontWeight: index === activeStep ? "bold" : "normal",
                       cursor: "pointer",
                       mr: 2,
@@ -224,7 +232,7 @@ export default function AddUsers({ mode, toggleTheme }) {
           {/* العمود الرئيسي */}
           <Paper
             sx={{
-              bgcolor: "#fff",
+              bgcolor: theme.palette.background.ma2,
               borderRadius: 2,
               boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
               p: 4,
@@ -253,7 +261,7 @@ export default function AddUsers({ mode, toggleTheme }) {
                           mr: 1,
                           display: "flex",
                           alignItems: "center",
-                          color: "gray",
+                          color: theme.palette.text.secondary,
                         }}
                       >
                         {field.icon}
@@ -262,11 +270,11 @@ export default function AddUsers({ mode, toggleTheme }) {
                   }}
                   sx={{
                     borderRadius: "30px",
-                    backgroundColor: "#F5F5F5",
+                    backgroundColor: theme.palette.background.note1,
                     boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
                     "& .MuiOutlinedInput-root": {
                       borderRadius: "30px",
-                      backgroundColor: "#F5F5F5",
+                      backgroundColor: theme.palette.background.note1,
                       "& fieldset": { border: "none" },
                     },
                   }}
@@ -285,7 +293,7 @@ export default function AddUsers({ mode, toggleTheme }) {
               <Button
                 variant="contained"
                 sx={{
-                  bgcolor: "#FF8E29",
+                  bgcolor: theme.palette.primary.main,
                   color: "#fff",
                   borderRadius: "30px",
                   px: 6,
@@ -301,9 +309,11 @@ export default function AddUsers({ mode, toggleTheme }) {
                       phone,
                       email,
                       password,
-                      job_title: jobTitle, 
+                      job_title: jobTitle,
                       department_id: Number(departmentId),
-                      department_name: departments.find(d => d.id === Number(departmentId))?.name || ""
+                      department_name:
+                        departments.find((d) => d.id === Number(departmentId))
+                          ?.name || "",
                     },
                   })
                 }

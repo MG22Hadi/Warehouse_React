@@ -54,8 +54,8 @@ export default function CalendarPage({ mode, toggleTheme }) {
     const year = String(dateObj.getFullYear());
 
     try {
-      const token = localStorage.getItem("token"); // لازم يكون موجود بعد تسجيل الدخول
-      const res = await api.get(`${BASE_URL}?month=${month}&year=${year}`, {
+      const token = localStorage.getItem("token");
+      const res = await api.get(`${BASE_URL}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -147,11 +147,9 @@ export default function CalendarPage({ mode, toggleTheme }) {
   // ====== CRUD Handlers ======
   const handleSave = async () => {
     try {
-      // البيانات اللي راح نرسلها
       const payload = {
         noteContent: noteContent,
         note_date: selectedDate,
-        // أضف أي حقول أخرى مطلوبة حسب الـ API
       };
 
       console.log("📤 البيانات المرسلة:", payload);

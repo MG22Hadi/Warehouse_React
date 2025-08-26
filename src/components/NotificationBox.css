@@ -1,162 +1,163 @@
 html,
 body,
 #root {
- height: 100%;
- margin: 0;
- padding: 0;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 /* --- التعديلات الأساسية تبدأ هنا --- */
 
 .notification-page {
- display: flex;
- direction: rtl;
- align-items: flex-start;
- gap: 2rem; /* إضافة مسافة بين الأقسام والخط الفاصل */
+  display: flex;
+  direction: rtl;
+  align-items: flex-start;
+  gap: 2rem; /* إضافة مسافة بين الأقسام والخط الفاصل */
 }
 
 .left-side {
- flex: 2; /* إعطاء القسم اليساري مساحة أكبر (ثلثي العرض) */
- padding: 2rem;
- min-width: 0; /* مهم لمنع العناصر من التمدد بشكل خاطئ */
+  min-height: 800px;
+  flex: 2; /* إعطاء القسم اليساري مساحة أكبر (ثلثي العرض) */
+  padding: 2rem;
+  min-width: 0; /* مهم لمنع العناصر من التمدد بشكل خاطئ */
 }
 
 .right-side {
- flex: 1; /* إعطاء القسم اليميني مساحة أصغر (ثلث العرض) */
- padding: 2rem;
- min-width: 0;
+  flex: 1; /* إعطاء القسم اليميني مساحة أصغر (ثلث العرض) */
+  padding: 2rem;
+  min-width: 0;
 }
 
 .divider {
- width: 1px;
- background-color: #e1e1e1;
- align-self: stretch; /* تجعل الخط يمتد بكامل الطول */
+  width: 1px;
+  background-color: #e1e1e1;
+  align-self: stretch; /* تجعل الخط يمتد بكامل الطول */
 }
 
 /* --- باقي التصميم مع تحسينات بسيطة --- */
 
 .notification-container {
- background-color: #ffffff;
- border-radius: 20px;
- padding: 24px;
- margin: 24px auto;
- max-width: 1400px; /* زيادة عرض الحاوية قليلاً */
- height: auto;
- box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 24px;
+  margin: 24px auto;
+  max-width: 1400px; /* زيادة عرض الحاوية قليلاً */
+  height: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .section-title {
- font-size: 20px;
- font-weight: bold;
- margin-bottom: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
 }
 
 .orders-grid {
- display: grid;
- grid-template-columns: repeat(2, 1fr); /* شبكة من عمودين للقسم اليساري */
- gap: 24px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* شبكة من عمودين للقسم اليساري */
+  gap: 24px;
 }
 
 .right-side .order-card {
- width: 100%; /* اجعل البطاقات في القسم اليميني تملأ المساحة */
- max-width: none;
+  width: 100%; /* اجعل البطاقات في القسم اليميني تملأ المساحة */
+  max-width: none;
 }
 
 .order-card {
- border-radius: 12px;
- padding: 16px;
- box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
- transition: transform 0.2s;
- display: flex;
- flex-direction: column;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s;
+  display: flex;
+  flex-direction: column;
 }
 
 .order-card:hover {
-   transform: translateY(-2px);
+  transform: translateY(-2px);
 }
 
 .order-header {
- display: flex;
- justify-content: space-between;
- margin-bottom: 10px;
- font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-weight: bold;
 }
 
 .order-type {
- color: #ff8e29;
- font-size: 14px;
+  color: #ff8e29;
+  font-size: 14px;
 }
 
 .order-id,
 .order-id1 {
- font-size: 14px;
- color: #6f757e;
+  font-size: 14px;
+  color: #6f757e;
 }
 
 .order-info {
- flex-grow: 1; /* يجعل هذا القسم ينمو ليملأ المساحة المتاحة */
+  flex-grow: 1; /* يجعل هذا القسم ينمو ليملأ المساحة المتاحة */
 }
 
 .order-info p {
- margin: 8px 0;
+  margin: 8px 0;
 }
 
 .order-actions {
- display: flex;
- justify-content: space-between;
- align-items: center; /* محاذاة الأزرار بشكل أفضل */
- margin-top: 16px;
- gap: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* محاذاة الأزرار بشكل أفضل */
+  margin-top: 16px;
+  gap: 8px;
 }
 
 .view-btn,
 .approve-btn,
 .deny-btn {
- padding: 6px 12px;
- border: none;
- border-radius: 6px;
- cursor: pointer;
- font-size: 14px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
 }
 
 .view-btn {
- font-weight: bold;
- color: #333;
+  font-weight: bold;
+  color: #333;
 }
 
 .strong {
- color: #000;
- font-weight: bold;
+  color: #000;
+  font-weight: bold;
 }
 
 .deny-btn {
- color: red;
- background: none;
+  color: red;
+  background: none;
 }
 
 .approve-btn {
- color: green;
+  color: green;
   background: none;
 }
 
 .divider1 {
- width: 100%;
- background-color: #e1e1e1;
- height: 1px;
- margin-bottom: 15px;
+  width: 100%;
+  background-color: #e1e1e1;
+  height: 1px;
+  margin-bottom: 15px;
 }
 
 .all-requests-btn {
- background: #ff8e29;
- color: #fff;
- border: none;
- border-radius: 20px;
- padding: 8px 18px;
- font-size: 15px;
- font-weight: bold;
- cursor: pointer;
- box-shadow: 0 1px 4px #ff8e2922;
- transition: background-color 0.2s;
+  background: #ff8e29;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 18px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 1px 4px #ff8e2922;
+  transition: background-color 0.2s;
 }
 
 .all-requests-btn:hover {

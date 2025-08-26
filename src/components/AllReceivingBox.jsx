@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./AllNotesBox.css";
-import { Button } from "@mui/material";
-// import CreateReceivingNote from "./CreateReceivingNote"; // إذا عندك مكون إنشاء
+import { useTheme } from "@mui/material/styles";
 
 const AllReceivingBox = () => {
+  const theme = useTheme();
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
@@ -37,20 +37,28 @@ const AllReceivingBox = () => {
     navigate(`/ReceivingNotes/${id}`);
   };
 
+  const handleCreateNote = () => {
+    navigate("/CreateReceivingNote");
+  };
+
   return (
-    <div className="all-exit-box-container">
+    <div
+      className="all-exit-box-container"
+      style={{
+        backgroundColor: theme.palette.background.default,
+        color: theme.palette.text.primary,
+      }}
+    >
       <div className="create-note-button-wrapper">
-        <button className="create-note-button" onClick={() => setOpen(true)}>
-          إنشاء مذكرة استلام
+        <button className="create-note-button" onClick={handleCreateNote}>
+          إنشاء مذكرة إستلام
         </button>
-        {/* هون لو عامل مكون خاص بالإنشاء ضيفه */}
-        {/* <CreateReceivingNote open={open} onClose={() => setOpen(false)} /> */}
       </div>
 
       <div className="cards-row">
         {data.length === 0 ? (
           <div className="no-data-message">
-            <p>لا توجد مذكرات استلام بعد</p>
+            <p>لا توجد مذكرات إستلام بعد</p>
           </div>
         ) : (
           data.map((item, index) => (
@@ -65,27 +73,84 @@ const AllReceivingBox = () => {
               onKeyDown={(e) => {
                 if (e.key === "Enter") handleClick(item.id);
               }}
+              style={{
+                color: theme.palette.text.primary,
+                backgroundColor:
+                  index % 2 === 0
+                    ? theme.palette.background.note1
+                    : theme.palette.background.note2,
+              }}
             >
               <div className="card-content">
                 <div className="info-item">
-                  <span className="label">الرقم</span>
-                  <span className="value">{item.serial_number}</span>
+                  <span
+                    className="label"
+                    style={{ color: theme.palette.text.secondary }}
+                  >
+                    الرقم
+                  </span>
+                  <span
+                    className="value"
+                    style={{ color: theme.palette.text.primary }}
+                  >
+                    {item.serial_number}
+                  </span>
                 </div>
                 <div className="info-item">
-                  <span className="label">التاريخ</span>
-                  <span className="value">{item.date?.slice(0, 10)}</span>
+                  <span
+                    className="label"
+                    style={{ color: theme.palette.text.secondary }}
+                  >
+                    التاريخ
+                  </span>
+                  <span
+                    className="value"
+                    style={{ color: theme.palette.text.primary }}
+                  >
+                    {item.date?.slice(0, 10)}
+                  </span>
                 </div>
                 <div className="info-item">
-                  <span className="label">العدد</span>
-                  <span className="value">{item.items_count}</span>
+                  <span
+                    className="label"
+                    style={{ color: theme.palette.text.secondary }}
+                  >
+                    العدد
+                  </span>
+                  <span
+                    className="value"
+                    style={{ color: theme.palette.text.primary }}
+                  >
+                    {item.items_count}
+                  </span>
                 </div>
                 <div className="info-item">
-                  <span className="label">المستلم</span>
-                  <span className="value">{item.user?.name || "—"}</span>
+                  <span
+                    className="label"
+                    style={{ color: theme.palette.text.secondary }}
+                  >
+                    المستلم
+                  </span>
+                  <span
+                    className="value"
+                    style={{ color: theme.palette.text.primary }}
+                  >
+                    {item.supplier?.name || "—"}
+                  </span>
                 </div>
                 <div className="info-item">
-                  <span className="label">الحالة</span>
-                  <span className="value">مذكرة استلام</span>
+                  <span
+                    className="label"
+                    style={{ color: theme.palette.text.secondary }}
+                  >
+                    الحالة
+                  </span>
+                  <span
+                    className="value"
+                    style={{ color: theme.palette.text.primary }}
+                  >
+                    {item.purchase_request?.status}
+                  </span>
                 </div>
               </div>
             </div>

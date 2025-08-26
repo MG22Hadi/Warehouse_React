@@ -19,7 +19,7 @@ export default function ReceivingNotes({ mode, toggleTheme }) {
     const fetchNote = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/ReceivingNote/${id}/details`,
+          `http://localhost:8000/api/receivingNote/${id}`,
           {
             headers: {
               Accept: "application/json",
