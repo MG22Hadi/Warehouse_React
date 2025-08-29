@@ -1,56 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./NotificationBox.css";
-
-// ملاحظة: بما أن الكود لا يحتوي على MainLayout، قمت بإزالته.
-// إذا كان ضرورياً، يمكنك إضافته مرة أخرى بنفسك.
-
-const sampleOrdersData = [
-  {
-    id: "#طلب-2025-001",
-    user: "علي محمود",
-    itemCount: 3,
-    warehouse: "دمشق",
-    products: [
-      { code: "P001", name: "طابعة HP Laserjet", quantity: 1 },
-      { code: "P002", name: 'شاشة Samsung 24"', quantity: 2 },
-      { code: "M005", name: "لوحة مفاتيح لاسلكية", quantity: 1 },
-    ],
-  },
-  {
-    id: "#طلب-2025-002",
-    user: "فاطمة الزهراء",
-    itemCount: 2,
-    warehouse: "حلب",
-    products: [
-      { code: "L011", name: "لابتوب Dell Vostro", quantity: 1 },
-      { code: "A015", name: "حقيبة لابتوب", quantity: 1 },
-    ],
-  },
-  ...Array(4)
-    .fill(null)
-    .map((_, i) => ({
-      ...[
-        {
-          id: `#طلب-2025-00${3 + i * 2}`,
-          user: "أحمد خالد",
-          itemCount: 5,
-          warehouse: "حمص",
-          products: [{ code: "S033", name: "سماعات رأس", quantity: 10 }],
-        },
-        {
-          id: `#طلب-2025-00${4 + i * 2}`,
-          user: "سارة مراد",
-          itemCount: 1,
-          warehouse: "اللاذقية",
-          products: [{ code: "C021", name: "كيبورد ميكانيكي", quantity: 2 }],
-        },
-      ][i % 2],
-    })),
-];
+import axios from "axios";
+import { useTheme } from "@mui/material/styles";
 
 const NotificationBox = () => {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const [orders, setOrders] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
 
@@ -58,51 +15,166 @@ const NotificationBox = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [tempProducts, setTempProducts] = useState([]);
 
-  const handleViewDetails = (order) => {
-    setSelectedOrder(order);
-    // عمل نسخة من المنتجات للتعديل عليها دون التأثير على الأصل
-    setTempProducts(JSON.parse(JSON.stringify(order.products)));
-    setIsModalOpen(true);
-  };
-
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedOrder(null);
     setIsEditMode(false); // إعادة تعيين وضع التعديل عند الإغلاق
   };
 
-  const handleApprove = () => {
-    alert(`تمت الموافقة على الطلب رقم ${selectedOrder.id}`);
-    handleCloseModal();
+  const handleMarkAllAsRead = async () => {
+    try {
+      const res = await axios.get(
+        "http://localhost:8000/api/markAsRead-allNotification-S",
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        }
+      );
+      if (res.data.success) {
+        alert(res.data.message);
+
+        const updated = await axios.get(
+          "http://localhost:8000/api/allNotification-S",
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          }
+        );
+        setOrders(updated.data.data);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
-  const handleReject = () => {
-    alert(`تم رفض الطلب رقم ${selectedOrder.id}`);
-    handleCloseModal();
-  };
+
+  // const handleApprove = async () => {
+  //   try {
+  //     await axios.put(
+  //       `http://localhost:8000/api/materialRequests/${selectedOrder.id}/approve`,
+  //       {},
+  //       {
+  //         headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+  //       }
+  //     );
+  //     alert("تمت الموافقة على الطلب");
+  //     handleCloseModal();
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+
+  // const handleReject = async () => {
+  //   try {
+  //     await axios.put(
+  //       `http://localhost:8000/api/materialRequests/${selectedOrder.id}/reject`,
+  //       {},
+  //       {
+  //         headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+  //       }
+  //     );
+  //     alert("تم رفض الطلب");
+  //     handleCloseModal();
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
 
   // --- دوال جديدة خاصة بالتعديل ---
   const handleQuantityChange = (index, newQuantity) => {
     const updatedProducts = [...tempProducts];
     // تأكد من أن القيمة رقم وليست نصاً فارغاً
-    updatedProducts[index].quantity =
+    updatedProducts[index].quantity_approved =
       newQuantity === "" ? 0 : parseInt(newQuantity, 10);
     setTempProducts(updatedProducts);
   };
 
-  const handleSave = () => {
-    console.log("البيانات الجديدة:", tempProducts);
-    alert("تم حفظ التعديلات");
-    // هنا يمكنك إرسال البيانات المحدثة للباك إند
-    setIsEditMode(false); // الخروج من وضع التعديل
-  };
+  // const handleSave = async () => {
+  //   try {
+  //     const itemsForApi = tempProducts.map((p) => ({
+  //       id: p.id,
+  //       quantity_approved: p.quantity_approved,
+  //     }));
+  //     await axios.put(
+  //       `http://localhost:8000/api/materialRequests/${selectedOrder.id}/edit`,
+  //       {
+  //         items: itemsForApi,
+  //         notes: "تمت الموافقة مع تعديل الكمية",
+  //       },
+  //       {
+  //         headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+  //       }
+  //     );
+  //     alert("تم حفظ التعديلات");
+  //     setIsEditMode(false);
+  //     handleCloseModal();
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
 
-  const handleCancelEdit = () => {
-    setIsEditMode(false); // إلغاء وضع التعديل
+  // const handleCancelEdit = () => {
+  //   setIsEditMode(false); // إلغاء وضع التعديل
+  // };
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:8000/api/allNotification-S",
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          }
+        );
+        setOrders(res.data.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchOrders();
+  }, []);
+
+  const handleViewDetails = async (orderId) => {
+    try {
+      const res = await axios.get(
+        `http://localhost:8000/api/Notification/${orderId}`,
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        }
+      );
+
+      const orderData = res.data.data;
+      setSelectedOrder(orderData);
+
+      const formattedItems = orderData.items
+        ? orderData.items.map((item) => ({
+            id: item.id,
+            code: item.product.code,
+            name: item.product.name,
+            quantity_requested: item.quantity_requested,
+            quantity_approved: item.quantity_approved,
+            notes: item.notes,
+          }))
+        : [];
+      setTempProducts(formattedItems);
+      setIsModalOpen(true);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
     <>
-      <div className="notification-container">
+      <div
+        className="notification-container"
+        style={{ backgroundColor: theme.palette.background.paper }}
+      >
         <div className="notification-page">
           <div className="left-side">
             <div
@@ -116,11 +188,19 @@ const NotificationBox = () => {
               <h2 className="section-title" style={{ margin: 0 }}>
                 طلبات من المستخدمين
               </h2>
-              <button
+              {/* <button
                 className="all-requests-btn"
                 onClick={() => navigate("/AllUserRequests")}
               >
                 عرض كل طلبات المستخدمين
+              </button> */}
+              {/* زر قراءة */}
+              <button
+                className="all-requests-btn"
+                style={{ backgroundColor: "#FF8E29", color: "#fff" }}
+                onClick={handleMarkAllAsRead}
+              >
+                قراءة الكل
               </button>
             </div>
             <div
@@ -131,17 +211,16 @@ const NotificationBox = () => {
                 gap: "1rem",
               }}
             >
-              {sampleOrdersData.map((order, i) => {
-                const row = Math.floor(i / 2);
-                const col = i % 2;
-                const isOrange =
-                  (row % 2 === 0 && col === 0) || (row % 2 === 1 && col === 1);
+              {orders.map((order, index) => {
                 return (
                   <div
                     className="order-card"
-                    key={i}
+                    key={index}
                     style={{
-                      backgroundColor: isOrange ? "#FFF4EA" : "#F5F5F5",
+                      backgroundColor:
+                        index % 2 === 0
+                          ? theme.palette.background.car
+                          : theme.palette.background.card2,
                       padding: "1rem",
                       borderRadius: "12px",
                       width: "100%",
@@ -151,20 +230,49 @@ const NotificationBox = () => {
                   >
                     <div className="order-header">
                       <span className="order-type">📄 طلب مواد</span>
-                      <span className="order-id">{order.id}</span>
+                      <span className="order-id">{order.title}</span>
                     </div>
                     <div className="divider1"></div>
                     <div className="order-info">
-                      <p>
-                        <strong>من:</strong> {order.user}
+                      <p
+                        className="order-id1"
+                        style={{ color: theme.palette.text.primary }}
+                      >
+                        نوع :{" "}
+                        <span style={{ color: theme.palette.text.secondary }}>
+                          {order.type}
+                        </span>
                       </p>
-                      <p className="order-id1">عدد المواد: {order.itemCount}</p>
-                      <p className="order-id1">المستودع: {order.warehouse}</p>
+                      {/* <p style={{ color: theme.palette.text.primary }}>
+                        <strong>من:</strong>{" "}
+                        <span style={{ color: theme.palette.text.secondary }}>
+                          {order.requested_by?.name}
+                        </span>
+                      </p>
+                      <p
+                        className="order-id1"
+                        style={{ color: theme.palette.text.primary }}
+                      >
+                        عدد المواد:{" "}
+                        <span style={{ color: theme.palette.text.secondary }}>
+                          {order.itemCount}
+                        </span>
+                      </p>
+                      <p
+                        className="order-id1"
+                        style={{ color: theme.palette.text.primary }}
+                      >
+                        المستودع:{" "}
+                        <span style={{ color: theme.palette.text.secondary }}>
+                          {order.warehouse}
+                        </span>
+                      </p> */}
                     </div>
                     <div className="order-actions">
                       <button
                         className="view-btn"
-                        onClick={() => handleViewDetails(order)}
+                        onClick={() => handleViewDetails(order.id)}
+                        style={{ color: theme.palette.text.primary }}
                       >
                         ▼ عرض التفاصيل
                       </button>
@@ -180,12 +288,15 @@ const NotificationBox = () => {
             <p style={{ color: "gray", marginBottom: "1rem" }}>
               بعض المواد منخفضة المخزون، يرجى اتخاذ إجراء:
             </p>
-            {[...Array(3)].map((_, i) => (
-              <div style={{ marginBottom: "20px" }} key={i}>
+            {[...Array(3)].map((_, index) => (
+              <div style={{ marginBottom: "20px" }} key={index}>
                 <div
                   className="order-card"
                   style={{
-                    backgroundColor: i % 2 === 0 ? "#F5F5F5" : "#FFF4EA",
+                    backgroundColor:
+                      index % 2 === 0
+                        ? theme.palette.background.car
+                        : theme.palette.background.car1,
                   }}
                 >
                   <div className="order-header">
@@ -193,24 +304,69 @@ const NotificationBox = () => {
                   </div>
                   <div className="order-info" style={{ marginTop: "10px" }}>
                     <p>
-                      <span className="strong">الصنف:</span>{" "}
-                      <span className="order-id1">لابتوب HP</span>
+                      <span
+                        className="strong"
+                        style={{ color: theme.palette.text.primary }}
+                      >
+                        الصنف:
+                      </span>{" "}
+                      <span
+                        className="order-id1"
+                        style={{ color: theme.palette.text.secondary }}
+                      >
+                        لابتوب HP
+                      </span>
                     </p>
                     <p>
-                      <span className="strong">الرمز:</span>{" "}
-                      <span className="order-id1">ITM-2024-001</span>
+                      <span
+                        className="strong"
+                        style={{ color: theme.palette.text.primary }}
+                      >
+                        الرمز:
+                      </span>{" "}
+                      <span
+                        className="order-id1"
+                        style={{ color: theme.palette.text.secondary }}
+                      >
+                        ITM-2024-001
+                      </span>
                     </p>
                     <p>
-                      <span className="strong">المخزن:</span>{" "}
-                      <span className="order-id1">التخزين التقني</span>
+                      <span
+                        className="strong"
+                        style={{ color: theme.palette.text.primary }}
+                      >
+                        المخزن:
+                      </span>{" "}
+                      <span
+                        className="order-id1"
+                        style={{ color: theme.palette.text.secondary }}
+                      >
+                        التخزين التقني
+                      </span>
                     </p>
                     <p>
-                      <span className="strong">الكمية المتبقية:</span>{" "}
-                      <span className="order-id1">فقط 2</span>
+                      <span
+                        className="strong"
+                        style={{ color: theme.palette.text.primary }}
+                      >
+                        الكمية المتبقية:
+                      </span>{" "}
+                      <span
+                        className="order-id1"
+                        style={{ color: theme.palette.text.secondary }}
+                      >
+                        فقط 2
+                      </span>
                     </p>
                   </div>
                   <div className="order-actions">
-                    <button className="view-btn">🛒 اطلب الآن</button>
+                    <button
+                      className="view-btn"
+                      style={{ color: theme.palette.text.primary }}
+                    >
+                      🛒 اطلب الآن
+                    </button>
                     <button className="deny-btn"> تجاهل</button>
                   </div>
                 </div>
@@ -226,12 +382,25 @@ const NotificationBox = () => {
           onClick={handleCloseModal}
         >
           <div
-            className="bg-white rounded-lg shadow-xl p-6 w-fullmax-w-7xl mx-4"
+            className="rounded-lg shadow-xl p-6 w-fullmax-w-7xl mx-4"
             onClick={(e) => e.stopPropagation()}
             dir="rtl"
+            style={{
+              backgroundColor: theme.palette.background.paper,
+              color: theme.palette.text.primary,
+            }}
           >
-            <div className="flex justify-between items-center border-b pb-3 mb-4">
-              <h2 className="text-xl font-bold text-gray-800">
+            <div
+              className="flex justify-between items-center border-b pb-3 mb-4"
+              style={{
+                backgroundColor: theme.palette.background.paper,
+                color: theme.palette.text.primary,
+              }}
+            >
+              <h2
+                className="text-xl font-bol"
+                style={{ color: theme.palette.text.primary }}
+              >
                 📝 تفاصيل طلب المواد
               </h2>
               <button
@@ -242,16 +411,30 @@ const NotificationBox = () => {
               </button>
             </div>
             <div>
-              <div className="grid grid-cols-2  gap-y-2 text-sm text-gray-700 mb-4 p-3 bg-gray-50 rounded-md">
+              <div
+                className="grid grid-cols-2  gap-y-2 text-sm text-gray-700 mb-4 p-3 rounded-md"
+                style={{
+                  backgroundColor: theme.palette.background.paper,
+                  color: theme.palette.text.primary,
+                }}
+              >
                 <p>
-                  <strong>مقدم الطلب:</strong> {selectedOrder.user}
+                  <strong>مقدم الطلب:</strong>{" "}
+                  {selectedOrder.requested_by?.name}
                 </p>
                 <p>
                   <strong>من مستودع:</strong> {selectedOrder.warehouse}
                 </p>
               </div>
               <div className=" rounded-md overflow-hidden">
-                <table className="w-full table-fixed">
+                <table
+                  className="w-full table-fixed"
+                  style={{
+                    backgroundColor: theme.palette.background.default,
+                    color: theme.palette.text.primary,
+                    borderBottom: `1px solid ${theme.palette.divider}`,
+                  }}
+                >
                   <thead className="bg-gray-50">
                     <tr>
                       <th className="w-[25%] px-4 py-2 text-right text-xs font-medium text-white uppercase">
@@ -265,28 +448,47 @@ const NotificationBox = () => {
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {/* استخدام البيانات المؤقتة وعرض حقل الإدخال في وضع التعديل */}
+                  <tbody className="">
                     {tempProducts.map((product, index) => (
-                      <tr key={index}>
-                        <td className="px-4 py-2 text-sm break-words">
+                      <tr
+                        key={index}
+                        style={{
+                          borderColor: theme.palette.divider,
+                          backgroundColor: theme.palette.background.default,
+                        }}
+                      >
+                        <td
+                          className="px-4 py-2 text-sm break-words"
+                          style={{ color: theme.palette.text.third }}
+                        >
                           {product.code}
                         </td>
-                        <td className="px-4 py-2 text-sm break-words">
+                        <td
+                          className="px-4 py-2 text-sm break-words"
+                          style={{ color: theme.palette.text.third }}
+                        >
                           {product.name}
                         </td>
-                        <td className="px-4 py-2 text-sm text-center">
+                        <td
+                          className="px-4 py-2 text-sm text-center"
+                          style={{ color: theme.palette.text.third }}
+                        >
                           {isEditMode ? (
                             <input
                               type="number"
-                              value={product.quantity}
+                              value={product.quantity_approved} // أو quantity_requested
                               onChange={(e) =>
                                 handleQuantityChange(index, e.target.value)
                               }
-                              className="w-16 text-center border border-gray-300 rounded-md"
+                              style={{
+                                border: `1px solid ${theme.palette.divider}`,
+                                backgroundColor: theme.palette.background.paper,
+                                color: theme.palette.text.primary,
+                              }}
+                              className="w-16 text-center border rounded-md"
                             />
                           ) : (
-                            product.quantity
+                            product.quantity_approved
                           )}
                         </td>
                       </tr>
@@ -296,7 +498,7 @@ const NotificationBox = () => {
               </div>
             </div>
 
-            <div className="mt-6 flex justify-end gap-4">
+            {/* <div className="mt-6 flex justify-end gap-4">
               {isEditMode ? (
                 <>
                   <button
@@ -314,27 +516,32 @@ const NotificationBox = () => {
                 </>
               ) : (
                 <>
-                  <button
-                    onClick={handleReject}
-                    className=" text-red-600 font-bold py-2 px-6 rounded-lg hover:text-red-700 transition"
-                  >
-                    رفض
-                  </button>
-                  <button
-                    onClick={handleApprove}
-                    className=" text-green-600 font-bold py-2 px-6 rounded-lg hover:text-green-700 transition"
-                  >
-                    موافقة
-                  </button>
-                  <button
-                    onClick={() => setIsEditMode(true)}
-                    className=" text-[#FF8E29] font-bold py-2 px-6 rounded-lg hover:text-yellow-600 transition"
-                  >
-                    تعديل الكمية
-                  </button>
+                  {selectedOrder.status !== "approved" &&
+                    selectedOrder.status !== "rejected" && (
+                      <>
+                        <button
+                          onClick={handleReject}
+                          className=" text-red-600 font-bold py-2 px-6 rounded-lg hover:text-red-700 transition"
+                        >
+                          رفض
+                        </button>
+                        <button
+                          onClick={handleApprove}
+                          className=" text-green-600 font-bold py-2 px-6 rounded-lg hover:text-green-700 transition"
+                        >
+                          موافقة
+                        </button>
+                        <button
+                          onClick={() => setIsEditMode(true)}
+                          className=" text-[#FF8E29] font-bold py-2 px-6 rounded-lg hover:text-yellow-600 transition"
+                        >
+                          تعديل الكمية
+                        </button>
+                      </>
+                    )}
                 </>
               )}
-            </div>
+            </div> */}
           </div>
         </div>
       )}

@@ -126,7 +126,7 @@ export default function CreateCustodyNote({ mode, toggleTheme }) {
                   </th>
                   <th
                     colSpan="3"
-                    class="center-text"
+                    className="center-text"
                     style={{ borderColor: theme.palette.divider }}
                   >
                     الارجاع
@@ -206,7 +206,7 @@ export default function CreateCustodyNote({ mode, toggleTheme }) {
             <button
               style={{
                 background: theme.palette.primary.main,
-                color: theme.palette.text.default,
+                color: "#fff",
                 borderRadius: "30px",
                 padding: "12px 40px",
                 fontSize: "18px",
@@ -268,7 +268,7 @@ export default function CreateCustodyNote({ mode, toggleTheme }) {
                   <button
                     style={{
                       background: theme.palette.primary.main,
-                      color: theme.palette.text.default,
+                      color: "#fff",
                       borderRadius: "12px",
                       padding: "10px 32px",
                       fontSize: "16px",
@@ -282,7 +282,7 @@ export default function CreateCustodyNote({ mode, toggleTheme }) {
                   </button>
                   <button
                     style={{
-                      background: theme.palette.background.default,
+                      background: theme.palette.background.ma1,
                       color: theme.palette.text.primary,
                       borderRadius: "12px",
                       padding: "10px 32px",

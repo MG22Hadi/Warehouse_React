@@ -2,16 +2,18 @@ import React, { useState, useEffect } from "react";
 import MainLayout from "../MainLayout";
 import "./../components/Entry.css";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 
 export default function CreateExitNote({ mode, toggleTheme }) {
   const theme = useTheme();
+  const location = useLocation();
+  const orderId = location.state?.orderId;
   const [showModal, setShowModal] = useState(false);
   const [products, setProducts] = useState([]);
   const [warehouses, setWarehouses] = useState([]);
   const [selectedWarehouse, setSelectedWarehouse] = useState("");
-  const [materialRequestId, setMaterialRequestId] = useState("");
+  const [materialRequestId, setMaterialRequestId] = useState(orderId || "");
   const [generalNotes, setGeneralNotes] = useState("");
   const [entryDate, setEntryDate] = useState("");
   const token = localStorage.getItem("token");
@@ -59,18 +61,28 @@ export default function CreateExitNote({ mode, toggleTheme }) {
       .catch((err) => console.error(err));
   }, []);
 
-  // جلب المواد
   useEffect(() => {
+    if (!selectedWarehouse) {
+      setProducts([]); // ما في مستودع، ما في مواد
+      return;
+    }
+
     axios
-      .get("http://localhost:8000/api/products", {
+      .get(`http://localhost:8000/api/warehouses/show/${selectedWarehouse}`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
         },
       })
-      .then((res) => setProducts(res.data.data.products))
-      .catch((err) => console.error("خطأ بجلب المواد:", err));
-  }, []);
+      .then((res) => {
+        setProducts(
+          res.data?.data?.warehouse?.stock?.map((s) => s.product) ?? []
+        );
+      })
+      .catch((err) => {
+        console.error("خطأ بجلب المواد:", err);
+      });
+  }, [selectedWarehouse]);
 
   // تغيير المستودع: إعادة تعيين المواقع وجلبها لكل مادة مختارة
   const handleWarehouseChange = async (value) => {
@@ -249,7 +261,29 @@ export default function CreateExitNote({ mode, toggleTheme }) {
                 </span>
                 <select
                   value={selectedWarehouse}
-                  onChange={(e) => handleWarehouseChange(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setSelectedWarehouse(value ? Number(value) : "");
+                    if (!value) {
+                      // إذا لغى اختيار المستودع نفرغ كل المواد المختارة
+                      setItems(
+                        Array(11)
+                          .fill()
+                          .map((_, idx) => ({
+                            serial: idx + 1,
+                            product_id: "",
+                            product_code: "",
+                            product_unit: "",
+                            quantity: "",
+                            notes: "",
+                            location_id: "", // إذا كنت تستخدم location_id
+                          }))
+                      );
+                    } else {
+                      // إذا اخترت مستودع جديد، ممكن هنا تستدعي handleWarehouseChange الأصلي
+                      handleWarehouseChange(value);
+                    }
+                  }}
                   style={{
                     ...inputStyle,
                     flex: 1,
@@ -274,7 +308,7 @@ export default function CreateExitNote({ mode, toggleTheme }) {
                 </select>
               </p>
 
-              <p style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              {/* <p style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 <span
                   className="black"
                   style={{ color: theme.palette.text.primary }}
@@ -288,7 +322,7 @@ export default function CreateExitNote({ mode, toggleTheme }) {
                   onChange={(e) => setMaterialRequestId(e.target.value)}
                   style={{ ...inputStyle, flex: 1 }}
                 />
-              </p>
+              </p> */}
             </div>
 
             <div className="title">
@@ -409,34 +443,30 @@ export default function CreateExitNote({ mode, toggleTheme }) {
                     </td>
 
                     <td className="center-text" style={{ padding: "8px" }}>
-                      <select
-                        style={{
-                          ...inputStyle,
-                          backgroundColor: theme.palette.background.default,
-                          color: theme.palette.text.primary,
-                        }}
-                        value={row.product_id}
-                        onChange={(e) =>
-                          handleProductChange(rowIndex, e.target.value)
-                        }
-                        onFocus={(e) =>
-                          (e.target.style.border = "1px solid #FF8E29")
-                        }
-                        onBlur={(e) =>
-                          (e.target.style.border = "1px solid transparent")
-                        }
-                      >
-                        <option
-                          value=""
+                      {!selectedWarehouse ? (
+                        <span style={{ color: "#999", fontSize: "13px" }}>
+                          (لا يمكن اختيار مادة قبل تحديد المستودع)
+                        </span>
+                      ) : (
+                        <select
                           style={{
-                            backgroundColor: theme.palette.background.paper,
+                            ...inputStyle,
+                            backgroundColor: theme.palette.background.default,
                             color: theme.palette.text.primary,
                           }}
+                          value={row.product_id}
+                          onChange={(e) =>
+                            handleProductChange(rowIndex, e.target.value)
+                          }
+                          onFocus={(e) =>
+                            (e.target.style.border = "1px solid #FF8E29")
+                          }
+                          onBlur={(e) =>
+                            (e.target.style.border = "1px solid transparent")
+                          }
                         >
-                          اختر مادة...
-                        </option>
-                        {Array.isArray(products) &&
-                          products
+                          <option value="">اختر مادة...</option>
+                          {(products ?? [])
                             .filter(
                               (p) =>
                                 !selectedIds.includes(p.id) ||
@@ -447,7 +477,8 @@ export default function CreateExitNote({ mode, toggleTheme }) {
                                 {p.name}
                               </option>
                             ))}
-                      </select>
+                        </select>
+                      )}
                     </td>
 
                     <td className="center-text" style={{ padding: "8px" }}>
@@ -510,7 +541,7 @@ export default function CreateExitNote({ mode, toggleTheme }) {
             <button
               style={{
                 background: theme.palette.primary.main,
-                color: theme.palette.text.default,
+                color: "#fff",
                 borderRadius: "30px",
                 padding: "12px 40px",
                 fontSize: "18px",
@@ -574,7 +605,7 @@ export default function CreateExitNote({ mode, toggleTheme }) {
                   <button
                     style={{
                       background: theme.palette.primary.main,
-                      color: theme.palette.text.default,
+                      color: "#fff",
                       borderRadius: "12px",
                       padding: "10px 32px",
                       fontSize: "16px",
@@ -588,7 +619,7 @@ export default function CreateExitNote({ mode, toggleTheme }) {
                   </button>
                   <button
                     style={{
-                      background: theme.palette.background.default,
+                      background: theme.palette.background.ma1,
                       color: theme.palette.text.primary,
                       borderRadius: "12px",
                       padding: "10px 32px",

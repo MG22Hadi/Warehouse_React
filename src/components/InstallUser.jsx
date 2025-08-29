@@ -2,6 +2,7 @@ import React from "react";
 import { useTheme } from "@mui/material/styles";
 import "./InstallUser.css";
 
+
 const InstallUser = ({ report }) => {
   const theme = useTheme();
 
@@ -176,15 +177,6 @@ const InstallUser = ({ report }) => {
             style={{ color: theme.palette.text.secondary }}
           >
             {report.created_by?.name || "—"}
-          </span>
-        </p>
-        <p>
-          <span className="grand_total">المستلم:</span>
-          <span
-            className="price"
-            style={{ color: theme.palette.text.secondary }}
-          >
-            {report.approved_by?.name || "—"}
           </span>
         </p>
       </div>

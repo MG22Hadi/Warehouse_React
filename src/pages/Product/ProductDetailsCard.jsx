@@ -5,26 +5,43 @@ import { useTheme } from "@mui/material/styles";
 export default function ProductDetailsCard({ id }) {
   const theme = useTheme();
   const [product, setProduct] = useState(null);
+  const [movements, setMovements] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const token = localStorage.getItem("token");
+
+  // جلب تفاصيل المنتج
   const fetchProduct = async () => {
     try {
-      const token = localStorage.getItem("token");
       const response = await axios.get(`/api/products/show/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
       setProduct(response.data.data.product);
     } catch (error) {
       console.error("فشل في جلب تفاصيل المنتج", error);
-    } finally {
-      setLoading(false);
+    }
+  };
+
+  // جلب حركة المادة
+  const fetchMovements = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/product-movements/${id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setMovements(response.data.data || []);
+    } catch (error) {
+      console.error("فشل في جلب حركة المادة", error);
     }
   };
 
   useEffect(() => {
-    fetchProduct();
+    setLoading(true);
+    Promise.all([fetchProduct(), fetchMovements()]).finally(() =>
+      setLoading(false)
+    );
   }, [id]);
 
   if (loading) return <div>جاري تحميل تفاصيل المنتج...</div>;
@@ -35,13 +52,13 @@ export default function ProductDetailsCard({ id }) {
       dir="rtl"
       className="rounded-2xl p-8 shadow-xl"
       style={{
-        width: "991px",
-        height: "548px",
+        width: "1205px",
+        minHeight: "548px",
         backgroundColor: theme.palette.background.paper,
       }}
     >
       {/* العنوان وصورة المنتج */}
-      <div className="flex items-center gap-4 mb-4">
+      <div className="flex items-center gap-4 mb-6">
         <div className="w-[50px] h-[50px] rounded-md overflow-hidden">
           <img
             src="/assets/Product-icon.png"
@@ -57,13 +74,26 @@ export default function ProductDetailsCard({ id }) {
         </h2>
       </div>
 
-      {/* الوصف */}
-      <p
-        className="text-sm mb-6"
-        style={{ color: theme.palette.text.secondary }}
-      >
-        {product.description || "لا يوجد وصف."}
-      </p>
+      {/* مواصفات المنتج بدل الوصف */}
+      <div className="mb-6 text-sm grid grid-cols-2 gap-y-3 gap-x-8">
+        <p style={{ color: theme.palette.text.secondary }}>
+          <strong>الكود :</strong> {product.code}
+        </p>
+        <p style={{ color: theme.palette.text.secondary }}>
+          <strong>الكمية :</strong> {product.quantity}
+        </p>
+        <p style={{ color: theme.palette.text.secondary }}>
+          <strong>الوحدة :</strong> {product.unit || "قطعة"}
+        </p>
+        <p style={{ color: theme.palette.text.secondary }}>
+          <strong>التاريخ :</strong>{" "}
+          {new Date(product.created_at).toLocaleDateString("ar-EG")}
+        </p>
+        <p style={{ color: theme.palette.text.secondary }}>
+          <strong>الحالة :</strong>{" "}
+          {product.status === "active" ? "نشط" : "غير نشط"}
+        </p>
+      </div>
 
       {/* خط فاصل */}
       <div
@@ -71,9 +101,9 @@ export default function ProductDetailsCard({ id }) {
         style={{ backgroundColor: theme.palette.divider }}
       ></div>
 
-      {/* جدول التفاصيل */}
-      <div className="w-full overflow-x-auto">
-        <table className="w-full text-sm rounded-xl overflow-hidden">
+      {/* جدول حركة المادة */}
+      <div className="w-full">
+        <table className="w-full table-fixed text-sm rounded-xl overflow-hidden">
           <thead>
             <tr
               style={{
@@ -81,58 +111,86 @@ export default function ProductDetailsCard({ id }) {
                 color: theme.palette.primary.contrastText,
               }}
             >
-              {["الكود", "الكمية", "الوحدة", "السعر", "التاريخ", "الحالة"].map(
-                (title, index) => (
-                  <th key={index} className="py-3 px-4 text-right font-medium">
-                    {title}
-                  </th>
-                )
-              )}
+              {[
+                "النوع",
+                "الرقم التسلسلي",
+                "الكمية السابقة",
+                "الكمية الحالية",
+                "الكمية بعد التعديل",
+                "التاريخ",
+                "الملاحظات",
+              ].map((title, index) => (
+                <th
+                  key={index}
+                  className="py-3 px-2 text-right font-medium truncate"
+                >
+                  {title}
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
-            <tr
-              style={{
-                backgroundColor: theme.palette.action.hover,
-              }}
-            >
-              <td
-                className="py-3 px-4"
-                style={{ color: theme.palette.text.primary }}
-              >
-                {product.code}
-              </td>
-              <td
-                className="py-3 px-4"
-                style={{ color: theme.palette.text.primary }}
-              >
-                {product.quantity}
-              </td>
-              <td
-                className="py-3 px-4"
-                style={{ color: theme.palette.text.primary }}
-              >
-                {product.unit || "قطعة"}
-              </td>
-              <td
-                className="py-3 px-4"
-                style={{ color: theme.palette.text.primary }}
-              >
-                {product.price} ل.س
-              </td>
-              <td
-                className="py-3 px-4"
-                style={{ color: theme.palette.text.primary }}
-              >
-                {product.created_at}
-              </td>
-              <td
-                className="py-3 px-4"
-                style={{ color: theme.palette.text.primary }}
-              >
-                {product.status === "active" ? "نشط" : "غير نشط"}
-              </td>
-            </tr>
+            {movements.length === 0 ? (
+              <tr>
+                <td
+                  colSpan={7}
+                  className="py-4 text-center"
+                  style={{ color: theme.palette.text.secondary }}
+                >
+                  لا يوجد حركات لهذه المادة
+                </td>
+              </tr>
+            ) : (
+              movements.map((m) => (
+                <tr
+                  key={m.id}
+                  style={{ backgroundColor: theme.palette.action.hover }}
+                >
+                  <td
+                    className="py-3 px-2 truncate"
+                    style={{ borderColor: theme.palette.divider }}
+                  >
+                    {m.type}
+                  </td>
+                  <td
+                    className="py-3 px-2 truncate"
+                    style={{ borderColor: theme.palette.divider }}
+                  >
+                    {m.reference_serial}
+                  </td>
+                  <td
+                    className="py-3 px-2"
+                    style={{ borderColor: theme.palette.divider }}
+                  >
+                    {m.prv_quantity}
+                  </td>
+                  <td
+                    className="py-3 px-2"
+                    style={{ borderColor: theme.palette.divider }}
+                  >
+                    {m.note_quantity}
+                  </td>
+                  <td
+                    className="py-3 px-2"
+                    style={{ borderColor: theme.palette.divider }}
+                  >
+                    {m.after_quantity}
+                  </td>
+                  <td
+                    className="py-3 px-2 truncate"
+                    style={{ borderColor: theme.palette.divider }}
+                  >
+                    {new Date(m.date).toLocaleDateString("ar-EG")}
+                  </td>
+                  <td
+                    className="py-3 px-2 truncate"
+                    style={{ borderColor: theme.palette.divider }}
+                  >
+                    {m.notes}
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

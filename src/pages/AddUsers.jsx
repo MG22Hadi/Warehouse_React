@@ -128,7 +128,7 @@ export default function AddUsers({ mode, toggleTheme }) {
         dir="rtl"
         sx={{
           minHeight: "100vh",
-          bgcolor: theme.palette.background.default,
+          bgcolor: theme.palette.background.paper,
           color: theme.palette.text.primary,
           borderRadius: 6,
           px: 4,
@@ -300,7 +300,7 @@ export default function AddUsers({ mode, toggleTheme }) {
                   py: 1.5,
                   fontSize: "16px",
                   "&:hover": { bgcolor: "#ff7f00" },
-                  ml: "auto",
+                  mr: "auto",
                 }}
                 onClick={() =>
                   navigate("/AddUsers2", {

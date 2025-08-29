@@ -42,7 +42,7 @@ export default function CreateInstallBuyNote({ mode, toggleTheme }) {
     transition: "border 0.2s",
   };
 
-  const tableInputStyle = { ...inputStyle, width: "120px" };  
+  const tableInputStyle = { ...inputStyle, width: "120px" };
 
   const selectedWh = warehouses.find((wh) => wh.id === selectedWarehouse);
 
@@ -61,6 +61,8 @@ export default function CreateInstallBuyNote({ mode, toggleTheme }) {
         .filter((i) => i.product_name && i.quantity)
         .map((i) => ({
           product_name: i.product_name,
+          product_code: i.product_code,
+          product_unit: i.product_unit,
           quantity: parseFloat(i.quantity),
           unit_price: parseFloat(i.unit_price || 0),
           location_id: selectedWarehouse,
@@ -114,20 +116,20 @@ export default function CreateInstallBuyNote({ mode, toggleTheme }) {
   }, []);
 
   // عند اختيار مادة
-  const handleProductChange = (rowIndex, productId) => {
-    const selected = products.find((p) => p.id === parseInt(productId));
-    setItems((prev) => {
-      const updated = [...prev];
-      updated[rowIndex] = {
-        ...updated[rowIndex],
-        product_id: selected?.id || "",
-        product_code: selected?.code || "",
-        product_name: selected?.name || "",
-        product_unit: selected?.unit || "",
-      };
-      return updated;
-    });
-  };
+  // const handleProductChange = (rowIndex, productId) => {
+  //   const selected = products.find((p) => p.id === parseInt(productId));
+  //   setItems((prev) => {
+  //     const updated = [...prev];
+  //     updated[rowIndex] = {
+  //       ...updated[rowIndex],
+  //       product_id: selected?.id || "",
+  //       product_code: selected?.code || "",
+  //       product_name: selected?.name || "",
+  //       product_unit: selected?.unit || "",
+  //     };
+  //     return updated;
+  //   });
+  // };
 
   // تعديل الكمية والملاحظات
   const handleChange = (rowIndex, field, value) => {
@@ -318,53 +320,47 @@ export default function CreateInstallBuyNote({ mode, toggleTheme }) {
                     <td className="center-text">
                       <input
                         type="text"
-                        value={row.product_code || ""}
-                        readOnly
-                        style={{ inputStyle, color: theme.palette.text.third }}
-                      />
-                    </td>
-
-                    <td className="center-text">
-                      <select
+                        value={row.product_code}
+                        onChange={(e) =>
+                          handleChange(rowIndex, "product_code", e.target.value)
+                        }
+                        placeholder="كود المادة"
                         style={{
                           ...inputStyle,
-                          backgroundColor: theme.palette.background.default,
                           color: theme.palette.text.primary,
                         }}
-                        value={row.product_id || ""}
-                        onChange={(e) =>
-                          handleProductChange(rowIndex, e.target.value)
-                        }
-                      >
-                        <option
-                          value=""
-                          style={{
-                            backgroundColor: theme.palette.background.paper,
-                            color: theme.palette.text.primary,
-                          }}
-                        >
-                          اختر مادة...
-                        </option>
-                        {products
-                          .filter(
-                            (p) =>
-                              !selectedIds.includes(p.id) ||
-                              p.id === row.product_id
-                          )
-                          .map((p) => (
-                            <option key={p.id} value={p.id}>
-                              {p.name}
-                            </option>
-                          ))}
-                      </select>
+                      />
                     </td>
 
                     <td className="center-text">
                       <input
                         type="text"
-                        value={row.product_unit || ""}
-                        readOnly
-                        style={{ inputStyle, color: theme.palette.text.third }}
+                        value={row.product_name}
+                        onChange={(e) =>
+                          handleChange(rowIndex, "product_name", e.target.value)
+                        }
+                        placeholder="اسم المادة"
+                        style={{
+                          ...inputStyle,
+                          color: theme.palette.text.primary,
+                        }}
+                      />
+                    </td>
+
+                    <td className="center-text">
+                      <input
+                        type="text"
+                        value={row.product_unit}
+                        onChange={(e) =>
+                          handleChange(rowIndex, "product_unit", e.target.value)
+                        }
+                        placeholder="الوحدة"
+                        style={{
+                          ...inputStyle,
+                          color: theme.palette.text.primary,
+                          width: "80px",
+                          padding: "4px 6px", 
+                        }}
                       />
                     </td>
 
@@ -413,7 +409,7 @@ export default function CreateInstallBuyNote({ mode, toggleTheme }) {
           </div>
 
           {/* ===== Footer ===== */}
-          <div className="footer mt-8">
+          {/* <div className="footer mt-8">
             <p style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <span className="grand_total">أمين المستودع:</span>
               <input
@@ -423,14 +419,14 @@ export default function CreateInstallBuyNote({ mode, toggleTheme }) {
                 style={{ ...inputStyle, flex: 1 }}
               />
             </p>
-          </div>
+          </div> */}
 
           {/* ===== زر التأكيد ===== */}
           <div className="w-full flex justify-center mt-8">
             <button
               style={{
                 background: theme.palette.primary.main,
-                color: theme.palette.text.default,
+                color: "#fff",
                 borderRadius: "30px",
                 padding: "12px 40px",
                 fontSize: "18px",
@@ -494,7 +490,7 @@ export default function CreateInstallBuyNote({ mode, toggleTheme }) {
                   <button
                     style={{
                       background: theme.palette.primary.main,
-                      color: theme.palette.text.default,
+                      color: "#fff",
                       borderRadius: "12px",
                       padding: "10px 32px",
                       fontSize: "16px",
@@ -508,7 +504,7 @@ export default function CreateInstallBuyNote({ mode, toggleTheme }) {
                   </button>
                   <button
                     style={{
-                      background: theme.palette.background.default,
+                      background: theme.palette.background.ma1,
                       color: theme.palette.text.primary,
                       borderRadius: "12px",
                       padding: "10px 32px",

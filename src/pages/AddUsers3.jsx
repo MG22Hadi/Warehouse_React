@@ -237,7 +237,7 @@ export default function AddUsers3({ mode, toggleTheme }) {
                 variant="contained"
                 sx={{
                   bgcolor: theme.palette.primary.main,
-                  color: theme.palette.primary.contrastText,
+                  color: "#fff",
                   borderRadius: "30px",
                   px: 6,
                   py: 1.5,

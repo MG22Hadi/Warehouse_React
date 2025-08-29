@@ -1,6 +1,6 @@
 import React from "react";
 import MainLayout from "../MainLayout";
-import NotificationBox from "../components/NotificationBox"; // حسب مسار المشروع
+import NotificationBox from "../components/NotificationBox";
 
 export default function Notification({ mode, toggleTheme }) {
   return (

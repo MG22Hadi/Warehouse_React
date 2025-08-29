@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 import "../components/NotificationBox.css";
 import MainLayout from "../MainLayout.jsx";
 import axios from "axios";
+import { useTheme } from "@mui/material/styles";
 
 const AllUserRequests = ({ mode, toggleTheme }) => {
   const [orders, setOrders] = useState([]);
+  const theme = useTheme();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const navigate = useNavigate();
@@ -55,7 +57,7 @@ const AllUserRequests = ({ mode, toggleTheme }) => {
   };
 
   const handleCreateExitNote = () => {
-    navigate("/CreateExitNote");
+    navigate("/CreateExitNote", { state: { orderId: selectedOrder.id } });
   };
 
   return (
@@ -64,7 +66,12 @@ const AllUserRequests = ({ mode, toggleTheme }) => {
       toggleTheme={toggleTheme}
       pageTitle="طلبات من المستخدمين"
     >
-      <div className="notification-container">
+      <div
+        className="notification-container"
+        style={{
+          backgroundColor: theme.palette.background.paper,
+        }}
+      >
         <div
           className="left-side"
           style={{ margin: "0 auto", maxWidth: "100%" }}
@@ -82,36 +89,61 @@ const AllUserRequests = ({ mode, toggleTheme }) => {
             </h2>
           </div>
           <div className="orders-grid">
-            {orders.map((order, i) => {
-              const row = Math.floor(i / 2);
-              const col = i % 2;
-              const isOrange =
-                (row % 2 === 0 && col === 0) || (row % 2 === 1 && col === 1);
+            {orders.map((order, index) => {
               return (
                 <div
                   className="order-card"
-                  style={{ backgroundColor: isOrange ? "#FFF4EA" : "#F5F5F5" }}
+                  style={{
+                    backgroundColor:
+                      index % 2 === 0
+                        ? theme.palette.background.car
+                        : theme.palette.background.car1,
+                  }}
                   key={order.id}
                 >
                   <div className="order-header">
                     <span className="order-type">📄 طلب مواد</span>
-                    <span className="order-id">{order.serial_number}</span>
+                    <span
+                      className="order-id"
+                      style={{ color: theme.palette.text.secondary }}
+                    >
+                      {order.serial_number}
+                    </span>
                   </div>
                   <div className="divider1"></div>
                   <div className="order-info">
                     <p>
-                      <strong>من:</strong> {order.requested_by?.name}
+                      <strong style={{ color: theme.palette.text.primary }}>
+                        من:
+                      </strong>{" "}
+                      <span style={{ color: theme.palette.text.secondary }}>
+                        {order.requested_by?.name}
+                      </span>
                     </p>
-                    <p className="order-id1">الحالة: {order.status}</p>
-                    <p className="order-id1">
+                    <p
+                      className="order-id1"
+                      style={{ color: theme.palette.text.primary }}
+                    >
+                      الحالة:{" "}
+                      <span style={{ color: theme.palette.text.secondary }}>
+                        {order.status}
+                      </span>
+                    </p>
+                    <p
+                      className="order-id1"
+                      style={{ color: theme.palette.text.primary }}
+                    >
                       التاريخ:{" "}
-                      {new Date(order.date).toLocaleDateString("ar-SY")}
+                      <span style={{ color: theme.palette.text.secondary }}>
+                        {new Date(order.date).toLocaleDateString("ar-SY")}
+                      </span>
                     </p>
                   </div>
                   <div className="order-actions">
                     <button
                       className="view-btn"
                       onClick={() => handleViewDetails(order.id)}
+                      style={{ color: theme.palette.text.primary }}
                     >
                       ▼ عرض التفاصيل
                     </button>
@@ -130,9 +162,10 @@ const AllUserRequests = ({ mode, toggleTheme }) => {
           onClick={handleCloseModal}
         >
           <div
-            className="bg-white rounded-lg shadow-xl p-6 w-full max-w-7xl mx-4"
+            className=" rounded-lg shadow-xl p-6 w-full max-w-7xl mx-4"
             onClick={(e) => e.stopPropagation()}
             dir="rtl"
+            style={{ backgroundColor: theme.palette.background.paper }}
           >
             <div className="flex justify-between items-center border-b pb-3 mb-4">
               <h2 className="text-xl font-bold text-green-600">
@@ -173,17 +206,35 @@ const AllUserRequests = ({ mode, toggleTheme }) => {
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                       {selectedOrder.items.map((item, index) => (
-                        <tr key={index}>
-                          <td className="px-4 py-2 text-sm break-words">
+                        <tr
+                          key={index}
+                          style={{
+                            borderColor: theme.palette.divider,
+                            backgroundColor: theme.palette.background.default,
+                          }}
+                        >
+                          <td
+                            className="px-4 py-2 text-sm break-words"
+                            style={{ color: theme.palette.text.third }}
+                          >
                             {item.product.code}
                           </td>
-                          <td className="px-4 py-2 text-sm break-words">
+                          <td
+                            className="px-4 py-2 text-sm break-words"
+                            style={{ color: theme.palette.text.third }}
+                          >
                             {item.product.name}
                           </td>
-                          <td className="px-4 py-2 text-sm text-center">
+                          <td
+                            className="px-4 py-2 text-sm text-center"
+                            style={{ color: theme.palette.text.third }}
+                          >
                             {item.quantity_requested}
                           </td>
-                          <td className="px-4 py-2 text-sm text-center">
+                          <td
+                            className="px-4 py-2 text-sm text-center"
+                            style={{ color: theme.palette.text.third }}
+                          >
                             {item.quantity_approved}
                           </td>
                         </tr>

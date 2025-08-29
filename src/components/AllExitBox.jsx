@@ -37,7 +37,8 @@ const AllExitBox = () => {
   };
 
   const handleCreateNote = () => {
-    navigate("/CreateExitNote");
+    alert("اذهب الى صفحة الطلبات لانشاء مذكرة اخراج");
+    // navigate("/CreateExitNote");
   };
 
   return (

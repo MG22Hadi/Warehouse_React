@@ -51,7 +51,6 @@ export default function CreateReceivingNote({ mode, toggleTheme }) {
 
   const tableInputStyle = { ...inputStyle, width: "120px" };
 
-  // جلب البيانات من API
   useEffect(() => {
     axios
       .get("http://localhost:8000/api/warehouses/index", {
@@ -62,16 +61,6 @@ export default function CreateReceivingNote({ mode, toggleTheme }) {
       })
       .then((res) => res.data.success && setWarehouses(res.data.data))
       .catch((err) => console.error("خطأ بجلب المستودعات:", err));
-
-    axios
-      .get("http://localhost:8000/api/products", {
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => setProducts(res.data.data.products))
-      .catch((err) => console.error("خطأ بجلب المواد:", err));
 
     axios
       .get("http://localhost:8000/api/suppliers", {
@@ -94,8 +83,32 @@ export default function CreateReceivingNote({ mode, toggleTheme }) {
       .catch((err) => console.error("خطأ بجلب طلبات الشراء:", err));
   }, []);
 
+  useEffect(() => {
+    if (!selectedWarehouse) {
+      setProducts([]); // فرغ المنتجات إذا لم يتم اختيار مستودع
+      return;
+    }
+
+    axios
+      .get(`http://localhost:8000/api/warehouses/show/${selectedWarehouse}`, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) =>
+        setProducts(
+          res.data?.data?.warehouse?.stock?.map((s) => s.product) ?? []
+        )
+      )
+      .catch((err) => console.error("خطأ بجلب المواد:", err));
+  }, [selectedWarehouse]);
+
   // عند اختيار مادة
   const handleProductChange = (rowIndex, productId) => {
+    if (!selectedWarehouse || !selectedSupplier || !selectedPurchaseRequest)
+      return;
+
     const selected = products.find((p) => p.id === parseInt(productId));
     setItems((prev) => {
       const updated = [...prev];
@@ -246,7 +259,27 @@ export default function CreateReceivingNote({ mode, toggleTheme }) {
                 </span>
                 <select
                   value={selectedWarehouse}
-                  onChange={(e) => setSelectedWarehouse(Number(e.target.value))}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setSelectedWarehouse(value ? Number(value) : "");
+                    if (!value) {
+                      // إذا لغى اختيار المستودع نفرغ الحقول
+                      setItems(
+                        Array(11)
+                          .fill()
+                          .map((_, idx) => ({
+                            serial: idx + 1,
+                            product_id: "",
+                            product_code: "",
+                            product_name: "",
+                            product_unit: "",
+                            quantity: "",
+                            unit_price: "",
+                            notes: "",
+                          }))
+                      );
+                    }
+                  }}
                   style={{
                     ...inputStyle,
                     flex: 1,
@@ -426,38 +459,42 @@ export default function CreateReceivingNote({ mode, toggleTheme }) {
                       />
                     </td>
                     <td className="center-text">
-                      <select
-                        value={row.product_id}
-                        onChange={(e) =>
-                          handleProductChange(rowIndex, e.target.value)
-                        }
-                        style={{
-                          ...inputStyle,
-                          backgroundColor: theme.palette.background.default,
-                          color: theme.palette.text.primary,
-                        }}
-                      >
-                        <option
-                          value=""
+                      {!selectedWarehouse ? (
+                        <span style={{ color: "#999", fontSize: "13px" }}>
+                          (لا يمكن اختيار مادة قبل تحديد المستودع)
+                        </span>
+                      ) : (
+                        <select
                           style={{
-                            backgroundColor: theme.palette.background.paper,
+                            ...inputStyle,
+                            backgroundColor: theme.palette.background.default,
                             color: theme.palette.text.primary,
                           }}
+                          value={row.product_id}
+                          onChange={(e) =>
+                            handleProductChange(rowIndex, e.target.value)
+                          }
+                          onFocus={(e) =>
+                            (e.target.style.border = "1px solid #FF8E29")
+                          }
+                          onBlur={(e) =>
+                            (e.target.style.border = "1px solid transparent")
+                          }
                         >
-                          اختر مادة...
-                        </option>
-                        {products
-                          .filter(
-                            (p) =>
-                              !selectedIds.includes(p.id) ||
-                              p.id === row.product_id
-                          )
-                          .map((p) => (
-                            <option key={p.id} value={p.id}>
-                              {p.name}
-                            </option>
-                          ))}
-                      </select>
+                          <option value="">اختر مادة...</option>
+                          {(products ?? [])
+                            .filter(
+                              (p) =>
+                                !selectedIds.includes(p.id) ||
+                                p.id === row.product_id
+                            )
+                            .map((p) => (
+                              <option key={p.id} value={p.id}>
+                                {p.name}
+                              </option>
+                            ))}
+                        </select>
+                      )}
                     </td>
                     <td>
                       <input
@@ -516,7 +553,7 @@ export default function CreateReceivingNote({ mode, toggleTheme }) {
             <button
               style={{
                 background: theme.palette.primary.main,
-                color: theme.palette.text.default,
+                color: "#fff",
                 borderRadius: "30px",
                 padding: "12px 40px",
                 fontSize: "18px",
@@ -568,10 +605,11 @@ export default function CreateReceivingNote({ mode, toggleTheme }) {
                   <button
                     style={{
                       background: theme.palette.primary.main,
-                      color: theme.palette.text.default,
+                      color: "#fff",
                       borderRadius: "12px",
                       padding: "10px 32px",
                       border: "none",
+                      cursor: "pointer",
                     }}
                     onClick={handleSubmit}
                   >
@@ -579,11 +617,12 @@ export default function CreateReceivingNote({ mode, toggleTheme }) {
                   </button>
                   <button
                     style={{
-                      background: theme.palette.background.default,
+                      background: theme.palette.background.ma1,
                       color: theme.palette.text.primary,
                       borderRadius: "12px",
                       padding: "10px 32px",
                       border: "none",
+                      cursor: "pointer",
                     }}
                     onClick={() => setShowModal(false)}
                   >

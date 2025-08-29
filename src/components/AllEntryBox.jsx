@@ -128,13 +128,13 @@ const AllEntryBox = () => {
                     className="label"
                     style={{ color: theme.palette.text.secondary }}
                   >
-                    المستلم
+                    أمين المستودع
                   </span>
                   <span
                     className="value"
                     style={{ color: theme.palette.text.primary }}
                   >
-                    {item.user?.name || "—"}
+                    {item.created_by?.name || "—"}
                   </span>
                 </div>
                 <div className="info-item">
@@ -148,7 +148,7 @@ const AllEntryBox = () => {
                     className="value"
                     style={{ color: theme.palette.text.primary }}
                   >
-                    {item.action}
+                    {item.status || "__"}
                   </span>
                 </div>
               </div>

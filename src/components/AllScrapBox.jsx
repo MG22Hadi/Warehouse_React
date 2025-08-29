@@ -33,7 +33,7 @@ const AllScrapBox = () => {
   }, []);
 
   const handleClick = (id) => {
-    navigate(`/scrapNote/${id}`);
+    navigate(`/ScrapNotes/${id}`);
   };
 
   const handleCreateNote = () => {

@@ -76,7 +76,6 @@ import ScrapNoteManager from "./pages/ScrapNoteManager.jsx";
 import ViewUserOrSupplier from "./pages/ViewUserOrSupplier.jsx";
 import SortingMaterials from "./pages/SortingMaterials.jsx";
 
-
 export default function App() {
   const [mode, setMode] = useState("light");
   const theme = useMemo(() => getTheme(mode), [mode]);
@@ -122,6 +121,7 @@ export default function App() {
 
     { path: "/AllScrap", element: AllScrap },
     { path: "/ScrapNotes", element: ScrapNotes },
+    { path: "/ScrapNotes/:id", element: ScrapNotes },
     { path: "/CreateScrapNote", element: CreateScrapNote },
 
     { path: "/AllReceiving", element: AllReceiving },
@@ -165,15 +165,23 @@ export default function App() {
       path: "/InstallReportsStoreManager",
       element: InstallReportsStoreManager,
     },
+    {
+      path: "/InstallReportsStoreManager/:id",
+      element: InstallReportsStoreManager,
+    },
     { path: "/InstallReportsUserManager", element: InstallReportsUserManager },
+    {
+      path: "/InstallReportsUserManager/:id",
+      element: InstallReportsUserManager,
+    },
     { path: "/ScrapNoteManager", element: ScrapNoteManager },
+    { path: "/ScrapNoteManager/:id", element: ScrapNoteManager },
 
     { path: "/Notification", element: Notification },
     { path: "/Settings", element: Settings },
-    
+
     { path: "/ViewUserOrSupplier", element: ViewUserOrSupplier },
     { path: "/SortingMaterials", element: SortingMaterials },
-
   ];
 
   return (

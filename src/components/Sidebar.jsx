@@ -16,7 +16,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import BuildIcon from "@mui/icons-material/Build";
 import WarehouseIcon from "@mui/icons-material/Warehouse";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
-// --- 1. استيراد الأيقونة الجديدة ---
+import AssignmentIndIcon from "@mui/icons-material/AssignmentInd"; 
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 
 
@@ -30,6 +30,7 @@ const menuItems = [
   { icon: <DeleteIcon />, label: "مذكرات إتلاف", path: "/AllScrap" },
   { icon: <SettingsIcon />, label: "ضبط التركيب", path: "/AllInstallBox" },
   { icon: <ShoppingCartIcon />, label: "طلبات الشراء", path: "/AllPurchase" },
+  { icon: <AssignmentIndIcon />, label: "طلبات المستخدمين", path: "/AllUserRequests" },
   { icon: <AccountBoxIcon />, label: "العهدة الشخصية", path: "/AllCustody" },
   { icon: <NotificationsIcon />, label: "الإشعارات", path: "/Notification" },
   { icon: <PeopleIcon />, label: "المستخدمين", path: "/AllUsers" },
@@ -334,7 +335,7 @@ export default function Sidebar() {
 
           {/* 1. Render "طلبات الشراء" button from the array */}
           {menuItems
-            .filter((item) => ["طلبات الشراء"].includes(item.label))
+            .filter((item) => ["طلبات الشراء", "طلبات المستخدمين"].includes(item.label))
             .map((item, index) => (
               <li
                 key={index}

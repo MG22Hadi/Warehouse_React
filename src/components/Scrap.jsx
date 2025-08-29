@@ -67,11 +67,10 @@ const ScrapNote = ({ note }) => {
         className="table-wrapper"
         style={{
           borderColor: theme.palette.divider,
-          backgroundColor: theme.palette.background.default,
         }}
       >
         <table>
-          <thead>
+          <thead style={{ backgroundColor: theme.palette.background.default }}>
             <tr>
               <th
                 rowSpan="2"

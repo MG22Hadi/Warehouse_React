@@ -63,20 +63,25 @@ export default function CreateScrapNote({ mode, toggleTheme }) {
   }, []);
 
   useEffect(() => {
+    if (!selectedWarehouse) {
+      setProducts([]); // فرغ المنتجات إذا لم يتم اختيار مستودع
+      return;
+    }
+
     axios
-      .get("http://localhost:8000/api/products", {
+      .get(`http://localhost:8000/api/warehouses/show/${selectedWarehouse}`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
         },
       })
-      .then((res) => {
-        setProducts(res.data.data.products);
-      })
-      .catch((err) => {
-        console.error("خطأ بجلب المواد:", err);
-      });
-  }, []);
+      .then((res) =>
+        setProducts(
+          res.data?.data?.warehouse?.stock?.map((s) => s.product) ?? []
+        )
+      )
+      .catch((err) => console.error("خطأ بجلب المواد:", err));
+  }, [selectedWarehouse]);
 
   // عند اختيار مادة
   const handleProductChange = async (rowIndex, productId) => {
@@ -229,7 +234,25 @@ export default function CreateScrapNote({ mode, toggleTheme }) {
                 </span>
                 <select
                   value={selectedWarehouse}
-                  onChange={(e) => setSelectedWarehouse(Number(e.target.value))}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setSelectedWarehouse(value ? Number(value) : "");
+                    if (!value) {
+                      // إذا لغى اختيار المستودع نفرغ الحقول
+                      setItems(
+                        Array(11)
+                          .fill()
+                          .map((_, idx) => ({
+                            serial: idx + 1,
+                            product_id: "",
+                            product_code: "",
+                            product_unit: "",
+                            quantity: "",
+                            notes: "",
+                          }))
+                      );
+                    }
+                  }}
                   style={{
                     ...inputStyle,
                     flex: 1,
@@ -376,34 +399,30 @@ export default function CreateScrapNote({ mode, toggleTheme }) {
 
                     {/* اسم المادة */}
                     <td className="center-text" style={{ padding: "8px" }}>
-                      <select
-                        style={{
-                          ...inputStyle,
-                          backgroundColor: theme.palette.background.default,
-                          color: theme.palette.text.primary,
-                        }}
-                        value={row.product_id}
-                        onChange={(e) =>
-                          handleProductChange(rowIndex, e.target.value)
-                        }
-                        onFocus={(e) =>
-                          (e.target.style.border = "1px solid #FF8E29")
-                        }
-                        onBlur={(e) =>
-                          (e.target.style.border = "1px solid transparent")
-                        }
-                      >
-                        <option
-                          value=""
+                      {!selectedWarehouse ? (
+                        <span style={{ color: "#999", fontSize: "13px" }}>
+                          (لا يمكن اختيار مادة قبل تحديد المستودع)
+                        </span>
+                      ) : (
+                        <select
                           style={{
-                            backgroundColor: theme.palette.background.paper,
+                            ...inputStyle,
+                            backgroundColor: theme.palette.background.default,
                             color: theme.palette.text.primary,
                           }}
+                          value={row.product_id}
+                          onChange={(e) =>
+                            handleProductChange(rowIndex, e.target.value)
+                          }
+                          onFocus={(e) =>
+                            (e.target.style.border = "1px solid #FF8E29")
+                          }
+                          onBlur={(e) =>
+                            (e.target.style.border = "1px solid transparent")
+                          }
                         >
-                          اختر مادة...
-                        </option>
-                        {Array.isArray(products) &&
-                          products
+                          <option value="">اختر مادة...</option>
+                          {(products ?? [])
                             .filter(
                               (p) =>
                                 !selectedIds.includes(p.id) ||
@@ -414,7 +433,8 @@ export default function CreateScrapNote({ mode, toggleTheme }) {
                                 {p.name}
                               </option>
                             ))}
-                      </select>
+                        </select>
+                      )}
                     </td>
 
                     {/* الوحدة */}
@@ -480,7 +500,7 @@ export default function CreateScrapNote({ mode, toggleTheme }) {
             <button
               style={{
                 background: theme.palette.primary.main,
-                color: theme.palette.text.default,
+                color: "#fff",
                 borderRadius: "30px",
                 padding: "12px 40px",
                 fontSize: "18px",
@@ -544,7 +564,7 @@ export default function CreateScrapNote({ mode, toggleTheme }) {
                   <button
                     style={{
                       background: theme.palette.primary.main,
-                      color: theme.palette.text.default,
+                      color: "#fff",
                       borderRadius: "12px",
                       padding: "10px 32px",
                       fontSize: "16px",
@@ -558,7 +578,7 @@ export default function CreateScrapNote({ mode, toggleTheme }) {
                   </button>
                   <button
                     style={{
-                      background: theme.palette.background.default,
+                      background: theme.palette.background.ma1,
                       color: theme.palette.text.primary,
                       borderRadius: "12px",
                       padding: "10px 32px",

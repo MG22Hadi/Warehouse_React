@@ -225,15 +225,9 @@ export default function Products({ mode, toggleTheme }) {
                   className="flex justify-between text-sm font-medium"
                   style={{ color: theme.palette.text.secondary }}
                 >
-                  <div className="flex flex-col items-end">
-                    <span>السعر</span>
-                    <span style={{ color: theme.palette.success.main }}>
-                      {product.price} ر.س
-                    </span>
-                  </div>
                   <div className="flex flex-col items-start">
                     <span>التاريخ</span>
-                    <span>{product.created_at}</span>
+                    <span>{new Date(product.created_at).toLocaleDateString("ar-EG")}</span>
                   </div>
                 </div>
 
