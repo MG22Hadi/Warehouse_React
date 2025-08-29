@@ -2,6 +2,8 @@ import { useState, useMemo, useEffect } from "react";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
+import GlobalNotifier from "./utils/GlobalNotifier";
+
 import getTheme from "./Theme.jsx";
 
 // صفحات الدخول والتوثيق
@@ -187,6 +189,7 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <GlobalNotifier />
       <Router>
         <Routes>
           {/* مسارات الدخول */}

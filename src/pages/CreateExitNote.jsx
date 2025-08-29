@@ -203,6 +203,7 @@ export default function CreateExitNote({ mode, toggleTheme }) {
         },
       })
       .then((res) => {
+        alert("تم الإنشاء:", res.data);
         console.log("تم الإنشاء:", res.data);
         setShowModal(false);
         handleFinaleSubmit();

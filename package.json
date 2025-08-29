@@ -24,6 +24,7 @@
     "axios": "^1.9.0",
     "chart.js": "^4.4.9",
     "lucide-react": "^0.509.0",
+    "notistack": "^3.0.2",
     "react": "^19.1.0",
     "react-calendar": "^5.1.0",
     "react-chartjs-2": "^5.3.0",

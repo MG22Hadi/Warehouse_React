@@ -160,10 +160,10 @@ export default function CalendarPage({ mode, toggleTheme }) {
         },
       });
 
-      console.log("✅ تم الحفظ بنجاح:", res.data);
+      console.log("تم الحفظ بنجاح:", res.data);
       alert("تم الحفظ بنجاح");
     } catch (err) {
-      console.error("❌ خطأ أثناء الحفظ:", err);
+      console.error("خطأ أثناء الحفظ:", err);
 
       if (err.response) {
         console.error("📩 رد السيرفر:", err.response.data);
@@ -176,7 +176,7 @@ export default function CalendarPage({ mode, toggleTheme }) {
         console.error("📡 لم يتم الرد من السيرفر");
         alert("لم يتم الرد من السيرفر");
       } else {
-        console.error("⚠️ خطأ غير متوقع:", err.message);
+        console.error("خطأ غير متوقع:", err.message);
         alert(`خطأ غير متوقع: ${err.message}`);
       }
     }

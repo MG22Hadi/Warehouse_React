@@ -90,10 +90,24 @@ export default function Warehouses({ mode, toggleTheme }) {
     }
 
     try {
+      let response;
       if (editingWarehouse) {
-        await api.put(`${BASE_URL}/update/${editingWarehouse.id}`, formData);
+        response = await api.put(
+          `${BASE_URL}/update/${editingWarehouse.id}`,
+          formData
+        );
       } else {
-        await api.post(`${BASE_URL}/store`, formData);
+        response = await api.post(`${BASE_URL}/store`, formData);
+      }
+      if (response.data.success) {
+        alert(
+          response.data.message ||
+            (editingWarehouse
+              ? "تم تعديل المستودع بنجاح"
+              : "تم إضافة المستودع بنجاح")
+        );
+      } else {
+        alert(response.data.message || "حدث خطأ أثناء العملية");
       }
       fetchWarehouses();
       closeModal();
@@ -125,22 +139,43 @@ export default function Warehouses({ mode, toggleTheme }) {
     }
 
     try {
+      let response;
+      if (
+        !formDataSection.name.trim() ||
+        !formDataSection.manager ||
+        !formDataSection.description.trim()
+      ) {
+        alert("يرجى ملء جميع الحقول");
+        return;
+      }
       if (editingSection) {
         // تعديل القسم
-        await api.put(`${BASE_URL_SECTIONS}/update/${editingSection.id}`, {
-          name: formDataSection.name,
-          description: formDataSection.description,
-          manager_id: storedUser?.id,
-          warehouse_id: formDataSection.warehouse,
-        });
+        response = await api.put(
+          `${BASE_URL_SECTIONS}/update/${editingSection.id}`,
+          {
+            name: formDataSection.name,
+            description: formDataSection.description,
+            manager_id: storedUser?.id,
+            warehouse_id: formDataSection.warehouse,
+          }
+        );
       } else {
         // إضافة قسم جديد
-        await api.post(`${BASE_URL_SECTIONS}/store`, {
+        response = await api.post(`${BASE_URL_SECTIONS}/store`, {
           name: formDataSection.name,
           manager_id: storedUser?.id,
           warehouse_id: formDataSection.warehouse,
           description: formDataSection.description,
         });
+      }
+
+      if (response.data.success) {
+        alert(
+          response.data.message ||
+            (editingSection ? "تم تعديل القسم بنجاح" : "تم إضافة القسم بنجاح")
+        );
+      } else {
+        alert(response.data.message || "حدث خطأ أثناء العملية");
       }
 
       fetchSections(); // تحديث القائمة بعد الإضافة أو التعديل
@@ -158,15 +193,23 @@ export default function Warehouses({ mode, toggleTheme }) {
 
   const handleDeleteConfirm = async () => {
     try {
+      let response;
       if (deleteModal.type === "warehouse") {
-        await api.delete(`${BASE_URL}/destroy/${deleteModal.id}`);
+        response = await api.delete(`${BASE_URL}/destroy/${deleteModal.id}`);
+        if (response.data.success)
+          alert(response.data.message || "تم حذف المستودع بنجاح");
         fetchWarehouses();
       } else if (deleteModal.type === "section") {
-        await api.delete(`${BASE_URL_SECTIONS}/delete/${deleteModal.id}`);
+        response = await api.delete(
+          `${BASE_URL_SECTIONS}/delete/${deleteModal.id}`
+        );
+        if (response.data.success)
+          alert(response.data.message || "تم حذف القسم بنجاح");
         fetchSections();
       }
     } catch (error) {
       console.error("خطأ أثناء الحذف", error);
+      alert(error.response?.data?.message || "حدث خطأ أثناء الاتصال بالسيرفر");
     } finally {
       setDeleteModal({ show: false, id: null, type: null });
     }
@@ -297,14 +340,30 @@ export default function Warehouses({ mode, toggleTheme }) {
                   </button>
                 </div>
 
-                <h3 className="text-lg font-bold mb-1" style={{ color: theme.palette.text.primary }}>{section.name}</h3>
-                <p className="text-sm text-gray-600 mb-1" style={{ color: theme.palette.text.secondary }}>
+                <h3
+                  className="text-lg font-bold mb-1"
+                  style={{ color: theme.palette.text.primary }}
+                >
+                  {section.name}
+                </h3>
+                <p
+                  className="text-sm text-gray-600 mb-1"
+                  style={{ color: theme.palette.text.secondary }}
+                >
                   المدير: {section.manager}
                 </p>
-                <p className="text-sm text-gray-600 mb-1" style={{ color: theme.palette.text.secondary }}>
+                <p
+                  className="text-sm text-gray-600 mb-1"
+                  style={{ color: theme.palette.text.secondary }}
+                >
                   المستودع: {section.warehouse}
                 </p>
-                <p className="text-sm text-gray-500" style={{ color: theme.palette.text.secondary }}>{section.description}</p>
+                <p
+                  className="text-sm text-gray-500"
+                  style={{ color: theme.palette.text.secondary }}
+                >
+                  {section.description}
+                </p>
               </div>
             ))}
           </div>
@@ -347,7 +406,11 @@ export default function Warehouses({ mode, toggleTheme }) {
               هل أنت متأكد من الحذف؟
             </h2>
             <p
-              style={{ marginBottom: "30px", fontSize: "16px", color: theme.palette.text.secondary, }}
+              style={{
+                marginBottom: "30px",
+                fontSize: "16px",
+                color: theme.palette.text.secondary,
+              }}
             >
               لا يمكن التراجع عن هذه العملية
             </p>

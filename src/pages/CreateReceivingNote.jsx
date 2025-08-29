@@ -96,11 +96,12 @@ export default function CreateReceivingNote({ mode, toggleTheme }) {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then((res) =>
+      .then((res) => {
         setProducts(
           res.data?.data?.warehouse?.stock?.map((s) => s.product) ?? []
-        )
-      )
+        );
+        alert(res.data.message);
+      })
       .catch((err) => console.error("خطأ بجلب المواد:", err));
   }, [selectedWarehouse]);
 

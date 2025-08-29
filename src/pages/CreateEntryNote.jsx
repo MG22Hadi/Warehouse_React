@@ -144,11 +144,13 @@ export default function CreateEntryNote({ mode, toggleTheme }) {
         },
       })
       .then((res) => {
+        alert("تم الإنشاء:", res.data);
         console.log("تم الإنشاء:", res.data);
         setShowModal(false);
         handleFinaleSubmit();
       })
       .catch((err) => {
+        alert("خطأ أثناء الإنشاء:", err);
         console.error("خطأ أثناء الإنشاء:", err);
       });
   };

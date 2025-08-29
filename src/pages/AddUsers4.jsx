@@ -71,6 +71,7 @@ export default function AddUsers4({ mode, toggleTheme }) {
       }
 
       if (response.data.success) {
+        alert(response.data.success);
         navigate("/AllUsers");
       } else {
         alert("حدث خطأ: " + response.data.message);

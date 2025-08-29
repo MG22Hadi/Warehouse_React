@@ -85,7 +85,7 @@ export default function Settings({ mode, toggleTheme }) {
       );
 
       if (response.data.success) {
-        alert("تم تحديث بيانات أمين المستودع بنجاح");
+        alert("تم تحديث البيانات بنجاح");
         navigate("/Settings");
         setUserData(response.data.data);
       }

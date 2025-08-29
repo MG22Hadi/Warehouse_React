@@ -157,6 +157,7 @@ export default function CreatePurchaseNote({ mode, toggleTheme }) {
         },
       })
       .then((res) => {
+        alert("تم الإنشاء:", res.data.message);
         console.log("تم الإنشاء:", res.data);
         setShowModal(false);
         handleFinaleSubmit();

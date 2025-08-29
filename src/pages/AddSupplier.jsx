@@ -5,9 +5,11 @@ import MainLayout from "../MainLayout";
 import PersonIcon from "@mui/icons-material/Person";
 import PhoneIcon from "@mui/icons-material/Phone";
 import axios from "axios";
+import { useSnackbar } from "notistack";
 import { useTheme } from "@mui/material/styles";
 
 export default function AddSupplier({ mode, toggleTheme }) {
+  const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
   const navigate = useNavigate();
   const { id } = useParams(); // هنا ناخد ال id من الرابط
@@ -21,7 +23,7 @@ export default function AddSupplier({ mode, toggleTheme }) {
       const fetchSupplier = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:8000/api/supplier/show/${id}`, // استخدام API الصحيح
+            `http://localhost:8000/api/supplier/show/${id}`,
             {
               headers: {
                 Accept: "application/json",
@@ -30,8 +32,8 @@ export default function AddSupplier({ mode, toggleTheme }) {
             }
           );
           const supplier = response.data.data;
-          setName(supplier.name);
-          setContact(supplier.contact_info);
+          setName(supplier.name || "");
+          setContact(supplier.contact_info || "");
         } catch (error) {
           console.error("خطأ في جلب بيانات المورد:", error);
         }
@@ -71,11 +73,23 @@ export default function AddSupplier({ mode, toggleTheme }) {
       }
 
       if (response.data.success) {
+        enqueueSnackbar(id ? "تم حفظ التعديلات بنجاح" : "تمت الإضافة بنجاح", {
+          variant: "success",
+        });
         navigate("/AllUsers");
+      } else {
+        enqueueSnackbar(response.data.message || "حدث خطأ غير متوقع", {
+          variant: "error",
+        });
       }
     } catch (error) {
       console.error("خطأ في الحفظ:", error);
-      alert("حدث خطأ أثناء حفظ المورد");
+      const serverMessage =
+        error.response?.data?.message || error.message || "فشل الاتصال بالخادم";
+      enqueueSnackbar(`حدث خطأ أثناء حفظ المورد: ${serverMessage}`, {
+        variant: "error",
+        autoHideDuration: 6000,
+      });
     }
   };
 
@@ -172,11 +186,11 @@ export default function AddSupplier({ mode, toggleTheme }) {
               }}
               sx={{
                 borderRadius: "30px",
-                                backgroundColor: theme.palette.background.note1,
+                backgroundColor: theme.palette.background.note1,
                 boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
                 "& .MuiOutlinedInput-root": {
                   borderRadius: "30px",
-                                  backgroundColor: theme.palette.background.note1,
+                  backgroundColor: theme.palette.background.note1,
                   "& fieldset": { border: "none" },
                 },
               }}

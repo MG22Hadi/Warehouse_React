@@ -78,14 +78,14 @@ export default function CreateInstallBuyNote({ mode, toggleTheme }) {
         },
       })
       .then((res) => {
+        alert(res.data.message);
         console.log("تم الإنشاء:", res.data);
         setShowModal(false);
-        alert(res.data.message);
         navigate("/AllInstallStore");
       })
       .catch((err) => {
-        console.error("خطأ أثناء الإنشاء:", err);
         alert("حدث خطأ أثناء إنشاء المذكرة");
+        console.error("خطأ أثناء الإنشاء:", err);
       });
   };
 
