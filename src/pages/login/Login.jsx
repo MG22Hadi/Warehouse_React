@@ -56,10 +56,10 @@ export default function Login({ mode, toggleTheme }) {
 
         switch (result.data.role) {
           case "manager":
-            navigate("/dashboard");
+            navigate("/Manager");
             break;
           case "warehouseKeeper":
-            navigate("/warehouses");
+            navigate("/dashboard");
             break;
           case "user":
             navigate("/data-entry");

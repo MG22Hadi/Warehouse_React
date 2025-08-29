@@ -97,16 +97,16 @@ export default function SignUp({ mode, toggleTheme }) {
 
         switch (result.data.role) {
           case "manager":
-            navigate("/dashboard");
+            navigate("/Manager");
             break;
           case "warehouseKeeper":
-            navigate("/warehouses");
+            navigate("/dashboard");
             break;
           case "user":
             navigate("/data-entry");
             break;
           default:
-            navigate("/login");
+            navigate("/");
         }
       } else {
         if (result.errors) {

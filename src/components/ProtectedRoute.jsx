@@ -1,16 +1,28 @@
+import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
+import NotFound from "../components/NotFound";
 
 export default function ProtectedRoute({ children, allowedRoles }) {
   const token = localStorage.getItem("token");
-  const role = localStorage.getItem("role");
+  let role = localStorage.getItem("role");
   const location = useLocation();
 
-  if (!token) {
-    return <Navigate to="/login" replace state={{ from: location }} />;
+  // إذا خزنت الـ role كـ JSON (مثلاً {"role":"warehouse"}) حاول تفك الـ JSON بأمان:
+  try {
+    const maybe = JSON.parse(role);
+    if (maybe && typeof maybe === "object" && maybe.role) role = maybe.role;
+  } catch (e) {
+    // إذا مش JSON نكمل بالقيمة كما هي
   }
 
+  // غير مسجل -> روح للـ login (عندك login على "/")
+  if (!token) {
+    return <Navigate to="/" replace state={{ from: location }} />;
+  }
+
+  // ما عنده صلاحية -> نعرض 404 (حسب طلبك نُخفي الصفحة بدل 403)
   if (allowedRoles && !allowedRoles.includes(role)) {
-    return <Navigate to="/unauthorized" replace />;
+    return <NotFound />;
   }
 
   return children;
