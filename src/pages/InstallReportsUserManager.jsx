@@ -39,11 +39,29 @@ export default function InstallReportsUserManager({ mode, toggleTheme }) {
     );
   }
 
+  if (loading) {
+    return (
+      <div
+        className="flex items-center justify-center h-screen"
+        style={{ backgroundColor: theme.palette.background.default }}
+      >
+        <p style={{ color: theme.palette.text.primary }}>
+          جاري تحميل البيانات...
+        </p>
+      </div>
+    );
+  }
+
   if (!report) {
     return (
-      <p className="min-h-screen w-full bg-[#FFF4EA] p-8 flex items-center justify-center">
-        لا يوجد تفاصيل لعرضها
-      </p>
+      <div
+        className="flex items-center justify-center h-screen"
+        style={{ backgroundColor: theme.palette.background.default }}
+      >
+        <p style={{ color: theme.palette.text.primary }}>
+          لا يوجد تفاصيل لعرضها
+        </p>
+      </div>
     );
   }
 

@@ -102,112 +102,156 @@ export default function App() {
 
   // باقي الصفحات
   const appRoutes = [
-    { path: "/dashboard", element: Dashboard, allowedRoles: ["warehouse"] },
-    { path: "/products", element: Products, allowedRoles: ["warehouse"] },
+    {
+      path: "/dashboard",
+      element: Dashboard,
+      allowedRoles: ["warehouseKeeper"],
+    },
+    { path: "/products", element: Products, allowedRoles: ["warehouseKeeper"] },
     {
       path: "/products/warehouse/:warehouseId",
       element: Products,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper"],
     },
     {
       path: "/products/details/:id",
       element: ProductDetailsCard,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper"],
     },
     {
       path: "/products/:id",
       element: ProductDetailsCard,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper"],
     },
-    { path: "/calendar", element: CalendarPage, allowedRoles: ["warehouse"] },
+    {
+      path: "/calendar",
+      element: CalendarPage,
+      allowedRoles: ["warehouseKeeper"],
+    },
 
-    { path: "/AddProduct1", element: AddProduct1, allowedRoles: ["warehouse"] },
-    { path: "/AddProduct2", element: AddProduct2, allowedRoles: ["warehouse"] },
-    { path: "/AddProduct3", element: AddProduct3, allowedRoles: ["warehouse"] },
+    {
+      path: "/AddProduct1",
+      element: AddProduct1,
+      allowedRoles: ["warehouseKeeper"],
+    },
+    {
+      path: "/AddProduct2",
+      element: AddProduct2,
+      allowedRoles: ["warehouseKeeper"],
+    },
+    {
+      path: "/AddProduct3",
+      element: AddProduct3,
+      allowedRoles: ["warehouseKeeper"],
+    },
 
-    { path: "/AllEntry", element: AllEntry, allowedRoles: ["warehouse"] },
-    { path: "/EntryNotes", element: EntryNotes, allowedRoles: ["warehouse"] },
+    { path: "/AllEntry", element: AllEntry, allowedRoles: ["warehouseKeeper"] },
+    {
+      path: "/EntryNotes",
+      element: EntryNotes,
+      allowedRoles: ["warehouseKeeper"],
+    },
     {
       path: "/EntryNotes/:id",
       element: EntryNotes,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper"],
     },
     {
       path: "/CreateEntryNote",
       element: CreateEntryNote,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper"],
     },
 
-    { path: "/AllExit", element: AllExit, allowedRoles: ["warehouse"] },
-    { path: "/ExitNotes", element: ExitNotes, allowedRoles: ["warehouse"] },
-    { path: "/ExitNotes/:id", element: ExitNotes, allowedRoles: ["warehouse"] },
+    { path: "/AllExit", element: AllExit, allowedRoles: ["warehouseKeeper"] },
+    {
+      path: "/ExitNotes",
+      element: ExitNotes,
+      allowedRoles: ["warehouseKeeper"],
+    },
+    {
+      path: "/ExitNotes/:id",
+      element: ExitNotes,
+      allowedRoles: ["warehouseKeeper"],
+    },
     {
       path: "/CreateExitNote",
       element: CreateExitNote,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper"],
     },
 
-    { path: "/AllScrap", element: AllScrap, allowedRoles: ["warehouse"] },
-    { path: "/ScrapNotes", element: ScrapNotes, allowedRoles: ["warehouse"] },
+    { path: "/AllScrap", element: AllScrap, allowedRoles: ["warehouseKeeper"] },
+    {
+      path: "/ScrapNotes",
+      element: ScrapNotes,
+      allowedRoles: ["warehouseKeeper"],
+    },
     {
       path: "/ScrapNotes/:id",
       element: ScrapNotes,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper"],
     },
     {
       path: "/CreateScrapNote",
       element: CreateScrapNote,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper"],
     },
 
     {
       path: "/AllReceiving",
       element: AllReceiving,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper"],
     },
     {
       path: "/ReceivingNotes",
       element: ReceivingNotes,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper"],
     },
     {
       path: "/ReceivingNotes/:id",
       element: ReceivingNotes,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper"],
     },
     {
       path: "/CreateReceivingNote",
       element: CreateReceivingNote,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper"],
     },
 
-    { path: "/AllInstall", element: AllInstall, allowedRoles: ["warehouse"] },
+    {
+      path: "/AllInstall",
+      element: AllInstall,
+      allowedRoles: ["warehouseKeeper"],
+    },
     {
       path: "/InstallReportsUser/:id",
       element: InstallReportsUser,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper"],
     },
     {
       path: "/InstallReportsStore/:id",
       element: InstallReportsStore,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper"],
     },
 
-    { path: "/AllPurchase", element: AllPurchase, allowedRoles: ["warehouse"] },
+    {
+      path: "/AllPurchase",
+      element: AllPurchase,
+      allowedRoles: ["warehouseKeeper"],
+    },
     {
       path: "/PurchaseRequests",
       element: PurchaseRequests,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper"],
     },
     {
       path: "/PurchaseRequests/:id",
       element: PurchaseRequests,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper"],
     },
     {
       path: "/CreatePurchaseNote",
       element: CreatePurchaseNote,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper"],
     },
 
     {
@@ -215,85 +259,113 @@ export default function App() {
       element: CustodyManagement,
       allowedRoles: ["warehouse"],
     },
-    { path: "/AllCustody", element: AllCustody, allowedRoles: ["warehouse"] },
+    {
+      path: "/AllCustody",
+      element: AllCustody,
+      allowedRoles: ["warehouseKeeper"],
+    },
     {
       path: "/AllUserRequests",
       element: AllUserRequests,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper"],
     },
     {
       path: "/CreateCustodyNote",
       element: CreateCustodyNote,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper"],
     },
 
-    { path: "/warehouses", element: Warehouses, allowedRoles: ["warehouse"] },
-    { path: "/AddSupplier", element: AddSupplier, allowedRoles: ["warehouse"] },
+    {
+      path: "/warehouses",
+      element: Warehouses,
+      allowedRoles: ["warehouseKeeper"],
+    },
+    {
+      path: "/AddSupplier",
+      element: AddSupplier,
+      allowedRoles: ["warehouseKeeper"],
+    },
     {
       path: "/AddSupplier/:id",
       element: AddSupplier,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper"],
     },
 
-    { path: "/AddUsers", element: AddUsers, allowedRoles: ["warehouse"] },
-    { path: "/AddUsers/:id", element: AddUsers, allowedRoles: ["warehouse"] },
-    { path: "/AddUsers2", element: AddUsers2, allowedRoles: ["warehouse"] },
-    { path: "/AddUsers3", element: AddUsers3, allowedRoles: ["warehouse"] },
-    { path: "/AddUsers4", element: AddUsers4, allowedRoles: ["warehouse"] },
+    { path: "/AddUsers", element: AddUsers, allowedRoles: ["warehouseKeeper"] },
+    {
+      path: "/AddUsers/:id",
+      element: AddUsers,
+      allowedRoles: ["warehouseKeeper"],
+    },
+    {
+      path: "/AddUsers2",
+      element: AddUsers2,
+      allowedRoles: ["warehouseKeeper"],
+    },
+    {
+      path: "/AddUsers3",
+      element: AddUsers3,
+      allowedRoles: ["warehouseKeeper"],
+    },
+    {
+      path: "/AddUsers4",
+      element: AddUsers4,
+      allowedRoles: ["warehouseKeeper"],
+    },
 
-    { path: "/AllUsers", element: AllUsers, allowedRoles: ["warehouse"] },
+    { path: "/AllUsers", element: AllUsers, allowedRoles: ["warehouseKeeper"] },
     { path: "/Manager", element: Manager, allowedRoles: ["manager"] },
 
     {
       path: "/CreateInstallBuyNote",
       element: CreateInstallBuyNote,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper"],
     },
     {
       path: "/CreateInstallmosNote",
       element: CreateInstallmosNote,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper"],
     },
 
     {
       path: "/AllInstallReports",
       element: AllInstallReports,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper"],
     },
     {
       path: "/AllInstallStore",
       element: AllInstallStore,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper"],
     },
     {
       path: "/InstallReportsStoreManager",
       element: InstallReportsStoreManager,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper" ,"manager"],
     },
     {
       path: "/InstallReportsStoreManager/:id",
       element: InstallReportsStoreManager,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper" , "manager"],
     },
     {
       path: "/InstallReportsUserManager",
       element: InstallReportsUserManager,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper", "manager"],
     },
     {
       path: "/InstallReportsUserManager/:id",
       element: InstallReportsUserManager,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper" , "manager"],
     },
     {
       path: "/ScrapNoteManager",
       element: ScrapNoteManager,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper" , "manager"],
     },
     {
       path: "/ScrapNoteManager/:id",
       element: ScrapNoteManager,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper" , "manager"],
     },
 
     {
@@ -301,17 +373,17 @@ export default function App() {
       element: Notification,
       allowedRoles: ["warehouse"],
     },
-    { path: "/Settings", element: Settings, allowedRoles: ["warehouse"] },
+    { path: "/Settings", element: Settings, allowedRoles: ["warehouseKeeper"] },
 
     {
       path: "/ViewUserOrSupplier",
       element: ViewUserOrSupplier,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper"],
     },
     {
       path: "/SortingMaterials",
       element: SortingMaterials,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper"],
     },
   ];
 

@@ -144,7 +144,7 @@ export default function ScrapNoteManager() {
                 className="text-lg font-semibold"
                 style={{ color: theme.palette.text.primary }}
               >
-                مذكرة اتلاف
+                عهدة إرجاع
               </p>
               <p className="Date">
                 <span
