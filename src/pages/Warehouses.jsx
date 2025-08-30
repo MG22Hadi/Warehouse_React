@@ -12,6 +12,7 @@ export default function Warehouses({ mode, toggleTheme }) {
   const BASE_URL = "http://127.0.0.1:8000/api/warehouses";
 
   const [warehouses, setWarehouses] = useState([]);
+  const [managers, setManagers] = useState([]);
   const [showModal1, setShowModal1] = useState(false);
   const [editingWarehouse, setEditingWarehouse] = useState(null);
   const [formData, setFormData] = useState({ name: "", location: "" });
@@ -25,12 +26,23 @@ export default function Warehouses({ mode, toggleTheme }) {
 
   const [formDataSection, setFormDataSection] = useState({
     name: "",
-    manager: storedUser?.id || "",
+    manager: "",
     description: "",
     warehouse: "",
   });
 
   const BASE_URL_SECTIONS = "http://127.0.0.1:8000/api/departments";
+
+  const fetchManagers = async () => {
+    try {
+      const res = await api.get("/managers"); // أو `${BASE_URL_BASE}/managers` لو تحب
+      const list = Array.isArray(res.data?.data) ? res.data.data : [];
+      setManagers(list);
+      console.log("المدراء من السيرفر:", list);
+    } catch (error) {
+      console.error("فشل تحميل المدراء", error);
+    }
+  };
 
   const fetchSections = async () => {
     try {
@@ -72,6 +84,7 @@ export default function Warehouses({ mode, toggleTheme }) {
   useEffect(() => {
     fetchWarehouses();
     fetchSections();
+    fetchManagers();
   }, []);
 
   const openAddModal = () => {
@@ -230,8 +243,10 @@ export default function Warehouses({ mode, toggleTheme }) {
   const availableWarehouses = warehouses.filter(
     (wh) => !sections.some((s) => s.warehouse_id === wh.id)
   );
-  const availableManagers = warehouses.filter(
-    (wh) => !sections.some((s) => s.manager_id === wh.id)
+  const availableManagers = managers.filter(
+    (m) =>
+      !sections.some((s) => s.manager_id === m.id) ||
+      (editingSection && editingSection.manager_id === m.id)
   );
 
   return (
@@ -242,7 +257,7 @@ export default function Warehouses({ mode, toggleTheme }) {
         style={{ backgroundColor: theme.palette.background.paper }}
       >
         {/* القسم اليساري */}
-        <div className="w-2/3 pr-6 border-l border-gray-300 ml-10">
+        <div className="w-2/3 pr-6 border-l border-gray-300 ml-10 pl-8">
           <div className="flex justify-between items-center mb-10 max-w-[1132px] mx-auto">
             <h1
               className="text-3xl font-bold"
@@ -299,12 +314,12 @@ export default function Warehouses({ mode, toggleTheme }) {
                   >
                     الموقع: {warehouse.location}
                   </p>
-                  <p
+                  {/* <p
                     className="text-sm"
                     style={{ color: theme.palette.text.secondary }}
                   >
                     عدد المنتجات: {warehouse.products_count ?? 0}
-                  </p>
+                  </p> */}
                 </div>
                 <div className="flex justify-end mt-4">
                   <button
@@ -685,18 +700,15 @@ export default function Warehouses({ mode, toggleTheme }) {
                   borderRadius: "10px",
                   fontSize: "14px",
                 }}
-                value={formDataSection.warehouse}
+                value={formDataSection.manager}
                 onChange={(e) =>
-                  setFormDataSection((f) => ({
-                    ...f,
-                    warehouse: e.target.value,
-                  }))
+                  setFormDataSection((f) => ({ ...f, manager: e.target.value }))
                 }
               >
                 <option value="">اختر المدير</option>
-                {availableWarehouses.map((wh) => (
-                  <option key={wh.id} value={wh.id}>
-                    {wh.name}
+                {availableManagers.map((m) => (
+                  <option key={m.id} value={m.id}>
+                    {m.name}
                   </option>
                 ))}
               </select>

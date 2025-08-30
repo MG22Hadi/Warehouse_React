@@ -16,15 +16,12 @@ export default function SortingMaterialsForm() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const unassignedRes = await axios.get(
-          `${BASE_URL}/unassigned-items`,
-          {
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const unassignedRes = await axios.get(`${BASE_URL}/unassigned-items`, {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         const unassignedItems = unassignedRes.data.data;
 
@@ -42,7 +39,12 @@ export default function SortingMaterialsForm() {
           const product = productRes.data.data.product;
 
           return {
-            id: product.id,
+            // id للقائمة نستخدم id الخاص بالـ unassigned item علشان يبقى مطابق للباك
+            id: item.id,
+            // معرف العنصر غير المُوزّع (هذا اللي لازم تبعثه في assign)
+            item_id: item.id,
+            // معرف المنتج نفسه (لو بحاجة لعمل استعلامات إضافية)
+            product_id: product.id,
             name: product.name,
             code: product.code,
             quantity: item.unassigned_quantity,
@@ -74,7 +76,7 @@ export default function SortingMaterialsForm() {
         `${BASE_URL}/locations/search-available`,
         {
           warehouse_id: product.warehouse_id,
-          product_id: product.id,
+          product_id: product.product_id,
           quantity: product.quantity,
           preferred_location_id: null,
         },
@@ -103,7 +105,7 @@ export default function SortingMaterialsForm() {
         `${BASE_URL}/assign-location`,
         {
           type: type,
-          item_id: selectedProduct.id,
+          item_id: selectedProduct.item_id,
           location_id: selectedLocation,
           quantity: assignQuantity,
         },
@@ -117,11 +119,10 @@ export default function SortingMaterialsForm() {
       setProducts((prev) =>
         prev
           .map((p) =>
-            p.id === selectedProduct.id
-              ? { ...p, quantity: p.quantity - assignQuantity }
+            p.item_id === selectedProduct.item_id
+              ? { ...p, quantity: p.quantity - Number(assignQuantity) }
               : p
           )
-          // إزالة المنتجات اللي صارت كميتها صفر
           .filter((p) => p.quantity > 0)
       );
       alert("تم توزيع الكمية على الموقع بنجاح");
