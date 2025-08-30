@@ -169,6 +169,9 @@ const NotificationBox = () => {
     }
   };
 
+   
+  const handleReade = async(orderId) =>{};
+
   return (
     <>
       <div
@@ -240,7 +243,7 @@ const NotificationBox = () => {
                       >
                         نوع :{" "}
                         <span style={{ color: theme.palette.text.secondary }}>
-                          {order.type}
+                          {order.message}
                         </span>
                       </p>
                       {/* <p style={{ color: theme.palette.text.primary }}>
@@ -268,13 +271,22 @@ const NotificationBox = () => {
                         </span>
                       </p> */}
                     </div>
-                    <div className="order-actions">
+                    {/* <div className="order-actions">
                       <button
                         className="view-btn"
                         onClick={() => handleViewDetails(order.id)}
                         style={{ color: theme.palette.text.primary }}
                       >
                         ▼ عرض التفاصيل
+                      </button>
+                    </div> */}
+                    <div className="order-actions">
+                      <button
+                        className="view-btn" 
+                        onClick={() => handleReade(order.id)}
+                        style={{ color: theme.palette.text.primary }}
+                      >
+                       قراءة
                       </button>
                     </div>
                   </div>

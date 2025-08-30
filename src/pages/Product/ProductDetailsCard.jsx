@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useTheme } from "@mui/material/styles";
+import { printElementForA4 } from "../.././print/printUtils";
 
 export default function ProductDetailsCard({ id }) {
   const theme = useTheme();
+  const [printing, setPrinting] = useState(false);
   const [product, setProduct] = useState(null);
   const [movements, setMovements] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -44,6 +46,26 @@ export default function ProductDetailsCard({ id }) {
     );
   }, [id]);
 
+  const handlePrint = () => {
+    if (printing) return; // يمنع إعادة الاستدعاء المتكرر
+    const card = document.querySelector(
+      'div[dir="rtl"].rounded-2xl.p-8.shadow-xl'
+    );
+    if (!card) {
+      alert(
+        "لم يتم العثور على بطاقة المنتج بعد. انتظر حتى تُحمَّل البيانات ثم جرّب مرة أخرى."
+      );
+      return;
+    }
+    setPrinting(true);
+    try {
+      printElementForA4(card);
+    } finally {
+      // نحرّر القفل بعد تأخير بسيط لأن الطباعة تأخذ وقت
+      setTimeout(() => setPrinting(false), 1500);
+    }
+  };
+
   if (loading) return <div>جاري تحميل تفاصيل المنتج...</div>;
   if (!product) return <div>تعذر تحميل بيانات المنتج.</div>;
 
@@ -57,30 +79,41 @@ export default function ProductDetailsCard({ id }) {
         backgroundColor: theme.palette.background.paper,
       }}
     >
-      {/* العنوان وصورة المنتج */}
-      <div className="flex items-center gap-4 mb-6">
-        <div className="w-[50px] h-[50px] rounded-md overflow-hidden">
-          <img
-            src="/assets/Product-icon.png"
-            alt="Product"
-            className="w-full h-full object-cover"
-          />
+      {/* === تعديل بسيط هنا: استخدمت justify-between لوضع الزر في الجهة المقابلة */}
+      <div className="flex items-center gap-4 mb-6 justify-between">
+        {/* جهة اليمين: الصورة والعنوان (يبقى نفس التصميم) */}
+        <div className="flex items-center gap-4">
+          <div className="w-[50px] h-[50px] rounded-md overflow-hidden">
+            <img
+              src="/assets/Product-icon.png"
+              alt="Product"
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <h2
+            className="text-xl font-bold"
+            style={{ color: theme.palette.text.primary }}
+          >
+            {product.name}
+          </h2>
         </div>
-        <h2
-          className="text-xl font-bold"
-          style={{ color: theme.palette.text.primary }}
-        >
-          {product.name}
-        </h2>
+
+        {/* جهة اليسار: زر الطباعة (اللي طلبته في الجهة التانية) */}
+        <div className="flex items-center mb-4">
+          <button
+            onClick={handlePrint}
+            disabled={printing}
+            className="px-4 py-2 rounded bg-orange-400 text-white"
+          >
+            {printing ? "جاري التحضير..." : "طباعة"}
+          </button>
+        </div>
       </div>
 
       {/* مواصفات المنتج بدل الوصف */}
       <div className="mb-6 text-sm grid grid-cols-2 gap-y-3 gap-x-8">
         <p style={{ color: theme.palette.text.secondary }}>
           <strong>الكود :</strong> {product.code}
-        </p>
-        <p style={{ color: theme.palette.text.secondary }}>
-          <strong>الكمية :</strong> {product.quantity}
         </p>
         <p style={{ color: theme.palette.text.secondary }}>
           <strong>الوحدة :</strong> {product.unit || "قطعة"}

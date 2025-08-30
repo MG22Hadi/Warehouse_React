@@ -111,7 +111,7 @@ export default function ScrapNoteManager() {
     >
       <div
         className="w-full max-w-7xl  rounded-[20px] p-8 shadow-lg"
-        style={{ backgroundColor: theme.palette.background.default }}
+        style={{ backgroundColor: theme.palette.background.paper }}
       >
         <div className="container" dir="rtl">
           <div className="entry-header">

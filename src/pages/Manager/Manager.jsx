@@ -1293,9 +1293,7 @@ const Manager = ({ mode = "light", toggleTheme }) => {
                       style={{
                         backgroundColor:
                           theme.palette.primary?.main || "#2563EB",
-                        color: theme.palette.getContrastText(
-                          theme.palette.primary?.main || "#2563EB"
-                        ),
+                        color: "#fff"
                       }}
                     >
                       حفظ التعديلات

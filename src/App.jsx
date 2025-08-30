@@ -371,7 +371,7 @@ export default function App() {
     {
       path: "/Notification",
       element: Notification,
-      allowedRoles: ["warehouse"],
+      allowedRoles: ["warehouseKeeper"],
     },
     { path: "/Settings", element: Settings, allowedRoles: ["warehouseKeeper"] },
 

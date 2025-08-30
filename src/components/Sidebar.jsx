@@ -16,9 +16,9 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import BuildIcon from "@mui/icons-material/Build";
 import WarehouseIcon from "@mui/icons-material/Warehouse";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
-import AssignmentIndIcon from "@mui/icons-material/AssignmentInd"; 
-import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
-
+import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
+import axios from "axios";
 
 const menuItems = [
   { icon: <HomeIcon />, label: "الصفحة الرئيسية", path: "/Dashboard" },
@@ -30,7 +30,11 @@ const menuItems = [
   { icon: <DeleteIcon />, label: "مذكرات إتلاف", path: "/AllScrap" },
   { icon: <SettingsIcon />, label: "ضبط التركيب", path: "/AllInstallBox" },
   { icon: <ShoppingCartIcon />, label: "طلبات الشراء", path: "/AllPurchase" },
-  { icon: <AssignmentIndIcon />, label: "طلبات المستخدمين", path: "/AllUserRequests" },
+  {
+    icon: <AssignmentIndIcon />,
+    label: "طلبات المستخدمين",
+    path: "/AllUserRequests",
+  },
   { icon: <AccountBoxIcon />, label: "العهدة الشخصية", path: "/AllCustody" },
   { icon: <NotificationsIcon />, label: "الإشعارات", path: "/Notification" },
   { icon: <PeopleIcon />, label: "المستخدمين", path: "/AllUsers" },
@@ -45,6 +49,32 @@ export default function Sidebar() {
   const [showInstallReports, setShowInstallReports] = useState(false);
 
   const isActive = (path) => location.pathname === path;
+
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const headers = {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      };
+
+      const response = await axios.post(
+        "http://localhost:8000/api/logout",
+        {},
+        { headers }
+      );
+
+      if (response.data.success) {
+        alert(response.data.message);
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        window.location.href = "/";
+      }
+    } catch (error) {
+      console.error("خطأ أثناء تسجيل الخروج:", error);
+      alert("حدث خطأ أثناء تسجيل الخروج");
+    }
+  };
 
   useEffect(() => {
     if (
@@ -335,7 +365,9 @@ export default function Sidebar() {
 
           {/* 1. Render "طلبات الشراء" button from the array */}
           {menuItems
-            .filter((item) => ["طلبات الشراء", "طلبات المستخدمين"].includes(item.label))
+            .filter((item) =>
+              ["طلبات الشراء", "طلبات المستخدمين"].includes(item.label)
+            )
             .map((item, index) => (
               <li
                 key={index}
@@ -367,12 +399,14 @@ export default function Sidebar() {
                 <span className="truncate">{item.label}</span>
               </li>
             ))}
-          
+
           {/* 2. Place the hardcoded "فرز المواد" button here */}
           <li
             onClick={() => navigate("/SortingMaterials")}
             className={`flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-all duration-200 ${
-              isActive("/SortingMaterials") ? "bg-[#FF8E29]" : "hover:bg-[#FF8E29]"
+              isActive("/SortingMaterials")
+                ? "bg-[#FF8E29]"
+                : "hover:bg-[#FF8E29]"
             }`}
             style={{
               color: isActive("/SortingMaterials")
@@ -392,7 +426,9 @@ export default function Sidebar() {
             }}
           >
             <CompareArrowsIcon
-              style={{ color: isActive("/SortingMaterials") ? "#FFFFFF" : undefined }}
+              style={{
+                color: isActive("/SortingMaterials") ? "#FFFFFF" : undefined,
+              }}
               className="w-4 h-4"
             />
             <span className="truncate">فرز المواد</span>
@@ -439,9 +475,28 @@ export default function Sidebar() {
                 <span className="truncate">{item.label}</span>
               </li>
             ))}
-            
+
           {/* --- END: MODIFIED SECTION --- */}
         </ul>
+        {/* تسجيل الخروج */}
+        <div
+          className="flex items-center gap-2 cursor-pointer px-3 py-2 rounded-md transition text-xs"
+          style={{ color: theme.palette.error.main }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = theme.palette.error.light;
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = "transparent";
+          }}
+          onClick={handleLogout}
+        >
+          <img
+            src="/assets/icons-dashboard/logout.svg"
+            alt="أيقونة"
+            className="w-4 h-4"
+          />
+          <span>تسجيل الخروج</span>
+        </div>
       </div>
     </div>
   );
