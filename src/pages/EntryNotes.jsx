@@ -4,6 +4,7 @@ import { useTheme } from "@mui/material/styles";
 import { useParams } from "react-router-dom";
 import MainLayout from "../MainLayout";
 import EntryNote from "../components/Entry";
+import { BASE_URL } from "../api/axiosInstance";
 
 export default function EntryNotes({ mode, toggleTheme }) {
   const theme = useTheme();
@@ -17,7 +18,7 @@ export default function EntryNotes({ mode, toggleTheme }) {
     const fetchNote = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/EntryNote/${id}/details`,
+          `${BASE_URL}/EntryNote/${id}/details`,
           {
             headers: {
               Accept: "application/json",

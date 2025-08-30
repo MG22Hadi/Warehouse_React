@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./product1.css";
 import axios from "axios";
 import { useTheme } from "@mui/material/styles";
+import { BASE_URL } from "../api/axiosInstance";
 
 export default function Product1({ onNext, initialData }) {
   const theme = useTheme();
@@ -19,7 +20,7 @@ export default function Product1({ onNext, initialData }) {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/warehouses/index", {
+      .get(`${BASE_URL}/warehouses/index`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,

@@ -4,6 +4,7 @@ import "./../components/Entry.css";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
+import { BASE_URL } from "../api/axiosInstance";
 
 export default function CreateExitNote({ mode, toggleTheme }) {
   const theme = useTheme();
@@ -49,7 +50,7 @@ export default function CreateExitNote({ mode, toggleTheme }) {
   // جلب المستودعات
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/warehouses/index", {
+      .get(`${BASE_URL}/warehouses/index`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
@@ -68,7 +69,7 @@ export default function CreateExitNote({ mode, toggleTheme }) {
     }
 
     axios
-      .get(`http://localhost:8000/api/warehouses/show/${selectedWarehouse}`, {
+      .get(`${BASE_URL}/warehouses/show/${selectedWarehouse}`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
@@ -99,7 +100,7 @@ export default function CreateExitNote({ mode, toggleTheme }) {
         if (!row.product_id) return;
         try {
           const res = await axios.get(
-            "http://localhost:8000/api/locations/product-locations",
+            `${BASE_URL}/locations/product-locations`,
             {
               params: {
                 product_id: Number(row.product_id),
@@ -196,7 +197,7 @@ export default function CreateExitNote({ mode, toggleTheme }) {
     };
 
     axios
-      .post("http://localhost:8000/api/exitNote", payload, {
+      .post(`${BASE_URL}/exitNote`, payload, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,

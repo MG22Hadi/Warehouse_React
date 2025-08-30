@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./AllNotesBox.css";
+import { BASE_URL } from "../api/axiosInstance";
 
 const AllCustodyBox = () => {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const AllCustodyBox = () => {
     const fetchNotes = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/custody/showAll",
+          `${BASE_URL}/custody/showAll`,
           {
             headers: {
               Accept: "application/json",

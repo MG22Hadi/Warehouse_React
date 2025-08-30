@@ -4,6 +4,7 @@ import "./../components/Entry.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
+import { BASE_URL } from "../api/axiosInstance";
 
 export default function CreateScrapNote({ mode, toggleTheme }) {
   const theme = useTheme();
@@ -48,7 +49,7 @@ export default function CreateScrapNote({ mode, toggleTheme }) {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/warehouses/index", {
+      .get(`${BASE_URL}/warehouses/index`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
@@ -69,7 +70,7 @@ export default function CreateScrapNote({ mode, toggleTheme }) {
     }
 
     axios
-      .get(`http://localhost:8000/api/warehouses/show/${selectedWarehouse}`, {
+      .get(`${BASE_URL}/warehouses/show/${selectedWarehouse}`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
@@ -100,7 +101,7 @@ export default function CreateScrapNote({ mode, toggleTheme }) {
     if (productId && selectedWarehouse) {
       try {
         const res = await axios.get(
-          "http://localhost:8000/api/locations/product-locations",
+          `${BASE_URL}/locations/product-locations`,
           {
             params: {
               product_id: Number(productId),
@@ -172,7 +173,7 @@ export default function CreateScrapNote({ mode, toggleTheme }) {
 
     console.log("Payload to send:", payload);
     axios
-      .post("http://localhost:8000/api/scrapNote/store", payload, {
+      .post(`${BASE_URL}/scrapNote/store`, payload, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,

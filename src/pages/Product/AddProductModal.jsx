@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { BASE_URL } from "../../api/axiosInstance";
 
 export default function AddProductModal({ onClose, onSuccess, warehouseId }) {
   const [form, setForm] = useState({
@@ -22,7 +23,7 @@ export default function AddProductModal({ onClose, onSuccess, warehouseId }) {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.post("/api/products/store", form, {
+      const res = await axios.post(`${BASE_URL}/products/store`, form, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

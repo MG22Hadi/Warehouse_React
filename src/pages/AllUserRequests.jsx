@@ -4,6 +4,7 @@ import "../components/NotificationBox.css";
 import MainLayout from "../MainLayout.jsx";
 import axios from "axios";
 import { useTheme } from "@mui/material/styles";
+import { BASE_URL } from "../api/axiosInstance";
 
 const AllUserRequests = ({ mode, toggleTheme }) => {
   const [orders, setOrders] = useState([]);
@@ -17,7 +18,7 @@ const AllUserRequests = ({ mode, toggleTheme }) => {
     const fetchOrders = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:8000/api/allRequestMaterial",
+          `${BASE_URL}/allRequestMaterial`,
           {
             headers: {
               Authorization: "Bearer " + localStorage.getItem("token"),
@@ -37,7 +38,7 @@ const AllUserRequests = ({ mode, toggleTheme }) => {
   const handleViewDetails = async (orderId) => {
     try {
       const res = await axios.get(
-        `http://localhost:8000/api/M-Request/show/${orderId}`,
+        `${BASE_URL}/M-Request/show/${orderId}`,
         {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),

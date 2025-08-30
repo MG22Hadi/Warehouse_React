@@ -4,6 +4,7 @@ import "./../components/Entry.css";
 import axios from "axios";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../api/axiosInstance";
 
 export default function CreateEntryNote({ mode, toggleTheme }) {
   const theme = useTheme();
@@ -46,7 +47,7 @@ export default function CreateEntryNote({ mode, toggleTheme }) {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/warehouses/index", {
+      .get(`${BASE_URL}/warehouses/index`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
@@ -67,7 +68,7 @@ export default function CreateEntryNote({ mode, toggleTheme }) {
     }
 
     axios
-      .get(`http://localhost:8000/api/warehouses/show/${selectedWarehouse}`, {
+      .get(`${BASE_URL}/warehouses/show/${selectedWarehouse}`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
@@ -137,7 +138,7 @@ export default function CreateEntryNote({ mode, toggleTheme }) {
     };
 
     axios
-      .post("http://localhost:8000/api/entryNote", payload, {
+      .post(`${BASE_URL}/entryNote`, payload, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,

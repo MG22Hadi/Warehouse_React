@@ -4,6 +4,7 @@ import { useTheme } from "@mui/material/styles";
 import { useParams } from "react-router-dom";
 import MainLayout from "../MainLayout";
 import InstallUser from "../components/InstallUser";
+import { BASE_URL } from "../api/axiosInstance";
 
 export default function InstallReportsUser({ mode, toggleTheme }) {
   const theme = useTheme();
@@ -17,7 +18,7 @@ export default function InstallReportsUser({ mode, toggleTheme }) {
     const fetchReport = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/InstallationReport/${id}/details`,
+          `${BASE_URL}/InstallationReport/${id}/details`,
           {
             headers: {
               Accept: "application/json",

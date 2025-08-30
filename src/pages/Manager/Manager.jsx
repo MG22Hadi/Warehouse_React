@@ -5,6 +5,7 @@ import axios from "axios";
 import { useTheme } from "@mui/material/styles";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
+import { BASE_URL } from "../../api/axiosInstance.js";
 
 const Manager = ({ mode = "light", toggleTheme }) => {
   const theme = useTheme();
@@ -36,13 +37,13 @@ const Manager = ({ mode = "light", toggleTheme }) => {
           Authorization: `Bearer ${token}`,
         };
         const [installRes, requestRes, scrapRes] = await Promise.all([
-          axios.get("http://localhost:8000/api/allInstallationReport", {
+          axios.get(`${BASE_URL}/allInstallationReport`, {
             headers,
           }),
-          axios.get("http://localhost:8000/api/allRequestMaterial", {
+          axios.get(`${BASE_URL}/allRequestMaterial`, {
             headers,
           }),
-          axios.get("http://localhost:8000/api/allScrapNote", { headers }),
+          axios.get(`${BASE_URL}/allScrapNote`, { headers }),
         ]);
 
         setInstallationReports(installRes.data.data.reports || []);

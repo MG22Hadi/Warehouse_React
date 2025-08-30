@@ -5,6 +5,7 @@ import MainLayout from "../MainLayout";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import { useTheme } from "@mui/material/styles";
+import { BASE_URL } from "../api/axiosInstance";
 
 export default function AllUsers({ mode, toggleTheme }) {
   const theme = useTheme();
@@ -20,7 +21,7 @@ export default function AllUsers({ mode, toggleTheme }) {
   const fetchUsersAndSuppliers = async () => {
     try {
       // جلب المستخدمين
-      const resUsers = await axios.get("http://localhost:8000/api/v1/users", {
+      const resUsers = await axios.get(`${BASE_URL}/v1/users`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -38,7 +39,7 @@ export default function AllUsers({ mode, toggleTheme }) {
 
       // جلب الموردين
       const resSuppliers = await axios.get(
-        "http://localhost:8000/api/suppliers",
+        `${BASE_URL}/suppliers`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

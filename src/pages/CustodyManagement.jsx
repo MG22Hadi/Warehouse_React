@@ -4,6 +4,7 @@ import { useTheme } from "@mui/material/styles";
 import { useParams } from "react-router-dom";
 import MainLayout from "../MainLayout";
 import Custody from "../components/Custody";
+import { BASE_URL } from "../api/axiosInstance";
 
 export default function CustodyManagement({ mode, toggleTheme }) {
   const theme = useTheme();
@@ -17,7 +18,7 @@ export default function CustodyManagement({ mode, toggleTheme }) {
     const fetchNote = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/custody/specific/${id}`,
+          `${BASE_URL}/custody/specific/${id}`,
           {
             headers: {
               Accept: "application/json",

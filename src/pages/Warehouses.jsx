@@ -3,13 +3,15 @@ import api from "../api/axiosInstance";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import MainLayout from "../MainLayout";
+import { BASE_URL } from "../api/axiosInstance";
+import axios from "axios";
 
 export default function Warehouses({ mode, toggleTheme }) {
   const theme = useTheme();
   const navigate = useNavigate();
   const storedUser = JSON.parse(localStorage.getItem("user"));
 
-  const BASE_URL = "http://localhost:8000/api/warehouses";
+  const BASE_URL_2 = `${BASE_URL}/warehouses`;
 
   const [warehouses, setWarehouses] = useState([]);
   const [showModal1, setShowModal1] = useState(false);
@@ -30,11 +32,11 @@ export default function Warehouses({ mode, toggleTheme }) {
     warehouse: "",
   });
 
-  const BASE_URL_SECTIONS = "http://localhost:8000/api/departments";
+  const BASE_URL_SECTIONS = `${BASE_URL}/departments`;
 
   const fetchSections = async () => {
     try {
-      const res = await api.get(`${BASE_URL_SECTIONS}`);
+      const res = await axios.get(`${BASE_URL_SECTIONS}`);
       setSections(
         res.data.data.map((d) => ({
           id: d.id,
@@ -53,7 +55,7 @@ export default function Warehouses({ mode, toggleTheme }) {
 
   const fetchWarehouses = async () => {
     try {
-      const res = await api.get(`${BASE_URL}/index`);
+      const res = await axios.get(`${BASE_URL_2}/index`);
       setWarehouses(res.data.data.sort((a, b) => a.name.localeCompare(b.name)));
     } catch (error) {
       console.error("فشل تحميل المستودعات", error);
@@ -92,12 +94,12 @@ export default function Warehouses({ mode, toggleTheme }) {
     try {
       let response;
       if (editingWarehouse) {
-        response = await api.put(
-          `${BASE_URL}/update/${editingWarehouse.id}`,
+        response = await axios.put(
+          `${BASE_URL_2}/update/${editingWarehouse.id}`,
           formData
         );
       } else {
-        response = await api.post(`${BASE_URL}/store`, formData);
+        response = await axios.post(`${BASE_URL_2}/store`, formData);
       }
       if (response.data.success) {
         alert(
@@ -150,7 +152,7 @@ export default function Warehouses({ mode, toggleTheme }) {
       }
       if (editingSection) {
         // تعديل القسم
-        response = await api.put(
+        response = await axios.put(
           `${BASE_URL_SECTIONS}/update/${editingSection.id}`,
           {
             name: formDataSection.name,
@@ -161,7 +163,7 @@ export default function Warehouses({ mode, toggleTheme }) {
         );
       } else {
         // إضافة قسم جديد
-        response = await api.post(`${BASE_URL_SECTIONS}/store`, {
+        response = await axios.post(`${BASE_URL_SECTIONS}/store`, {
           name: formDataSection.name,
           manager_id: storedUser?.id,
           warehouse_id: formDataSection.warehouse,
@@ -195,12 +197,14 @@ export default function Warehouses({ mode, toggleTheme }) {
     try {
       let response;
       if (deleteModal.type === "warehouse") {
-        response = await api.delete(`${BASE_URL}/destroy/${deleteModal.id}`);
+        response = await axios.delete(
+          `${BASE_URL_2}/destroy/${deleteModal.id}`
+        );
         if (response.data.success)
           alert(response.data.message || "تم حذف المستودع بنجاح");
         fetchWarehouses();
       } else if (deleteModal.type === "section") {
-        response = await api.delete(
+        response = await axios.delete(
           `${BASE_URL_SECTIONS}/delete/${deleteModal.id}`
         );
         if (response.data.success)
@@ -216,7 +220,7 @@ export default function Warehouses({ mode, toggleTheme }) {
   };
 
   const handleView = (id) => {
-    navigate(`/products/warehouse/${id}`);
+    navigate(`${BASE_URL_2}/warehouse/${id}`);
   };
   const availableWarehouses = warehouses.filter(
     (wh) => !sections.some((s) => s.warehouse_id === wh.id)

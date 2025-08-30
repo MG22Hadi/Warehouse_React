@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./AllNotesBox.css";
 import { useTheme } from "@mui/material/styles";
+import { BASE_URL } from "../api/axiosInstance";
 
 const AllScrapBox = () => {
   const theme = useTheme();
@@ -14,7 +15,7 @@ const AllScrapBox = () => {
     const fetchNotes = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/allScrapNote",
+          `${BASE_URL}/allScrapNote`,
           {
             headers: {
               Accept: "application/json",

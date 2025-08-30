@@ -4,6 +4,7 @@ import "../components/Exit.css";
 import { useTheme } from "@mui/material/styles";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../api/axiosInstance";
 
 export default function CreateInstallmosNote({ mode, toggleTheme }) {
   const theme = useTheme();
@@ -49,7 +50,7 @@ export default function CreateInstallmosNote({ mode, toggleTheme }) {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/warehouses/index", {
+      .get(`${BASE_URL}/warehouses/index`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
@@ -70,7 +71,7 @@ export default function CreateInstallmosNote({ mode, toggleTheme }) {
     }
 
     axios
-      .get(`http://localhost:8000/api/warehouses/show/${selectedWarehouse}`, {
+      .get(`${BASE_URL}/warehouses/show/${selectedWarehouse}`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
@@ -131,7 +132,7 @@ export default function CreateInstallmosNote({ mode, toggleTheme }) {
     };
 
     axios
-      .post("http://localhost:8000/api/InstallationReport/store", payload, {
+      .post(`${BASE_URL}/InstallationReport/store`, payload, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,

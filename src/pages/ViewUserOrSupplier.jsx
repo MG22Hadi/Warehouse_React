@@ -9,6 +9,7 @@ import {
   CircularProgress,
   Button,
 } from "@mui/material";
+import { BASE_URL } from "../api/axiosInstance";
 
 export default function ViewUserOrSupplier({ mode, toggleTheme }) {
   const location = useLocation();
@@ -23,8 +24,8 @@ export default function ViewUserOrSupplier({ mode, toggleTheme }) {
       try {
         let url =
           type === "user"
-            ? `http://localhost:8000/api/v1/users/${id}`
-            : `http://localhost:8000/api/supplier/show/${id}`;
+            ? `${BASE_URL}/v1/users/${id}`
+            : `${BASE_URL}/supplier/show/${id}`;
 
         const response = await axios.get(url, {
           headers: {

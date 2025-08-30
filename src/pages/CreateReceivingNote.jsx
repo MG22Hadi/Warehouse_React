@@ -3,6 +3,7 @@ import MainLayout from "../MainLayout";
 import axios from "axios";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../api/axiosInstance";
 
 export default function CreateReceivingNote({ mode, toggleTheme }) {
   const theme = useTheme();
@@ -53,7 +54,7 @@ export default function CreateReceivingNote({ mode, toggleTheme }) {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/warehouses/index", {
+      .get(`${BASE_URL}/warehouses/index`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
@@ -63,7 +64,7 @@ export default function CreateReceivingNote({ mode, toggleTheme }) {
       .catch((err) => console.error("خطأ بجلب المستودعات:", err));
 
     axios
-      .get("http://localhost:8000/api/suppliers", {
+      .get(`${BASE_URL}/suppliers`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
@@ -73,7 +74,7 @@ export default function CreateReceivingNote({ mode, toggleTheme }) {
       .catch((err) => console.error("خطأ بجلب الموردين:", err));
 
     axios
-      .get("http://localhost:8000/api/purchase-requests/my-requests", {
+      .get(`${BASE_URL}/purchase-requests/my-requests`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
@@ -90,7 +91,7 @@ export default function CreateReceivingNote({ mode, toggleTheme }) {
     }
 
     axios
-      .get(`http://localhost:8000/api/warehouses/show/${selectedWarehouse}`, {
+      .get(`${BASE_URL}/warehouses/show/${selectedWarehouse}`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
@@ -163,7 +164,7 @@ export default function CreateReceivingNote({ mode, toggleTheme }) {
     };
 
     axios
-      .post("http://localhost:8000/api/receivingNote/store", payload, {
+      .post(`${BASE_URL}/receivingNote/store`, payload, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,

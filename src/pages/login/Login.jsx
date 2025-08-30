@@ -6,6 +6,7 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 // import api from "../../api/axiosInstance";
+import { BASE_URL } from "../../api/axiosInstance.js";
 
 export default function Login({ mode, toggleTheme }) {
   const theme = useTheme();
@@ -33,7 +34,7 @@ export default function Login({ mode, toggleTheme }) {
 
       // const result = response.data;
       //or this
-      const response = await fetch("http://127.0.0.1:8000/api/login", {
+      const response = await fetch(`${BASE_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

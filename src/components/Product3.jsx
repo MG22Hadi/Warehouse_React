@@ -3,6 +3,7 @@ import "./Product3.css";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
+import { BASE_URL } from "../api/axiosInstance";
 
 export default function Product3() {
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ export default function Product3() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/products/store",
+        `${BASE_URL}/products/store`,
         finalProduct,
         {
           headers: {

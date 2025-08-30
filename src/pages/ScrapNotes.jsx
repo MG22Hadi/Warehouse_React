@@ -6,6 +6,7 @@ import MainLayout from "../MainLayout";
 // import ProductDetailsCard from "./ProductDetailsCa?rd";
 // import ProductForm from "../components/productform";
 import Scrap from "../components/Scrap";
+import { BASE_URL } from "../api/axiosInstance";
 
 export default function ScrapNotes({ mode, toggleTheme }) {
   const theme = useTheme();
@@ -19,7 +20,7 @@ export default function ScrapNotes({ mode, toggleTheme }) {
     const fetchNote = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/scrapNote/${id}/details`,
+          `${BASE_URL}/scrapNote/${id}/details`,
           {
             headers: {
               Accept: "application/json",

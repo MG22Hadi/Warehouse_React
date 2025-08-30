@@ -3,6 +3,7 @@ import { useTheme } from "@mui/material/styles";
 import { IconButton } from "@mui/material";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
+import { BASE_URL } from "../../api/axiosInstance.js";
 
 export default function ResetPassword({ mode, toggleTheme }) {
   const theme = useTheme();

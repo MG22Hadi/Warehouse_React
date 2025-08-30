@@ -4,6 +4,7 @@ import "../components/Receiving.css";
 import axios from "axios";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../api/axiosInstance";
 
 export default function CreateInstallBuyNote({ mode, toggleTheme }) {
   const theme = useTheme();
@@ -71,7 +72,7 @@ export default function CreateInstallBuyNote({ mode, toggleTheme }) {
     };
 
     axios
-      .post("http://localhost:8000/api/InstallationReport/store", payload, {
+      .post(`${BASE_URL}/InstallationReport/store`, payload, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
@@ -91,7 +92,7 @@ export default function CreateInstallBuyNote({ mode, toggleTheme }) {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/warehouses/index", {
+      .get(`${BASE_URL}/warehouses/index`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
@@ -105,7 +106,7 @@ export default function CreateInstallBuyNote({ mode, toggleTheme }) {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/products", {
+      .get(`${BASE_URL}/products`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,

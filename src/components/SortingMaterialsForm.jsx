@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useTheme } from "@mui/material/styles";
+import { BASE_URL } from "../api/axiosInstance";
 
 export default function SortingMaterialsForm() {
   const theme = useTheme();
@@ -16,7 +17,7 @@ export default function SortingMaterialsForm() {
     const fetchData = async () => {
       try {
         const unassignedRes = await axios.get(
-          "http://localhost:8000/api/unassigned-items",
+          `${BASE_URL}/unassigned-items`,
           {
             headers: {
               Accept: "application/json",
@@ -29,7 +30,7 @@ export default function SortingMaterialsForm() {
 
         const productPromises = unassignedItems.map(async (item) => {
           const productRes = await axios.get(
-            `http://localhost:8000/api/products/show/${item.product_id}`,
+            `${BASE_URL}/products/show/${item.product_id}`,
             {
               headers: {
                 Accept: "application/json",
@@ -70,7 +71,7 @@ export default function SortingMaterialsForm() {
       setSelectedLocation(null);
 
       const res = await axios.post(
-        "http://localhost:8000/api/locations/search-available",
+        `${BASE_URL}/locations/search-available`,
         {
           warehouse_id: product.warehouse_id,
           product_id: product.id,
@@ -99,7 +100,7 @@ export default function SortingMaterialsForm() {
       const type = selectedProduct.entry_note_id ? "entry" : "receiving";
 
       await axios.post(
-        "http://localhost:8000/api/assign-location",
+        `${BASE_URL}/assign-location`,
         {
           type: type,
           item_id: selectedProduct.id,

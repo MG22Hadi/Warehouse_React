@@ -4,6 +4,7 @@ import { useTheme } from "@mui/material/styles";
 import { useParams, useNavigate } from "react-router-dom";
 import MainLayout from "../MainLayout";
 import InstallStore from "../components/InstallStore";
+import { BASE_URL } from "../api/axiosInstance";
 
 export default function InstallReportsUserManager({ mode, toggleTheme }) {
   const theme = useTheme();
@@ -18,7 +19,7 @@ export default function InstallReportsUserManager({ mode, toggleTheme }) {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          `http://localhost:8000/api/InstallationReport/${id}/details`,
+          `${BASE_URL}/InstallationReport/${id}/details`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setReport(response.data.data);
@@ -60,7 +61,7 @@ if (loading) {
   const handleApprove = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:8000/api/installationReport/${id}/approve`,
+        `${BASE_URL}/installationReport/${id}/approve`,
         {},
         {
           headers: {
@@ -85,7 +86,7 @@ if (loading) {
   const handleReject = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:8000/api/installationReport/${id}/reject`,
+        `${BASE_URL}/installationReport/${id}/reject`,
         {},
         {
           headers: {

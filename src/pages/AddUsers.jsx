@@ -17,6 +17,7 @@ import WorkIcon from "@mui/icons-material/Work";
 import CategoryIcon from "@mui/icons-material/Category";
 import axios from "axios";
 import { useTheme } from "@mui/material/styles";
+import { BASE_URL } from "../api/axiosInstance";
 
 export default function AddUsers({ mode, toggleTheme }) {
   const theme = useTheme();
@@ -29,7 +30,7 @@ export default function AddUsers({ mode, toggleTheme }) {
   useEffect(() => {
     if (id) {
       axios
-        .get(`http://localhost:8000/api/v1/users/${id}`, {
+        .get(`${BASE_URL}/v1/users/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
@@ -111,7 +112,7 @@ export default function AddUsers({ mode, toggleTheme }) {
   useEffect(() => {
     const fetchDepartments = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/api/departments", {
+        const res = await axios.get(`${BASE_URL}/departments`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (res.data.success) setDepartments(res.data.data);

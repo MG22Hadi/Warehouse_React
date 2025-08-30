@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useTheme } from "@mui/material/styles";
 import { printElementForA4 } from "../.././print/printUtils";
+import { BASE_URL } from "../../api/axiosInstance";
 
 export default function ProductDetailsCard({ id }) {
   const theme = useTheme();
@@ -15,7 +16,7 @@ export default function ProductDetailsCard({ id }) {
   // جلب تفاصيل المنتج
   const fetchProduct = async () => {
     try {
-      const response = await axios.get(`/api/products/show/${id}`, {
+      const response = await axios.get(`${BASE_URL}/products/show/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setProduct(response.data.data.product);
@@ -28,7 +29,7 @@ export default function ProductDetailsCard({ id }) {
   const fetchMovements = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/product-movements/${id}`,
+        `${BASE_URL}/product-movements/${id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

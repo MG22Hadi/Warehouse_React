@@ -6,6 +6,7 @@ import MainLayout from "../MainLayout";
 // import ProductDetailsCard from "./ProductDetailsCard";
 // import ProductForm from "../components/productform";
 import ReceivingNote from "../components/Receiving";
+import { BASE_URL } from "../api/axiosInstance";
 
 export default function ReceivingNotes({ mode, toggleTheme }) {
   const theme = useTheme();
@@ -19,7 +20,7 @@ export default function ReceivingNotes({ mode, toggleTheme }) {
     const fetchNote = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/receivingNote/${id}`,
+          `${BASE_URL}/receivingNote/${id}`,
           {
             headers: {
               Accept: "application/json",

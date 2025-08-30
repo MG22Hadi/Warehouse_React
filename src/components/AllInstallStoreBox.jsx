@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./AllNotesBox.css";
 import { useTheme } from "@mui/material/styles";
+import { BASE_URL } from "../api/axiosInstance";
 
 const AllInstallStoreBox = () => {
   const theme = useTheme();
@@ -15,7 +16,7 @@ const AllInstallStoreBox = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          "http://localhost:8000/api/allInstallationReport?type=purchase",
+          `${BASE_URL}/allInstallationReport?type=purchase`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setData(response.data.data.reports);

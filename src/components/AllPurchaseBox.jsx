@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useTheme } from "@mui/material/styles";
 import "./AllNotesBox.css";
+import { BASE_URL } from "../api/axiosInstance";
 
 const AllPurchaseBox = () => {
   const theme = useTheme();
@@ -14,7 +15,7 @@ const AllPurchaseBox = () => {
     const fetchNotes = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/purchase-requests/my-requests",
+          `${BASE_URL}/purchase-requests/my-requests`,
           {
             headers: {
               Accept: "application/json",

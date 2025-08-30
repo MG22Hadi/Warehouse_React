@@ -4,6 +4,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Purchase from "../components/Purchase";
+import { BASE_URL } from "../api/axiosInstance";
 
 export default function PurchaseRequests({ mode, toggleTheme }) {
   const theme = useTheme();
@@ -17,7 +18,7 @@ export default function PurchaseRequests({ mode, toggleTheme }) {
     const fetchNote = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/purchase-requests/show/${id}`,
+          `${BASE_URL}/purchase-requests/show/${id}`,
           {
             headers: {
               Accept: "application/json",

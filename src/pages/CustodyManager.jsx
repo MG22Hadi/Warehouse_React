@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useTheme } from "@mui/material/styles";
+import { BASE_URL } from "../api/axiosInstance";
 
 export default function ScrapNoteManager() {
   const theme = useTheme();
@@ -16,7 +17,7 @@ export default function ScrapNoteManager() {
     const fetchNote = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/scrapNote/${id}/details`,
+          `${BASE_URL}/scrapNote/${id}/details`,
           {
             headers: {
               Accept: "application/json",
@@ -39,7 +40,7 @@ export default function ScrapNoteManager() {
   const handleApprove = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:8000/api/scrapNotes/${id}/approve`,
+        `${BASE_URL}/scrapNotes/${id}/approve`,
         {}, // body فاضي
         {
           headers: {
@@ -60,7 +61,7 @@ export default function ScrapNoteManager() {
   const handleReject = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:8000/api/scrapNotes/${id}/reject`,
+        `${BASE_URL}/scrapNotes/${id}/reject`,
         { rejection_reason: "اكل هوا" },
         {
           headers: {

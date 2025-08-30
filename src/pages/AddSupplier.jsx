@@ -7,6 +7,7 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import axios from "axios";
 import { useSnackbar } from "notistack";
 import { useTheme } from "@mui/material/styles";
+import { BASE_URL } from "../api/axiosInstance.js";
 
 export default function AddSupplier({ mode, toggleTheme }) {
   const { enqueueSnackbar } = useSnackbar();
@@ -23,7 +24,7 @@ export default function AddSupplier({ mode, toggleTheme }) {
       const fetchSupplier = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:8000/api/supplier/show/${id}`,
+            `${BASE_URL}/supplier/show/${id}`,
             {
               headers: {
                 Accept: "application/json",
@@ -49,7 +50,7 @@ export default function AddSupplier({ mode, toggleTheme }) {
       if (id) {
         // تعديل
         response = await axios.put(
-          `http://localhost:8000/api/supplier/update/${id}`,
+          `${BASE_URL}/supplier/update/${id}`,
           { name, contact_info: contact },
           {
             headers: {
@@ -61,7 +62,7 @@ export default function AddSupplier({ mode, toggleTheme }) {
       } else {
         // إضافة
         response = await axios.post(
-          "http://localhost:8000/api/suppliers/store",
+          `${BASE_URL}/suppliers/store`,
           { name, contact_info: contact },
           {
             headers: {

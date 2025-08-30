@@ -34,6 +34,7 @@ import LockIcon from "@mui/icons-material/Lock";
 import SecurityIcon from "@mui/icons-material/Security";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useTheme } from "@mui/material/styles";
+import { BASE_URL } from "../api/axiosInstance";
 
 const fields = [
   { label: "الاسم الكامل", icon: <PersonIcon /> },
@@ -67,7 +68,7 @@ export default function Settings({ mode, toggleTheme }) {
   const handleSaveChanges = async () => {
     try {
       const response = await axios.put(
-        "http://localhost:8000/api/warehouse-keepers/1",
+        `{BASE_URL}/warehouse-keepers/1`,
         {
           name: userData.name,
           email: userData.email,
@@ -99,7 +100,7 @@ export default function Settings({ mode, toggleTheme }) {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/warehouse-keeper/me",
+          `${BASE_URL}/warehouse-keeper/me`,
           {
             headers: {
               Accept: "application/json",
@@ -130,7 +131,7 @@ export default function Settings({ mode, toggleTheme }) {
   const handleUpdatePassword = async () => {
     try {
       const response = await axios.put(
-        "http://localhost:8000/api/warehouse-keepers/update-password/1",
+        `${BASE_URL}/warehouse-keepers/update-password/1`,
         {
           current_password: passwordData.current_password,
           new_password: passwordData.new_password,

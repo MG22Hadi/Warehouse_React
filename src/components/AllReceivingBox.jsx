@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./AllNotesBox.css";
 import { useTheme } from "@mui/material/styles";
+import { BASE_URL } from "../api/axiosInstance";
 
 const AllReceivingBox = () => {
   const theme = useTheme();
@@ -15,7 +16,7 @@ const AllReceivingBox = () => {
     const fetchNotes = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/allReceivingNote",
+          `${BASE_URL}/allReceivingNote`,
           {
             headers: {
               Accept: "application/json",

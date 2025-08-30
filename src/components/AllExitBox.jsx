@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useTheme } from "@mui/material/styles";
 import "./AllNotesBox.css";
+import { BASE_URL } from "../api/axiosInstance";
 
 const AllExitBox = () => {
   const theme = useTheme();
@@ -14,7 +15,7 @@ const AllExitBox = () => {
     const fetchNotes = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/allExitNote",
+          `${BASE_URL}/allExitNote`,
           {
             headers: {
               Accept: "application/json",

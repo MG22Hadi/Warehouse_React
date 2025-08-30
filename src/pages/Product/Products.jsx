@@ -7,6 +7,7 @@ import ProductDetailsCard from "./ProductDetailsCard";
 // import AddProduct1 from "../AddProduct1";
 import FilterBar from "./FilterBar";
 import axios from "axios";
+import { BASE_URL } from "../../api/axiosInstance.js";
 
 export default function Products({ mode, toggleTheme }) {
   const theme = useTheme();
@@ -26,7 +27,7 @@ export default function Products({ mode, toggleTheme }) {
   const fetchProducts = async (appliedFilters = {}) => {
     try {
       if (warehouseId) {
-        const res = await axios.get(`/api/warehouses/show/${warehouseId}`, {
+        const res = await axios.get(`${BASE_URL}/warehouses/show/${warehouseId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -65,7 +66,7 @@ export default function Products({ mode, toggleTheme }) {
         setProducts(mappedProducts);
       } else {
         // حالة عرض جميع المنتجات (الـ API فيه فلترة جاهزة)
-        const res = await axios.get("/api/products", {
+        const res = await axios.get(`${BASE_URL}/products`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -83,7 +84,7 @@ export default function Products({ mode, toggleTheme }) {
   const fetchWarehouseName = async () => {
     if (!warehouseId) return;
     try {
-      const res = await axios.get(`/api/warehouses/show/${warehouseId}`, {
+      const res = await axios.get(`${BASE_URL}/warehouses/show/${warehouseId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -110,7 +111,7 @@ export default function Products({ mode, toggleTheme }) {
     if (!confirmed) return;
 
     try {
-      await axios.delete(`/api/products/delete/${id}`, {
+      await axios.delete(`${BASE_URL}/products/delete/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

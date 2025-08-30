@@ -4,6 +4,7 @@ import "./../components/Purchase.css";
 import axios from "axios";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../api/axiosInstance";
 
 export default function CreatePurchaseNote({ mode, toggleTheme }) {
   const theme = useTheme();
@@ -48,7 +49,7 @@ export default function CreatePurchaseNote({ mode, toggleTheme }) {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/suppliers", {
+      .get(`${BASE_URL}/suppliers`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
@@ -64,7 +65,7 @@ export default function CreatePurchaseNote({ mode, toggleTheme }) {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/warehouses/index", {
+      .get(`${BASE_URL}/warehouses/index`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
@@ -85,7 +86,7 @@ export default function CreatePurchaseNote({ mode, toggleTheme }) {
     }
 
     axios
-      .get(`http://localhost:8000/api/warehouses/show/${selectedWarehouse}`, {
+      .get(`${BASE_URL}/warehouses/show/${selectedWarehouse}`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
@@ -150,7 +151,7 @@ export default function CreatePurchaseNote({ mode, toggleTheme }) {
     };
 
     axios
-      .post("http://localhost:8000/api/purchase-requests/store", payload, {
+      .post(`${BASE_URL}/purchase-requests/store`, payload, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,

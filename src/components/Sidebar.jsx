@@ -19,6 +19,7 @@ import Inventory2Icon from "@mui/icons-material/Inventory2";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import axios from "axios";
+import { BASE_URL } from "../api/axiosInstance";
 
 const menuItems = [
   { icon: <HomeIcon />, label: "الصفحة الرئيسية", path: "/Dashboard" },
@@ -59,7 +60,7 @@ export default function Sidebar() {
       };
 
       const response = await axios.post(
-        "http://localhost:8000/api/logout",
+        `${BASE_URL}/logout`,
         {},
         { headers }
       );

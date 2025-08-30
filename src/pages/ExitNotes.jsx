@@ -6,6 +6,7 @@ import MainLayout from "../MainLayout";
 // import ProductDetailsCard from "./ProductDetailsCard";
 // import ProductForm from "../components/productform";
 import ExitNote from "../components/Exit";
+import { BASE_URL } from "../api/axiosInstance";
 
 export default function ExitNotes({ mode, toggleTheme }) {
   const theme = useTheme();
@@ -20,7 +21,7 @@ export default function ExitNotes({ mode, toggleTheme }) {
     const fetchNote = async () => {
       try {
         const res = await axios.get(
-          `http://127.0.0.1:8000/api/ExitNote/${id}/details`,
+          `${BASE_URL}/ExitNote/${id}/details`,
           {
             headers: {
               Accept: "application/json",

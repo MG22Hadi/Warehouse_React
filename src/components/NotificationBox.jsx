@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./NotificationBox.css";
 import axios from "axios";
+import { BASE_URL } from "../api/axiosInstance";
 import { useTheme } from "@mui/material/styles";
 
 const NotificationBox = () => {
@@ -24,7 +25,7 @@ const NotificationBox = () => {
   const handleMarkAllAsRead = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:8000/api/markAsRead-allNotification-S",
+        `${BASE_URL}/markAsRead-allNotification-S`,
         {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
@@ -35,7 +36,7 @@ const NotificationBox = () => {
         alert(res.data.message);
 
         const updated = await axios.get(
-          "http://localhost:8000/api/allNotification-S",
+          `${BASE_URL}/allNotification-S`,
           {
             headers: {
               Authorization: "Bearer " + localStorage.getItem("token"),
@@ -122,7 +123,7 @@ const NotificationBox = () => {
     const fetchOrders = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:8000/api/allNotification-S",
+          `${BASE_URL}/allNotification-S`,
           {
             headers: {
               Authorization: "Bearer " + localStorage.getItem("token"),
@@ -141,7 +142,7 @@ const NotificationBox = () => {
   const handleViewDetails = async (orderId) => {
     try {
       const res = await axios.get(
-        `http://localhost:8000/api/Notification/${orderId}`,
+        `${BASE_URL}/Notification/${orderId}`,
         {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),

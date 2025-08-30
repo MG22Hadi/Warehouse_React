@@ -10,6 +10,7 @@ import CategoryIcon from "@mui/icons-material/Category";
 import PublicIcon from "@mui/icons-material/Public";
 import axios from "axios";
 import { useTheme } from "@mui/material/styles";
+import { BASE_URL } from "../api/axiosInstance";
 
 export default function AddUsers4({ mode, toggleTheme }) {
   const theme = useTheme();
@@ -47,7 +48,7 @@ export default function AddUsers4({ mode, toggleTheme }) {
       if (data.id) {
         // تعديل المستخدم
         response = await axios.put(
-          `http://localhost:8000/api/v1/users/${data.id}`,
+          `${BASE_URL}/v1/users/${data.id}`,
           payload,
           {
             headers: {
@@ -59,7 +60,7 @@ export default function AddUsers4({ mode, toggleTheme }) {
       } else {
         // إضافة مستخدم جديد
         response = await axios.post(
-          "http://localhost:8000/api/v1/users",
+          `${BASE_URL}/v1/users`,
           payload,
           {
             headers: {
