@@ -246,7 +246,7 @@ export default function CreateReceivingNote({ mode, toggleTheme }) {
                   </option>
                   {purchaseRequests.map((pr) => (
                     <option key={pr.id} value={pr.id}>
-                      {pr.id} - {pr.title || "بدون عنوان"}
+                      {pr.id} - {pr.title || "طلب شراء"}
                     </option>
                   ))}
                 </select>

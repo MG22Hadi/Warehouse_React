@@ -308,7 +308,7 @@ export default function CreateInstallmosNote({ mode, toggleTheme }) {
                     className="center-text"
                     style={{ borderColor: theme.palette.divider }}
                   >
-                    الكمية المستلمة
+                    الكمية المطلوبة
                   </th>
                   <th
                     rowSpan="2"

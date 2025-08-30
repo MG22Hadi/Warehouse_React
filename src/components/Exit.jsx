@@ -7,7 +7,7 @@ const ExitNote = ({ note }) => {
 
   return (
     <div className="container" dir="rtl">
-      <div className="header">
+      <div className="header pt-8">
         <div className="top-right">
           <p>
             <span
@@ -48,7 +48,8 @@ const ExitNote = ({ note }) => {
               className="storage"
               style={{ color: theme.palette.text.secondary }}
             >
-              {new Date(note.date).toLocaleDateString("ar-EG")}
+              {" "}
+              {note.date?.slice(0, 10)}
             </span>
           </p>
         </div>
@@ -102,8 +103,9 @@ const ExitNote = ({ note }) => {
             </tr>
           </thead>
           <tbody>
-            {note.items && note.items.length > 0 ? (
-              note.items.map((item, index) => (
+            {Array.from({ length: 11 }).map((_, index) => {
+              const item = note.items?.[index];
+              return (
                 <tr
                   key={index}
                   style={{
@@ -111,46 +113,25 @@ const ExitNote = ({ note }) => {
                     backgroundColor: theme.palette.background.default,
                   }}
                 >
-                  <td
-                    className="center-text"
-                    style={{ color: theme.palette.text.third }}
-                  >
+                  <td style={{ color: theme.palette.text.third }}>
                     {index + 1}
                   </td>
                   <td style={{ color: theme.palette.text.third }}>
-                    {item.code}
+                    {item ? item.product?.code : ""}
                   </td>
                   <td style={{ color: theme.palette.text.third }}>
-                    {item.name}
+                    {item ? item.product?.name : ""}
                   </td>
                   <td style={{ color: theme.palette.text.third }}>
-                    {item.description}
+                    {item ? item.product?.unit : ""}
                   </td>
-                  <td
-                    className="center-text"
-                    style={{ color: theme.palette.text.third }}
-                  >
-                    {item.quantity}
+                  <td style={{ color: theme.palette.text.third }}>
+                    {item ? item.quantity : ""}
                   </td>
-                  <td
-                    className="center-text"
-                    style={{ color: theme.palette.text.third }}
-                  >
-                    {item.notes ?? "—"}
-                  </td>
+                  <td>{item ? item.notes : ""}</td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td
-                  colSpan="6"
-                  className="text-center"
-                  style={{ borderColor: theme.palette.divider }}
-                >
-                  لا توجد مواد
-                </td>
-              </tr>
-            )}
+              );
+            })}
           </tbody>
         </table>
       </div>
@@ -162,7 +143,7 @@ const ExitNote = ({ note }) => {
             className="price"
             style={{ color: theme.palette.text.secondary }}
           >
-            {note.created_by?.name ?? "—"}
+          {note.created_by?.name || "—"}
           </span>
         </p>
         <p>

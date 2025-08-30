@@ -37,11 +37,11 @@ export default function ViewUserOrSupplier({ mode, toggleTheme }) {
         if (response.data.success) {
           setData(response.data.data);
         } else {
-          alert("فشل جلب البيانات");
+          // alert("فشل جلب البيانات");
         }
       } catch (err) {
         console.error("خطأ في جلب البيانات:", err);
-        alert("فشل جلب البيانات");
+        // alert("فشل جلب البيانات");
       } finally {
         setLoading(false);
       }
@@ -118,10 +118,10 @@ export default function ViewUserOrSupplier({ mode, toggleTheme }) {
             )}
           </Box>
 
-          <Box mt={4}>
+          <Box mt={4} mr={130}>
             <Button
               variant="contained"
-              sx={{ bgcolor: "#FF8E29", borderRadius: "30px", px: 4 }}
+              sx={{ bgcolor: "#FF8E29",color:"#fff", borderRadius: "30px", px: 4 }}
               onClick={() => navigate(-1)}
             >
               رجوع

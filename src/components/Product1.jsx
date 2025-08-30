@@ -12,6 +12,7 @@ export default function Product1({ onNext, initialData }) {
     code: initialData.code || "",
     consumable: initialData.consumable || "",
     warehouse_id: initialData.warehouse_id || "",
+    danger_quantity: initialData.danger_quantity || "",
   });
 
   const token = localStorage.getItem("token");
@@ -44,6 +45,9 @@ export default function Product1({ onNext, initialData }) {
     if (!formData.unit.trim()) newErrors.unit = "يرجى تعبئة هذا الحقل";
     if (!formData.warehouse_id.toString().trim())
       newErrors.warehouse_id = "يرجى تعبئة هذا الحقل";
+    if (!formData.danger_quantity.toString().trim())
+      newErrors.danger_quantity = "يرجى تعبئة هذا الحقل";
+
     setErrors(newErrors);
     if (Object.keys(newErrors).length === 0) {
       onNext({ ...initialData, ...formData });
@@ -267,6 +271,29 @@ export default function Product1({ onNext, initialData }) {
                   style={{ color: theme.palette.error.main }}
                 >
                   {errors.warehouse_id}
+                </span>
+              )}
+            </div>
+            <div className="input-wrapper">
+              <input
+                type="number"
+                name="danger_quantity"
+                placeholder="الكمية الحرجة"
+                value={formData.danger_quantity}
+                min={0}
+                onChange={handleChange}
+                style={{
+                  backgroundColor: theme.palette.background.ma,
+                  color: theme.palette.text.primary,
+                  border: `1px solid ${theme.palette.divider}`,
+                }}
+              />
+              {errors.danger_quantity && (
+                <span
+                  className="error-message"
+                  style={{ color: theme.palette.error.main }}
+                >
+                  {errors.danger_quantity}
                 </span>
               )}
             </div>

@@ -3,15 +3,13 @@ import api from "../api/axiosInstance";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import MainLayout from "../MainLayout";
-import { BASE_URL } from "../api/axiosInstance";
-import axios from "axios";
 
 export default function Warehouses({ mode, toggleTheme }) {
   const theme = useTheme();
   const navigate = useNavigate();
   const storedUser = JSON.parse(localStorage.getItem("user"));
 
-  const BASE_URL_2 = `${BASE_URL}/warehouses`;
+  const BASE_URL = "http://127.0.0.1:8000/api/warehouses";
 
   const [warehouses, setWarehouses] = useState([]);
   const [showModal1, setShowModal1] = useState(false);
@@ -32,13 +30,15 @@ export default function Warehouses({ mode, toggleTheme }) {
     warehouse: "",
   });
 
-  const BASE_URL_SECTIONS = `${BASE_URL}/departments`;
+  const BASE_URL_SECTIONS = "http://127.0.0.1:8000/api/departments";
 
   const fetchSections = async () => {
     try {
-      const res = await axios.get(`${BASE_URL_SECTIONS}`);
+      const res = await api.get(`${BASE_URL_SECTIONS}`);
+      console.log("الاقسام من السيرفر:", res.data);
+      const sectionsList = Array.isArray(res.data?.data) ? res.data.data : [];
       setSections(
-        res.data.data.map((d) => ({
+        sectionsList.map((d) => ({
           id: d.id,
           name: d.name,
           manager_id: d.manager_id,
@@ -48,6 +48,9 @@ export default function Warehouses({ mode, toggleTheme }) {
           warehouse: d.warehouse?.name || "غير محدد",
         }))
       );
+      if (res.data.data) {
+        console.log(res.data);
+      }
     } catch (error) {
       console.error("فشل تحميل الأقسام", error);
     }
@@ -55,8 +58,12 @@ export default function Warehouses({ mode, toggleTheme }) {
 
   const fetchWarehouses = async () => {
     try {
-      const res = await axios.get(`${BASE_URL_2}/index`);
-      setWarehouses(res.data.data.sort((a, b) => a.name.localeCompare(b.name)));
+      const res = await api.get(`${BASE_URL}/index`);
+      console.log("المستودعات من السيرفر:", res.data);
+      const warehousesList = Array.isArray(res.data?.data) ? res.data.data : [];
+      setWarehouses(
+        warehousesList.sort((a, b) => a.name.localeCompare(b.name))
+      );
     } catch (error) {
       console.error("فشل تحميل المستودعات", error);
     }
@@ -94,12 +101,12 @@ export default function Warehouses({ mode, toggleTheme }) {
     try {
       let response;
       if (editingWarehouse) {
-        response = await axios.put(
-          `${BASE_URL_2}/update/${editingWarehouse.id}`,
+        response = await api.put(
+          `${BASE_URL}/update/${editingWarehouse.id}`,
           formData
         );
       } else {
-        response = await axios.post(`${BASE_URL_2}/store`, formData);
+        response = await api.post(`${BASE_URL}/store`, formData);
       }
       if (response.data.success) {
         alert(
@@ -152,7 +159,7 @@ export default function Warehouses({ mode, toggleTheme }) {
       }
       if (editingSection) {
         // تعديل القسم
-        response = await axios.put(
+        response = await api.put(
           `${BASE_URL_SECTIONS}/update/${editingSection.id}`,
           {
             name: formDataSection.name,
@@ -163,7 +170,7 @@ export default function Warehouses({ mode, toggleTheme }) {
         );
       } else {
         // إضافة قسم جديد
-        response = await axios.post(`${BASE_URL_SECTIONS}/store`, {
+        response = await api.post(`${BASE_URL_SECTIONS}/store`, {
           name: formDataSection.name,
           manager_id: storedUser?.id,
           warehouse_id: formDataSection.warehouse,
@@ -197,14 +204,12 @@ export default function Warehouses({ mode, toggleTheme }) {
     try {
       let response;
       if (deleteModal.type === "warehouse") {
-        response = await axios.delete(
-          `${BASE_URL_2}/destroy/${deleteModal.id}`
-        );
+        response = await api.delete(`${BASE_URL}/destroy/${deleteModal.id}`);
         if (response.data.success)
           alert(response.data.message || "تم حذف المستودع بنجاح");
         fetchWarehouses();
       } else if (deleteModal.type === "section") {
-        response = await axios.delete(
+        response = await api.delete(
           `${BASE_URL_SECTIONS}/delete/${deleteModal.id}`
         );
         if (response.data.success)
@@ -220,10 +225,13 @@ export default function Warehouses({ mode, toggleTheme }) {
   };
 
   const handleView = (id) => {
-    navigate(`${BASE_URL_2}/warehouse/${id}`);
+    navigate(`/products/warehouse/${id}`);
   };
   const availableWarehouses = warehouses.filter(
     (wh) => !sections.some((s) => s.warehouse_id === wh.id)
+  );
+  const availableManagers = warehouses.filter(
+    (wh) => !sections.some((s) => s.manager_id === wh.id)
   );
 
   return (
@@ -669,8 +677,7 @@ export default function Warehouses({ mode, toggleTheme }) {
               >
                 اسم المدير المسؤول
               </label>
-              <input
-                type="text"
+              <select
                 style={{
                   width: "100%",
                   padding: "10px",
@@ -678,9 +685,21 @@ export default function Warehouses({ mode, toggleTheme }) {
                   borderRadius: "10px",
                   fontSize: "14px",
                 }}
-                value={storedUser?.name || "اسم غير معروف"}
-                readOnly
-              />
+                value={formDataSection.warehouse}
+                onChange={(e) =>
+                  setFormDataSection((f) => ({
+                    ...f,
+                    warehouse: e.target.value,
+                  }))
+                }
+              >
+                <option value="">اختر المدير</option>
+                {availableWarehouses.map((wh) => (
+                  <option key={wh.id} value={wh.id}>
+                    {wh.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* وصف القسم */}

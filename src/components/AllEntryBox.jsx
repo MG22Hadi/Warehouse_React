@@ -14,17 +14,14 @@ const AllEntryBox = () => {
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const response = await axios.get(
-          `${BASE_URL}/allEntryNote`,
-          {
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`${BASE_URL}/allEntryNote`, {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
         console.log("📥 المذكرات:", response.data);
-        setData(response.data.data);
+        setData(response.data?.data || []);
       } catch (error) {
         console.error("فشل في جلب المذكرات", error);
       }
@@ -56,7 +53,7 @@ const AllEntryBox = () => {
       </div>
 
       <div className="cards-row">
-        {data.length === 0 ? (
+        {!Array.isArray(data) || data.length === 0 ? (
           <div className="no-data-message">
             <p>لا توجد مذكرات إدخال بعد</p>
           </div>

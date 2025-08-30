@@ -350,7 +350,7 @@ export default function CreateScrapNote({ mode, toggleTheme }) {
                     className="center-text"
                     style={{ borderColor: theme.palette.divider }}
                   >
-                    الكمية المستلمة
+                    الكمية المتلفة
                   </th>
                   <th
                     rowSpan="2"

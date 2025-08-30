@@ -23,35 +23,34 @@ export default function Product3() {
   };
 
   const handleNext = async () => {
-    const { image, ...formDataWithoutImage } = productData.formData;
+    const formData = new FormData();
 
-    const finalProduct = {
-      name: productData.formData.name || "", 
-      code: productData.formData.code || "", 
-      unit: productData.formData.unit || "", 
-      consumable: productData.formData.consumable === "مستهلك" ? true : false,
-      warehouse_id: productData.formData.warehouse_id || "", 
-      notes,
-    };
-    console.log("سيتم إرسال البيانات:", finalProduct);
+    formData.append("name", productData.formData.name || "");
+    formData.append("code", productData.formData.code || "");
+    formData.append("unit", productData.formData.unit || "");
+    formData.append(
+      "consumable",
+      productData.formData.consumable === "مستهلك" ? 1 : 0
+    );
+    formData.append("warehouse_id", productData.formData.warehouse_id || "");
+    formData.append(
+      "danger_quantity",
+      productData.formData.danger_quantity || ""
+    );
+    formData.append("notes", notes || "");
 
-    //   const handleNext = async () => {
-    // const finalProduct = {
-    //   formData: {
-    //     ...productData.formData,
-    //     consumable: productData.formData.consumable === "مستهلك" ? true : false,
-    //   },
-    //   notes,
-    // };
+    if (productData.image) {
+      formData.append("image", productData.image); // ✅ رفع الصورة
+    }
 
     try {
       const response = await axios.post(
         `${BASE_URL}/products/store`,
-        finalProduct,
+        formData,
         {
           headers: {
-            Accept: "application/json",
             Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -60,7 +59,7 @@ export default function Product3() {
       console.log("النتيجة من السيرفر:", data);
 
       if (data.success) {
-        alert(data.success);
+        alert("تمت إضافة المنتج بنجاح ✅");
         navigate("/products");
       } else {
         alert("حدث خطأ أثناء حفظ المنتج: " + data.message);
@@ -150,7 +149,7 @@ export default function Product3() {
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             style={{
-              backgroundColor: theme.palette.background.ma, 
+              backgroundColor: theme.palette.background.ma,
               color: theme.palette.text.primary,
               border: `1px solid ${theme.palette.divider}`,
             }}
@@ -183,7 +182,6 @@ export default function Product3() {
               <button
                 className="btn cancel"
                 onClick={() => setShowConfirm(false)}
-
               >
                 لا
               </button>

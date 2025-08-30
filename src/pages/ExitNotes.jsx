@@ -20,18 +20,17 @@ export default function ExitNotes({ mode, toggleTheme }) {
   useEffect(() => {
     const fetchNote = async () => {
       try {
-        const res = await axios.get(
-          `${BASE_URL}/ExitNote/${id}/details`,
-          {
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await axios.get(`${BASE_URL}/ExitNote/${id}/details`, {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
         if (res.data.success) {
-          setNote(res.data.data.note); // تفاصيل المذكرة
-          setItems(res.data.data.items); // المواد المرتبطة بالمذكرة
+          setNote({
+            ...res.data.data.note,
+            items: res.data.data.items, // ✅ ضفنا المواد داخل النوت
+          });
         }
       } catch (err) {
         console.error("فشل في جلب مذكرة الإخراج:", err);
