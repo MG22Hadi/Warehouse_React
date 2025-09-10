@@ -30,7 +30,7 @@ export default function AllUsers({ mode, toggleTheme }) {
           id: u.id,
           name: u.name,
           email: u.email || "-",
-          address: "-",
+          gender: u.gender || "-",
           phone: u.phone || "-",
           date: u.created_at?.split("T")[0] || "-",
           social: u.job_title || "مستخدم",
@@ -141,7 +141,7 @@ export default function AllUsers({ mode, toggleTheme }) {
           >
             <div>الاسم</div>
             <div>البريد الإلكتروني</div>
-            <div>العنوان</div>
+            <div>الجنس</div>
             <div>رقم الهاتف</div>
             <div>التاريخ</div>
             <div>المسمى الوظيفي</div>
@@ -165,7 +165,7 @@ export default function AllUsers({ mode, toggleTheme }) {
               >
                 <div>{user.name}</div>
                 <div>{user.email}</div>
-                <div>{user.address}</div>
+                <div>{user.gender || "-"}</div>
                 <div>{user.phone}</div>
                 <div>{user.date}</div>
                 <div>{user.social}</div>

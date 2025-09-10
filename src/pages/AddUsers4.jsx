@@ -316,7 +316,7 @@ export default function AddUsers4({ mode, toggleTheme }) {
                   color: theme.palette.primary.main,
                   borderColor: theme.palette.primary.main,
                 }}
-                onClick={() => navigate("/AddUsers")}
+                onClick={() => navigate("/AddUsers", { state: data })}
               >
                 تعديل المعلومات
               </Button>
