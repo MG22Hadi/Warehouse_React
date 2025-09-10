@@ -81,10 +81,10 @@ export default function RevenueChart() {
 
   return (
     <div
-      className="rounded-2xl shadow-md p-6 mt-6 ml-auto mr-0 flex flex-col"
+      className="rounded-2xl shadow-md p-6 mt-6 ml-10 mr-0 flex flex-col"
       style={{
         backgroundColor: theme.palette.background.paper,
-        width: "758px",
+        width: "890px",
         height: "500px",
       }}
     >

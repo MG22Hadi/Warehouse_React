@@ -81,11 +81,17 @@ import ViewUserOrSupplier from "./pages/ViewUserOrSupplier.jsx";
 import SortingMaterials from "./pages/SortingMaterials.jsx";
 
 export default function App() {
-  const [mode, setMode] = useState("light");
+  const [mode, setMode] =  useState(() => {
+    return localStorage.getItem("theme") || "light";
+  });
   const theme = useMemo(() => getTheme(mode), [mode]);
 
   const toggleTheme = () => {
-    setMode((prev) => (prev === "light" ? "dark" : "light"));
+    setMode((prev) => {
+      const newMode = prev === "light" ? "dark" : "light";
+      localStorage.setItem("theme", newMode);
+      return newMode;
+    });
   };
 
   useEffect(() => {

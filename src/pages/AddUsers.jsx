@@ -25,7 +25,9 @@ export default function AddUsers({ mode, toggleTheme }) {
   const { id } = useParams();
   const location = useLocation();
   const initialData = location.state?.data || {};
-  const token = localStorage.getItem("token");
+  const [gender, setGender] = useState("");
+
+    const token = localStorage.getItem("token");
 
   useEffect(() => {
     if (id) {
@@ -107,6 +109,18 @@ export default function AddUsers({ mode, toggleTheme }) {
       value: jobTitle,
       setter: setJobTitle,
     },
+      {
+          label: "الجنس",
+          icon: <PersonIcon />,
+          value: gender,
+          setter: setGender,
+          select: true,
+          options: [
+              { value: "male", label: "ذكر" },
+              { value: "female", label: "أنثى" },
+          ],
+      },
+
   ];
 
   useEffect(() => {
@@ -245,6 +259,7 @@ export default function AddUsers({ mode, toggleTheme }) {
             <Box
               display="grid"
               gridTemplateColumns={{ sm: "1fr 1fr", xs: "1fr" }}
+              justifyItems="center"
               gap={3}
             >
               {fields.map((field) => (
@@ -278,6 +293,23 @@ export default function AddUsers({ mode, toggleTheme }) {
                       backgroundColor: theme.palette.background.note1,
                       "& fieldset": { border: "none" },
                     },
+                      ...(field.label === "الجنس" && {
+                          gridColumn: "1 / -1",
+                          maxWidth: "400px",
+                          mx: "auto",
+                      }),
+                  }}
+                  SelectProps={{
+                      MenuProps: {
+                          PaperProps: {
+                              sx: {
+                                  borderRadius: "30px",
+                                  backgroundColor: theme.palette.background.note1,
+                                  boxShadow: "0px 4px 12px rgba(0,0,0,0.15)",
+                                  mt: 1,
+                              },
+                          },
+                      },
                   }}
                 >
                   {field.select &&
@@ -315,6 +347,7 @@ export default function AddUsers({ mode, toggleTheme }) {
                       department_name:
                         departments.find((d) => d.id === Number(departmentId))
                           ?.name || "",
+                        gender,
                     },
                   })
                 }

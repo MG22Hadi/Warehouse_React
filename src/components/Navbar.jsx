@@ -2,9 +2,35 @@ import IconButton from "@mui/material/IconButton";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import { useTheme } from "@mui/material";
+import {useEffect, useState} from "react";
+import axios from "axios";
+import {BASE_URL} from "../api/axiosInstance.js";
 
 export default function Navbar({ mode, toggleTheme, pageTitle }) {
   const theme = useTheme();
+  const [data, setData] = useState([]);
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(
+            `${BASE_URL}/warehouse-keeper/me`,
+            {
+              headers: {
+                Accept: "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
+        );
+        setData(response.data?.data || []);
+      } catch (error) {
+        console.error("خطأ في جلب بيانات المستخدم:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
   return (
     <div className="flex items-center justify-between h-[45px] mt-6 mx-6 px-8">
       {/* يسار: اسم الصفحة والبحث */}
@@ -47,7 +73,7 @@ export default function Navbar({ mode, toggleTheme, pageTitle }) {
             className="text-sm font-semibold"
             style={{ backgroundColor: theme.palette.background.default }}
           >
-            عمار
+            {data.name}
           </p>
           <p className="text-xs text-[#64748B]">أمين المستودع</p>
         </div>
@@ -57,7 +83,7 @@ export default function Navbar({ mode, toggleTheme, pageTitle }) {
           className="w-4 h-4"
         />
         <IconButton onClick={toggleTheme} color="inherit" size="small">
-          {mode === "light" ? <DarkModeIcon /> : <LightModeIcon />}
+          {mode === "light" ?   <LightModeIcon /> : <DarkModeIcon />}
         </IconButton>
       </div>
     </div>

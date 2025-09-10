@@ -44,6 +44,9 @@ export default function AddUsers4({ mode, toggleTheme }) {
       const payload = { ...data };
       delete payload.department_name;
 
+      // طباعة البيانات قبل الإرسال
+      console.log("Payload to be sent:", payload);
+
       let response;
       if (data.id) {
         // تعديل المستخدم
