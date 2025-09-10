@@ -245,7 +245,10 @@ export default function AddUsers3({ mode, toggleTheme }) {
                 }}
                 onClick={() =>
                   navigate("/AddUsers4", {
-                    state: { ...prevData, facebook, instagram ,id},
+                    state: { ...prevData,
+                        facebook_url: facebook,
+                        instagram_url: instagram
+                      ,id},
                   })
                 }
               >

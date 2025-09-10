@@ -106,6 +106,18 @@ export default function ViewUserOrSupplier({ mode, toggleTheme }) {
                 <Typography>
                   <strong>الوظيفة:</strong> {data.job_title || "-"}
                 </Typography>
+                <Typography>
+                  <strong>الجنس:</strong> {data.gender || "-"}
+                </Typography>
+                <Typography>
+                  <strong>العنوان:</strong> {data.address || "-"}
+                </Typography>
+                <Typography>
+                  <strong>الفيسبوك:</strong> {data.facebook_url || "-"}
+                </Typography>
+                <Typography>
+                  <strong>الانستغرام:</strong> {data.instagram_url || "-"}
+                </Typography>
               </>
             )}
 

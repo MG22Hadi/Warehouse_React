@@ -105,16 +105,15 @@ export default function AddUsers4({ mode, toggleTheme }) {
     },
     {
       label: "Facebook",
-      value: data.facebook || "",
+      value: data.facebook_url || "",
       icon: <WorkIcon />,
     },
     {
       label: "Instagram",
-      value: data.instagram || "",
+      value: data.instagram_url || "",
       icon: <WorkIcon />,
     },
     { label: "المدينة", value: data.city || "" },
-    { label: "الدولة", value: data.state || "" },
   ];
 
   return (
