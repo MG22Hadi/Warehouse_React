@@ -247,7 +247,18 @@ export default function AddUsers2({ mode, toggleTheme }) {
                   color: theme.palette.primary.main,
                   borderColor: theme.palette.primary.main,
                 }}
-                onClick={() => navigate("/AddUsers")}
+                onClick={() =>
+                  navigate("/AddUsers", {
+                    state: {
+                      ...prevData,
+                      address,
+                      detailedAddress,
+                      city,
+                      country,
+                      id: prevData.id ?? id,
+                    },
+                  })
+                }
               >
                 السابق
               </Button>
@@ -269,7 +280,7 @@ export default function AddUsers2({ mode, toggleTheme }) {
                       detailedAddress,
                       city,
                       country,
-                      id,
+                      id: prevData.id ?? id,
                     },
                   })
                 }

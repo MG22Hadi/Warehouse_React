@@ -79,6 +79,7 @@ import ScrapNoteManager from "./pages/ScrapNoteManager.jsx";
 
 import ViewUserOrSupplier from "./pages/ViewUserOrSupplier.jsx";
 import SortingMaterials from "./pages/SortingMaterials.jsx";
+import MonthlyMovement from "./pages/MonthlyMovement";
 
 export default function App() {
   const [mode, setMode] =  useState(() => {
@@ -389,6 +390,11 @@ export default function App() {
     {
       path: "/SortingMaterials",
       element: SortingMaterials,
+      allowedRoles: ["warehouseKeeper"],
+    },
+    {
+      path: "/MonthlyMovement/:id",
+      element: MonthlyMovement,
       allowedRoles: ["warehouseKeeper"],
     },
   ];

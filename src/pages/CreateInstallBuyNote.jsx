@@ -116,6 +116,15 @@ export default function CreateInstallBuyNote({ mode, toggleTheme }) {
       .catch((err) => console.error("خطأ بجلب المواد:", err));
   }, []);
 
+  // تعيين التاريخ تلقائياً عند أول تحميل للصفحة
+  useEffect(() => {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const dd = String(today.getDate()).padStart(2, "0");
+    setReportDate(`${yyyy}-${mm}-${dd}`);
+  }, []);
+
   // عند اختيار مادة
   // const handleProductChange = (rowIndex, productId) => {
   //   const selected = products.find((p) => p.id === parseInt(productId));
@@ -360,7 +369,7 @@ export default function CreateInstallBuyNote({ mode, toggleTheme }) {
                           ...inputStyle,
                           color: theme.palette.text.primary,
                           width: "80px",
-                          padding: "4px 6px", 
+                          padding: "4px 6px",
                         }}
                       />
                     </td>

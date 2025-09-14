@@ -24,6 +24,15 @@ export default function CreateReceivingNote({ mode, toggleTheme }) {
   const [selectedPurchaseRequest, setSelectedPurchaseRequest] = useState("");
   const [entryDate, setEntryDate] = useState("");
 
+  // تعيين التاريخ تلقائياً عند أول تحميل للصفحة
+  useEffect(() => {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const dd = String(today.getDate()).padStart(2, "0");
+    setEntryDate(`${yyyy}-${mm}-${dd}`);
+  }, []);
+
   // المواد
   const [items, setItems] = useState(
     Array(11)

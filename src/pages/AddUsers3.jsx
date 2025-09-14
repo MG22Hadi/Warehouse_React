@@ -7,7 +7,7 @@ import {
   Button,
   InputAdornment,
 } from "@mui/material";
-import { useNavigate, useLocation ,useParams} from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { Facebook, Instagram } from "@mui/icons-material";
 import MainLayout from "../MainLayout";
 import { useTheme } from "@mui/material/styles";
@@ -37,8 +37,12 @@ export default function AddUsers3({ mode, toggleTheme }) {
     { label: "مراجعة", key: "final" },
   ];
 
-  const [facebook, setFacebook] = useState(prevData.facebook || "");
-  const [instagram, setInstagram] = useState(prevData.instagram || "");
+  const [facebook, setFacebook] = useState(
+    prevData.facebook ?? prevData.facebook_url ?? prevData.facebookUrl ?? ""
+  );
+  const [instagram, setInstagram] = useState(
+    prevData.instagram ?? prevData.instagram_url ?? prevData.instagramUrl ?? ""
+  );
 
   return (
     <MainLayout mode={mode} toggleTheme={toggleTheme} pageTitle="اضافة مستخدم">
@@ -229,7 +233,18 @@ export default function AddUsers3({ mode, toggleTheme }) {
                   color: theme.palette.primary.main,
                   borderColor: theme.palette.primary.main,
                 }}
-                onClick={() => navigate("/AddUsers2", { state: prevData })}
+                onClick={() =>
+                  navigate("/AddUsers2", {
+                    state: {
+                      ...prevData,
+                      facebook,
+                      instagram,
+                      facebook_url: facebook,
+                      instagram_url: instagram,
+                      id: prevData.id ?? id,
+                    },
+                  })
+                }
               >
                 السابق
               </Button>
@@ -245,10 +260,14 @@ export default function AddUsers3({ mode, toggleTheme }) {
                 }}
                 onClick={() =>
                   navigate("/AddUsers4", {
-                    state: { ...prevData,
-                        facebook_url: facebook,
-                        instagram_url: instagram
-                      ,id},
+                    state: {
+                      ...prevData,
+                      facebook,
+                      instagram,
+                      facebook_url: facebook,
+                      instagram_url: instagram,
+                      id: prevData.id ?? id,
+                    },
                   })
                 }
               >

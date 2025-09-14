@@ -5,18 +5,63 @@ import MainLayout from "../MainLayout";
 import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
-import WorkIcon from "@mui/icons-material/Work";
 import CategoryIcon from "@mui/icons-material/Category";
 import PublicIcon from "@mui/icons-material/Public";
 import axios from "axios";
 import { useTheme } from "@mui/material/styles";
 import { BASE_URL } from "../api/axiosInstance";
+import CircularProgress from "@mui/material/CircularProgress";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import Instagram from "@mui/icons-material/Instagram";
 
 export default function AddUsers4({ mode, toggleTheme }) {
   const theme = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const data = location.state || {};
+  // تحقق من وصول id عند التعديل
+  React.useEffect(() => {
+    if (!data.id && data.isEdit) {
+      setSnackbar({
+        open: true,
+        message: "لم يتم العثور على معرف المستخدم للتعديل!",
+        severity: "error",
+      });
+    }
+  }, [data]);
+  const [isSaving, setIsSaving] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success", // 'success'|'error'|'info'|'warning'
+  });
+
+  const buildPayload = (raw) => {
+    // تجهيز البيانات للإرسال
+    const normalized = {
+      name: raw.name ?? raw.fullName ?? "",
+      phone: raw.phone ?? "",
+      email: raw.email ?? "",
+      department_id:
+        raw.department_id ?? raw.departmentId ?? raw.department ?? null,
+      job_title: raw.job_title ?? raw.jobTitle ?? raw.job ?? "",
+      country: raw.country ?? raw.country_name ?? "",
+      city: raw.city ?? "",
+      address: raw.address ?? "",
+      facebook_url: raw.facebook_url ?? raw.facebook ?? "",
+      instagram_url: raw.instagram_url ?? raw.instagram ?? "",
+      gender: raw.gender ?? "",
+      // كلمة المرور فقط إذا تم تعديلها
+    };
+    if (raw.isPasswordDirty && raw.password && raw.password.trim().length > 0) {
+      normalized.password = raw.password;
+    }
+    Object.keys(normalized).forEach((k) => {
+      if (normalized[k] === null || normalized[k] === undefined)
+        delete normalized[k];
+    });
+    return normalized;
+  };
 
   const sectionsRef = {
     info: useRef(null),
@@ -40,50 +85,82 @@ export default function AddUsers4({ mode, toggleTheme }) {
   ];
   const token = localStorage.getItem("token");
   const handleSave = async () => {
+    // إزالة أي طباعة كونسول
     try {
-      const payload = { ...data };
-      delete payload.department_name;
-
-      // طباعة البيانات قبل الإرسال
-      console.log("Payload to be sent:", payload);
-
+      const confirm = window.confirm("هل أنت متأكد من حفظ بيانات المستخدم؟");
+      if (!confirm) return;
+      setIsSaving(true);
+      const payload = buildPayload(data);
+      // تحقق من العملية: تعديل أم إضافة
       let response;
       if (data.id) {
-        // تعديل المستخدم
-        response = await axios.put(
-          `${BASE_URL}/v1/users/${data.id}`,
-          payload,
-          {
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        // تعديل مستخدم
+        response = await axios.put(`${BASE_URL}/v1/users/${data.id}`, payload, {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
       } else {
         // إضافة مستخدم جديد
-        response = await axios.post(
-          `${BASE_URL}/v1/users`,
-          payload,
-          {
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        if (!payload.password || payload.password.length < 6) {
+          setSnackbar({
+            open: true,
+            message:
+              "يجب إدخال كلمة مرور صالحة (6 أحرف على الأقل) عند الإضافة.",
+            severity: "error",
+          });
+          setIsSaving(false);
+          return;
+        }
+        response = await axios.post(`${BASE_URL}/v1/users`, payload, {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
       }
-
-      if (response.data.success) {
-        alert(response.data.success);
-        navigate("/AllUsers");
+      if (response?.data?.success) {
+        setSnackbar({
+          open: true,
+          message:
+            response.data.message || response.data.success || "تم الحفظ بنجاح",
+          severity: "success",
+        });
+        setTimeout(() => navigate("/AllUsers"), 800);
       } else {
-        alert("حدث خطأ: " + response.data.message);
+        setSnackbar({
+          open: true,
+          message: response?.data?.message || "حدث خطأ أثناء الحفظ",
+          severity: "error",
+        });
       }
     } catch (error) {
-      console.error(error);
+      // لا تطبع في الكونسول، فقط أظهر رسالة للمستخدم
+      let errorMsg = error.response?.data?.message || "حدث خطأ في الخادم";
+      if (error.response?.data?.errors) {
+        const errs = error.response.data.errors;
+        let details = [];
+        Object.entries(errs).forEach(([field, messages]) => {
+          let label = field;
+          if (field === "email") label = "البريد الإلكتروني";
+          else if (field === "phone") label = "رقم الهاتف";
+          else if (field === "password") label = "كلمة المرور";
+          else if (field === "name") label = "الاسم";
+          else if (field === "department_id") label = "القسم";
+          else if (field === "job_title") label = "المسمى الوظيفي";
+          details.push(`${label}: ${messages.join(" ")}`);
+        });
+        errorMsg += "\n" + details.join("\n");
+      }
+      setSnackbar({
+        open: true,
+        message: errorMsg,
+        severity: "error",
+      });
+    } finally {
+      setIsSaving(false);
     }
-    setOpenSnackbar(true);
   };
 
   const handleCloseSnackbar = () => setOpenSnackbar(false);
@@ -106,12 +183,12 @@ export default function AddUsers4({ mode, toggleTheme }) {
     {
       label: "Facebook",
       value: data.facebook_url || "",
-      icon: <WorkIcon />,
+      icon: <FacebookIcon />,
     },
     {
       label: "Instagram",
       value: data.instagram_url || "",
-      icon: <WorkIcon />,
+      icon: <Instagram />,
     },
     { label: "المدينة", value: data.city || "" },
   ];
@@ -126,7 +203,7 @@ export default function AddUsers4({ mode, toggleTheme }) {
         dir="rtl"
         sx={{
           minHeight: "100vh",
-          bbgcolor: theme.palette.background.default,
+          bgcolor: theme.palette.background.default,
           color: theme.palette.text.primary,
           borderRadius: 6,
           px: 4,
@@ -322,8 +399,10 @@ export default function AddUsers4({ mode, toggleTheme }) {
               </Button>
               <Button
                 variant="contained"
+                disabled={isSaving}
                 sx={{
                   bgcolor: theme.palette.primary.main,
+                  opacity: isSaving ? 0.7 : 1,
                   color: "#fff",
                   borderRadius: "30px",
                   px: 6,
@@ -332,22 +411,22 @@ export default function AddUsers4({ mode, toggleTheme }) {
                 }}
                 onClick={handleSave}
               >
-                حفظ المستخدم
+                {isSaving ? <CircularProgress size={20} /> : "حفظ المستخدم"}
               </Button>
             </Box>
 
             <Snackbar
-              open={openSnackbar}
+              open={snackbar.open}
               autoHideDuration={3000}
-              onClose={handleCloseSnackbar}
+              onClose={() => setSnackbar((s) => ({ ...s, open: false }))}
               anchorOrigin={{ vertical: "top", horizontal: "center" }}
             >
               <Alert
-                onClose={handleCloseSnackbar}
-                severity="success"
+                onClose={() => setSnackbar((s) => ({ ...s, open: false }))}
+                severity={snackbar.severity}
                 sx={{ width: "100%" }}
               >
-                تم حفظ المستخدم بنجاح!
+                {snackbar.message}
               </Alert>
             </Snackbar>
           </Paper>

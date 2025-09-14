@@ -27,11 +27,14 @@ export default function Products({ mode, toggleTheme }) {
   const fetchProducts = async (appliedFilters = {}) => {
     try {
       if (warehouseId) {
-        const res = await axios.get(`${BASE_URL}/warehouses/show/${warehouseId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await axios.get(
+          `${BASE_URL}/warehouses/show/${warehouseId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         let stock = res.data?.data?.warehouse?.stock || [];
 
@@ -84,11 +87,14 @@ export default function Products({ mode, toggleTheme }) {
   const fetchWarehouseName = async () => {
     if (!warehouseId) return;
     try {
-      const res = await axios.get(`${BASE_URL}/warehouses/show/${warehouseId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.get(
+        `${BASE_URL}/warehouses/show/${warehouseId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setWarehouseName(res.data?.data?.warehouse?.name || "");
     } catch (err) {
       console.error("خطأ في تحميل اسم المستودع:", err);
@@ -137,13 +143,24 @@ export default function Products({ mode, toggleTheme }) {
           >
             {warehouseId ? `منتجات ${warehouseName}` : "جميع المنتجات"}
           </h1>
-          <button
-            className="text-sm font-medium py-2 px-4 rounded-md hover:bg-[#e57d18] transition"
-            style={{ backgroundColor: "#FF8E29", color: "#fff" }}
-            onClick={handleNext}
-          >
-            إضافة منتج جديد
-          </button>
+          <div className="flex gap-3">
+            {warehouseId && (
+              <button
+                className="text-sm font-medium py-2 px-4 rounded-md hover:bg-[#e57d18] transition"
+                style={{ backgroundColor: "#FF8E29", color: "#fff" }}
+                onClick={() => navigate(`/MonthlyMovement/${warehouseId}`)}
+              >
+                الحركة الشهرية
+              </button>
+            )}
+            <button
+              className="text-sm font-medium py-2 px-4 rounded-md hover:bg-[#e57d18] transition"
+              style={{ backgroundColor: "#FF8E29", color: "#fff" }}
+              onClick={handleNext}
+            >
+              إضافة منتج جديد
+            </button>
+          </div>
         </div>
 
         {/*  مكون الفلترة */}
@@ -228,7 +245,9 @@ export default function Products({ mode, toggleTheme }) {
                 >
                   <div className="flex flex-col items-start">
                     <span>التاريخ</span>
-                    <span>{new Date(product.created_at).toLocaleDateString("ar-EG")}</span>
+                    <span>
+                      {new Date(product.created_at).toLocaleDateString("ar-EG")}
+                    </span>
                   </div>
                 </div>
 

@@ -86,9 +86,8 @@ export default function PastRevenueTable() {
 
       <div className="flex justify-center w-full">
         <table
-          className="text-sm text-right rtl h-full border-collapse"
+          className="w-full text-sm text-right rtl h-full border-collapse"
           style={{
-            width: "700px",
             tableLayout: "auto",
             backgroundColor: theme.palette.background.paper,
             border: `1px solid ${theme.palette.divider}`,

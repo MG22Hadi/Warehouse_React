@@ -8,6 +8,8 @@ import {
   Typography,
   CircularProgress,
   Button,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { BASE_URL } from "../api/axiosInstance";
 
@@ -17,6 +19,11 @@ export default function ViewUserOrSupplier({ mode, toggleTheme }) {
   const { id, type } = location.state || {};
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "error",
+  });
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -37,18 +44,25 @@ export default function ViewUserOrSupplier({ mode, toggleTheme }) {
         if (response.data.success) {
           setData(response.data.data);
         } else {
-          // alert("فشل جلب البيانات");
+          setSnackbar({
+            open: true,
+            message: "فشل جلب البيانات من السيرفر.",
+            severity: "error",
+          });
         }
       } catch (err) {
-        console.error("خطأ في جلب البيانات:", err);
-        // alert("فشل جلب البيانات");
+        setSnackbar({
+          open: true,
+          message: "تعذر الاتصال بالخادم أو البيانات غير موجودة.",
+          severity: "error",
+        });
       } finally {
         setLoading(false);
       }
     };
 
     if (id && type) fetchData();
-  }, [id, type]);
+  }, [id, type, token]);
 
   if (loading) {
     return (
@@ -78,6 +92,20 @@ export default function ViewUserOrSupplier({ mode, toggleTheme }) {
       >
         <Box p={4}>
           <Typography color="error">لم يتم العثور على بيانات</Typography>
+          <Snackbar
+            open={snackbar.open}
+            autoHideDuration={4000}
+            onClose={() => setSnackbar({ ...snackbar, open: false })}
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          >
+            <Alert
+              onClose={() => setSnackbar({ ...snackbar, open: false })}
+              severity={snackbar.severity}
+              sx={{ width: "100%" }}
+            >
+              {snackbar.message}
+            </Alert>
+          </Snackbar>
         </Box>
       </MainLayout>
     );
@@ -133,13 +161,32 @@ export default function ViewUserOrSupplier({ mode, toggleTheme }) {
           <Box mt={4} mr={130}>
             <Button
               variant="contained"
-              sx={{ bgcolor: "#FF8E29",color:"#fff", borderRadius: "30px", px: 4 }}
+              sx={{
+                bgcolor: "#FF8E29",
+                color: "#fff",
+                borderRadius: "30px",
+                px: 4,
+              }}
               onClick={() => navigate(-1)}
             >
               رجوع
             </Button>
           </Box>
         </Paper>
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={4000}
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert
+            onClose={() => setSnackbar({ ...snackbar, open: false })}
+            severity={snackbar.severity}
+            sx={{ width: "100%" }}
+          >
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
       </Box>
     </MainLayout>
   );

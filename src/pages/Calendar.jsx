@@ -46,37 +46,37 @@ export default function CalendarPage({ mode, toggleTheme }) {
   }));
 
   // ====== Fetch notes for visible month ======
+  const [rawNotes, setRawNotes] = useState([]); // حفظ البيانات الخام من الـ API
+
   const fetchNotesByMonthYear = async (dateObj) => {
     setLoading(true);
     setError("");
-
-    const month = two(dateObj.getMonth() + 1);
-    const year = String(dateObj.getFullYear());
-
     try {
       const token = localStorage.getItem("token");
       const res = await api.get(`${BASE_URL}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
       const notes = res?.data?.data?.notes ?? [];
-      const mapped = notes.map((n) => ({
-        title: n.noteContent,
-        date: n.note_date,
-        backgroundColor: "#FFEDD5",
-        textColor: theme.palette?.text?.primary || "#111827",
-        borderColor: "transparent",
-      }));
-
-      setEvents(mapped);
+      setRawNotes(notes); // حفظ البيانات الخام
     } catch (err) {
-      console.error("فشل جلب ملاحظات التقويم", err);
       setError("فشل جلب ملاحظات التقويم");
-      setEvents([]);
+      setRawNotes([]);
     } finally {
       setLoading(false);
     }
   };
+
+  // توليد الأحداث حسب الثيم والبيانات الخام
+  useEffect(() => {
+    const mapped = rawNotes.map((n) => ({
+      title: n.noteContent,
+      date: n.note_date,
+      backgroundColor: theme.palette.background.ma1,
+      textColor: theme.palette?.text?.primary || "#111827",
+      borderColor: "transparent",
+    }));
+    setEvents(mapped);
+  }, [rawNotes, theme.palette.background.paper, theme.palette.text.primary]);
 
   // جلب عند التحميل وأي تغيير للشهر/السنة
   useEffect(() => {
@@ -167,25 +167,18 @@ export default function CalendarPage({ mode, toggleTheme }) {
 
       if (err.response) {
         console.error("📩 رد السيرفر:", err.response.data);
-        alert(
-          `خطأ من السيرفر: ${err.response.status} - ${JSON.stringify(
-            err.response.data
-          )}`
-        );
       } else if (err.request) {
         console.error("📡 لم يتم الرد من السيرفر");
         alert("لم يتم الرد من السيرفر");
       } else {
         console.error("خطأ غير متوقع:", err.message);
-        alert(`خطأ غير متوقع: ${err.message}`);
       }
     }
   };
 
   const handleDelete = async () => {
     if (!selectedDate) return;
-    if (!window.confirm("هل أنت متأكد من حذف الملاحظة؟")) return;
-
+  
     try {
       await api.delete(`${BASE_URL}/destroy/${selectedDate}`);
       await fetchNotesByMonthYear(new Date(selectedDate));
@@ -309,7 +302,7 @@ export default function CalendarPage({ mode, toggleTheme }) {
         </div>
 
         <div
-          className="rounded-[20px] shadow p-4"
+          className="rounded-[20px] shadow p-7 mb-2"
           style={{ backgroundColor: theme.palette.background.calender }}
         >
           {/* التقويم */}
@@ -387,48 +380,58 @@ export default function CalendarPage({ mode, toggleTheme }) {
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div
-            className="w-[90%] max-w-md rounded-xl p-6 text-right"
+            className="w-[95%] max-w-md rounded-2xl p-7 text-right shadow-2xl border border-orange-200 backdrop-blur-md"
             style={{
-              backgroundColor:
-                theme.palette.mode === "dark" ? "#1f2937" : "#ffffff",
+              background:
+                theme.palette.mode === "dark"
+                  ? theme.palette.background.paper
+                  : theme.palette.background.paper,
+              boxShadow: "0 8px 32px rgba(0,0,0,0.12)",
+              border: "1.5px solid #FF8E29",
             }}
           >
             <h2
-              className="text-xl font-bold mb-2"
-              style={{ color: theme.palette.text.primary }}
+              className="text-2xl font-extrabold mb-2 text-[#FF8E29]"
+              style={{ letterSpacing: "0.5px" }}
             >
               {hasExistingNote ? "تعديل ملاحظة" : "إضافة ملاحظة"}
             </h2>
-            <p
-              className="text-sm mb-4"
-              style={{ color: theme.palette.text.secondary }}
-            >
-              التاريخ: {selectedDate}
+            <p className="text-sm mb-4 text-gray-500 font-medium">
+              التاريخ:{" "}
+              <span className="font-bold text-[#FF8E29]">{selectedDate}</span>
             </p>
-
             <div className="mb-4">
-              <label className="block mb-1 text-sm font-medium">
+              <label
+                className="block mb-2 text-base font-semibold"
+                style={{ color: theme.palette.text.secondary }}
+              >
                 نص الملاحظة
               </label>
               <textarea
-                className="w-full border rounded px-3 py-2 min-h-[110px]"
+                className="w-full border border-orange-200 rounded-xl px-3 py-2 min-h-[110px] focus:outline-none focus:ring-2 focus:ring-orange-300 text-[1rem]"
                 value={noteContent}
                 onChange={(e) => setNoteContent(e.target.value)}
+                placeholder="اكتب ملاحظتك هنا..."
+                style={{
+                  resize: "vertical",
+                  fontFamily: "inherit",
+                  background: theme.palette.background.paper,
+                  color: theme.palette.text.primary,
+                }}
               />
             </div>
-
-            <div className="flex flex-wrap gap-2 justify-between mt-4">
+            <div className="flex flex-wrap gap-2 justify-between mt-6">
               <div className="flex gap-2">
                 <button
                   onClick={handleSave}
-                  className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                  className="px-5 py-2 bg-[#FF8E29] text-white rounded-xl font-bold shadow hover:bg-orange-500 transition-all duration-200"
                 >
                   حفظ
                 </button>
                 {hasExistingNote && (
                   <button
                     onClick={handleDelete}
-                    className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                    className="px-5 py-2 bg-red-500 text-white rounded-xl font-bold shadow hover:bg-red-600 transition-all duration-200"
                   >
                     حذف
                   </button>
@@ -436,7 +439,7 @@ export default function CalendarPage({ mode, toggleTheme }) {
               </div>
               <button
                 onClick={closeModal}
-                className="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500"
+                className="px-5 py-2 bg-gray-300 text-gray-700 rounded-xl font-bold shadow hover:bg-gray-400 transition-all duration-200"
               >
                 إلغاء
               </button>

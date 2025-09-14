@@ -36,6 +36,15 @@ export default function CreateEntryNote({ mode, toggleTheme }) {
 
   const [entryDate, setEntryDate] = useState("");
 
+  // تعيين التاريخ تلقائياً عند أول تحميل للصفحة
+  useEffect(() => {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const dd = String(today.getDate()).padStart(2, "0");
+    setEntryDate(`${yyyy}-${mm}-${dd}`);
+  }, []);
+
   const inputStyle = {
     padding: "6px 8px",
     border: "1px solid transparent",

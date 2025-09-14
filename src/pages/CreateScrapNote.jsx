@@ -36,6 +36,16 @@ export default function CreateScrapNote({ mode, toggleTheme }) {
   const selectedIds = items.map((i) => i.product_id).filter(Boolean);
 
   const [entryDate, setEntryDate] = useState("");
+
+  // تعيين التاريخ تلقائياً عند أول تحميل للصفحة
+  useEffect(() => {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const dd = String(today.getDate()).padStart(2, "0");
+    setEntryDate(`${yyyy}-${mm}-${dd}`);
+  }, []);
+
   // const [warehouse, setWarehouse] = useState("");
 
   const inputStyle = {
@@ -100,19 +110,16 @@ export default function CreateScrapNote({ mode, toggleTheme }) {
     });
     if (productId && selectedWarehouse) {
       try {
-        const res = await axios.get(
-          `${BASE_URL}/locations/product-locations`,
-          {
-            params: {
-              product_id: Number(productId),
-              warehouse_id: Number(selectedWarehouse),
-            },
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await axios.get(`${BASE_URL}/locations/product-locations`, {
+          params: {
+            product_id: Number(productId),
+            warehouse_id: Number(selectedWarehouse),
+          },
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const firstLocation = res?.data?.data?.[0];
         if (firstLocation?.location_id) {
           setItems((prev) => {
@@ -513,7 +520,7 @@ export default function CreateScrapNote({ mode, toggleTheme }) {
               }}
               onClick={() => setShowModal(true)}
             >
-              تأكيد إنشاء الضبط
+              تأكيد إنشاء المذكرة
             </button>
           </div>
 
@@ -554,7 +561,7 @@ export default function CreateScrapNote({ mode, toggleTheme }) {
                   تأكيد الإنشاء
                 </h2>
                 <p style={{ fontSize: "16px", marginBottom: "24px" }}>
-                  هل تريد إنشاء الضبط إتلاف جديدة؟
+                  هل تريد إنشاء مذكرة إتلاف جديدة؟
                 </p>
                 <div
                   style={{

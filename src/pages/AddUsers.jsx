@@ -18,31 +18,43 @@ import CategoryIcon from "@mui/icons-material/Category";
 import axios from "axios";
 import { useTheme } from "@mui/material/styles";
 import { BASE_URL } from "../api/axiosInstance";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
 
 export default function AddUsers({ mode, toggleTheme }) {
   const theme = useTheme();
   const navigate = useNavigate();
   const { id } = useParams();
   const location = useLocation();
-  const initialData = location.state?.data || {};
-  const [gender, setGender] = useState("");
+  const initialData = location.state?.data || location.state || {};
 
-    const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
+  const realId = id || initialData.id;
 
   useEffect(() => {
-    if (id) {
+    if (realId) {
       axios
-        .get(`${BASE_URL}/v1/users/${id}`, {
+        .get(`${BASE_URL}/v1/users/${realId}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
-          setName(res.data.name);
-          setPhone(res.data.phone);
-          setEmail(res.data.email);
-          setPassword(""); // كلمة المرور عادة لا تُرجع
-          setJobTitle(res.data.jobTitle);
-          setDepartmentId(res.data.departmentId);
-        });
+          const user = res.data?.data || res.data || {};
+          setName(user.name || "");
+          setPhone(user.phone || "");
+          setEmail(user.email || "");
+          setPassword("");
+          setShowPasswordInput(false); // خفي حقل التغيير افتراضياً
+          setIsPasswordDirty(false);
+          setJobTitle(user.job_title ?? user.jobTitle ?? "");
+          setDepartmentId(user.department_id ?? user.departmentId ?? "");
+          setGender(user.gender ?? "");
+          setAddress(user.address ?? "");
+          setFacebookUrl(user.facebook_url ?? "");
+          setInstagramUrl(user.instagram_url ?? "");
+        })
+        .catch((err) => console.error(err));
     }
   }, [id, token]);
 
@@ -72,8 +84,25 @@ export default function AddUsers({ mode, toggleTheme }) {
   const [phone, setPhone] = useState(initialData.phone || "");
   const [email, setEmail] = useState(initialData.email || "");
   const [password, setPassword] = useState("");
-  const [jobTitle, setJobTitle] = useState(initialData.jobTitle || "");
-  const [departmentId, setDepartmentId] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordInput, setShowPasswordInput] = useState(false);
+  const [isPasswordDirty, setIsPasswordDirty] = useState(false);
+  const [jobTitle, setJobTitle] = useState(
+    initialData.job_title ?? initialData.jobTitle ?? ""
+  );
+  const [departmentId, setDepartmentId] = useState(
+    initialData.department_id ?? initialData.departmentId ?? ""
+  );
+  const [gender, setGender] = useState(initialData.gender ?? "");
+  const [address, setAddress] = useState(initialData.address ?? "");
+  const [facebook_url, setFacebookUrl] = useState(
+    initialData.facebook_url ?? ""
+  );
+  const [instagram_url, setInstagramUrl] = useState(
+    initialData.instagram_url ?? ""
+  );
+  // const [gender, setGender] = useState(initialData.gender ?? "");
+  // const [gender, setGender] = useState(initialData.gender ?? "");
 
   const fields = [
     {
@@ -109,18 +138,17 @@ export default function AddUsers({ mode, toggleTheme }) {
       value: jobTitle,
       setter: setJobTitle,
     },
-      {
-          label: "الجنس",
-          icon: <PersonIcon />,
-          value: gender,
-          setter: setGender,
-          select: true,
-          options: [
-              { value: "male", label: "ذكر" },
-              { value: "female", label: "أنثى" },
-          ],
-      },
-
+    {
+      label: "الجنس",
+      icon: <PersonIcon />,
+      value: gender,
+      setter: setGender,
+      select: true,
+      options: [
+        { value: "ذكر", label: "ذكر" },
+        { value: "أنثى", label: "أنثى" },
+      ],
+    },
   ];
 
   useEffect(() => {
@@ -138,7 +166,11 @@ export default function AddUsers({ mode, toggleTheme }) {
   }, [token]);
 
   return (
-    <MainLayout mode={mode} toggleTheme={toggleTheme} pageTitle="اضافة مستخدم">
+    <MainLayout
+      mode={mode}
+      toggleTheme={toggleTheme}
+      pageTitle="مراجعة المستخدم"
+    >
       <Box
         dir="rtl"
         sx={{
@@ -195,7 +227,7 @@ export default function AddUsers({ mode, toggleTheme }) {
                       width: 24,
                       height: 24,
                       borderRadius: "50%",
-                     bgcolor:
+                      bgcolor:
                         index === 0 || index === activeStep
                           ? "#FF8E29"
                           : "#FFC794",
@@ -262,64 +294,104 @@ export default function AddUsers({ mode, toggleTheme }) {
               justifyItems="center"
               gap={3}
             >
-              {fields.map((field) => (
-                <TextField
-                  key={field.label}
-                  label={field.label}
-                  value={field.value}
-                  onChange={(e) => field.setter(e.target.value)}
-                  fullWidth
-                  select={field.select || false}
-                  InputProps={{
-                    startAdornment: field.icon && (
-                      <Box
-                        sx={{
-                          mr: 1,
-                          display: "flex",
-                          alignItems: "center",
-                          color: theme.palette.text.secondary,
-                        }}
-                      >
-                        {field.icon}
-                      </Box>
-                    ),
-                  }}
-                  sx={{
-                    borderRadius: "30px",
-                    backgroundColor: theme.palette.background.note1,
-                    boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-                    "& .MuiOutlinedInput-root": {
+              {fields.map((field) => {
+                // لو الحقل هو كلمة المرور نطبّق إعدادات خاصة (نوع الحقل + أيقونة العين)
+                const isPasswordField = field.label === "كلمة المرور";
+
+                return (
+                  <TextField
+                    key={field.label}
+                    label={field.label}
+                    // لو هو كلمة المرور نستخدم state password، وإلا نستخدم value الاعتيادي
+                    value={isPasswordField ? password : field.value}
+                    onChange={(e) => {
+                      if (isPasswordField) {
+                        setPassword(e.target.value);
+                        setIsPasswordDirty(e.target.value.length > 0); // فقط إذا كتب كلمة مرور
+                      } else {
+                        field.setter(e.target.value);
+                      }
+                    }}
+                    fullWidth
+                    // لو هو password نغير النوع بناء على showPassword
+                    type={
+                      isPasswordField
+                        ? showPassword
+                          ? "text"
+                          : "password"
+                        : undefined
+                    }
+                    select={field.select || false}
+                    InputProps={{
+                      startAdornment: field.icon && (
+                        <Box
+                          sx={{
+                            mr: 1,
+                            display: "flex",
+                            alignItems: "center",
+                            color: theme.palette.text.secondary,
+                          }}
+                        >
+                          {field.icon}
+                        </Box>
+                      ),
+                      endAdornment: isPasswordField ? (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={() => setShowPassword((s) => !s)}
+                            edge="end"
+                            size="large"
+                            sx={{ p: 0.4 }}
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      ) : undefined,
+                    }}
+                    sx={{
                       borderRadius: "30px",
                       backgroundColor: theme.palette.background.note1,
-                      "& fieldset": { border: "none" },
-                    },
-                      ...(field.label === "الجنس" && {
-                          gridColumn: "1 / -1",
-                          maxWidth: "400px",
-                          mx: "auto",
-                      }),
-                  }}
-                  SelectProps={{
-                      MenuProps: {
-                          PaperProps: {
-                              sx: {
-                                  borderRadius: "30px",
-                                  backgroundColor: theme.palette.background.note1,
-                                  boxShadow: "0px 4px 12px rgba(0,0,0,0.15)",
-                                  mt: 1,
-                              },
-                          },
+                      boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+                      "& .MuiOutlinedInput-root": {
+                        borderRadius: "30px",
+                        backgroundColor: theme.palette.background.note1,
+                        "& fieldset": { border: "none" },
                       },
-                  }}
-                >
-                  {field.select &&
-                    field.options?.map((opt) => (
-                      <MenuItem key={opt.value} value={opt.value}>
-                        {opt.label}
-                      </MenuItem>
-                    ))}
-                </TextField>
-              ))}
+                      ...(field.label === "الجنس" && {
+                        gridColumn: "1 / -1",
+                        maxWidth: "400px",
+                        mx: "auto",
+                      }),
+                      ...isPasswordField,
+                    }}
+                    SelectProps={{
+                      MenuProps: {
+                        PaperProps: {
+                          sx: {
+                            borderRadius: "30px",
+                            backgroundColor: theme.palette.background.note1,
+                            boxShadow: "0px 4px 12px rgba(0,0,0,0.15)",
+                            mt: 1,
+                          },
+                        },
+                      },
+                    }}
+                    placeholder={
+                      isPasswordField && id
+                        ? "اتركه فارغًا إذا لم ترد تغييره"
+                        : undefined
+                    }
+                  >
+                    {field.select &&
+                      field.options?.map((opt) => (
+                        <MenuItem key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </MenuItem>
+                      ))}
+                  </TextField>
+                );
+              })}
             </Box>
 
             <Box display="flex" mt={8}>
@@ -338,16 +410,31 @@ export default function AddUsers({ mode, toggleTheme }) {
                 onClick={() =>
                   navigate("/AddUsers2", {
                     state: {
+                      // تمرير id بشكل صريح دائماً
+                      id: id || initialData.id || undefined,
                       name,
                       phone,
                       email,
-                      password,
+                      ...(isPasswordDirty ? { password } : {}),
+                      isPasswordDirty,
                       job_title: jobTitle,
-                      department_id: Number(departmentId),
+                      department_id: departmentId
+                        ? Number(departmentId)
+                        : undefined,
                       department_name:
                         departments.find((d) => d.id === Number(departmentId))
-                          ?.name || "",
-                        gender,
+                          ?.name ||
+                        initialData.department_name ||
+                        "",
+                      gender,
+                      address: address ?? initialData.address ?? "",
+                      detailedAddress: initialData.detailedAddress ?? "",
+                      city: initialData.city ?? "",
+                      country: initialData.country ?? "",
+                      facebook_url:
+                        facebook_url ?? initialData.facebook_url ?? "",
+                      instagram_url:
+                        instagram_url ?? initialData.instagram_url ?? "",
                     },
                   })
                 }
